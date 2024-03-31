@@ -2,6 +2,7 @@
   "name": "patronage-client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://4ndruxa.github.io/patronage_of_military_units/patronqage-client",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
