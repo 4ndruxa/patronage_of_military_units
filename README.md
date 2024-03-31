@@ -49,27 +49,27 @@ fastapi-project
 ```
 src
 |
-├── assets           
+├── assets
 |
-├── components       
+├── components
 |
-├── config           
+├── config
 |
-├── features         
+├── views   
 |
-├── hooks             
+├── services
 |
-├── lib               
+├── hooks
 |
-├── providers         
+├── providers
 |
-├── routes            
+├── routes
 |
-├── stores            
+├── stores
 |
-├── test              
+├── test
 |
-├── types             
+├── types
 |
 └── utils
 ```
