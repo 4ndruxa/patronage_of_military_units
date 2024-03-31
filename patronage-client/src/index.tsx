@@ -1,14 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import reportWebVitals from './reportWebVitals';
+import Header from './components/header/header';
+import Hero from './components/hero/hero';
+import Cards from './components/cards/cards';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <div>Hello from very nice patronage app;)</div>
+    <Header />
+    <Hero />
+    <Cards />
   </React.StrictMode>
 );
 
