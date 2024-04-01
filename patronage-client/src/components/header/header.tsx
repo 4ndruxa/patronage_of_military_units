@@ -14,7 +14,7 @@ const Header: React.FC = () => {
     <div className="container">
       <header className="d-flex flex-wrap justify-content-center align-items-center pt-3 mb-4 border-bottom">
         <a
-          href="/"
+          href="/patronage_of_military_units"
           className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none"
         >
           <FontAwesomeIcon icon={faDonate} className="fs-3 me-2" />
@@ -28,7 +28,7 @@ const Header: React.FC = () => {
               className="nav-link text-dark"
               onClick={() => handleTabClick("Home")}
             >
-              Home
+              Домашня сторінка
             </a>
             {activeTab === "Home" && <div className="highlight"></div>}
           </li>
@@ -38,7 +38,7 @@ const Header: React.FC = () => {
               className="nav-link text-dark"
               onClick={() => handleTabClick("Features")}
             >
-              Features
+              Активні збори
             </a>
             {activeTab === "Features" && <div className="highlight"></div>}
           </li>
@@ -48,7 +48,7 @@ const Header: React.FC = () => {
               className="nav-link text-dark"
               onClick={() => handleTabClick("About")}
             >
-              About
+              Мої збори
             </a>
             {activeTab === "About" && <div className="highlight"></div>}
           </li>
