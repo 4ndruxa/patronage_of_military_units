@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/patronage_of_military_units/patronqage-client/static/css/main.4d615e99.css",
+    "main.js": "/patronage_of_military_units/patronqage-client/static/js/main.b82df0d5.js",
+    "static/js/453.7cd6df65.chunk.js": "/patronage_of_military_units/patronqage-client/static/js/453.7cd6df65.chunk.js",
+    "static/media/hero.jpeg": "/patronage_of_military_units/patronqage-client/static/media/hero.c032d3f8f1b9c5612934.jpeg",
+    "static/media/cat-money-maker.png": "/patronage_of_military_units/patronqage-client/static/media/cat-money-maker.9479e3b93ce993202006.png",
+    "index.html": "/patronage_of_military_units/patronqage-client/index.html",
+    "main.4d615e99.css.map": "/patronage_of_military_units/patronqage-client/static/css/main.4d615e99.css.map",
+    "main.b82df0d5.js.map": "/patronage_of_military_units/patronqage-client/static/js/main.b82df0d5.js.map",
+    "453.7cd6df65.chunk.js.map": "/patronage_of_military_units/patronqage-client/static/js/453.7cd6df65.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4d615e99.css",
+    "static/js/main.b82df0d5.js"
+  ]
+}
