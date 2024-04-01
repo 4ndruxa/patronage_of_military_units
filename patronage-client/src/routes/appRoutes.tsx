@@ -6,7 +6,7 @@ import FundraisePage from '../views/fundraisePage/fundraisePage';
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      <Route path="/patronage-home" element={<HomePage />} />
+      <Route path="/patronage_of_military_units" element={<HomePage />} />
       <Route path="/fundraise/:id" element={<FundraisePage />} />
     </Routes>
   );
