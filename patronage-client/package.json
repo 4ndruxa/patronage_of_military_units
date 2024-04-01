@@ -2,7 +2,7 @@
   "name": "patronage-client",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://4ndruxa.github.io/patronage_of_military_units",
+  "homepage": "https://4ndruxa.github.io/patronage-home",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
