@@ -3,18 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import reportWebVitals from './reportWebVitals';
-import Header from './components/header/header';
-import Hero from './components/hero/hero';
-import Cards from './components/cards/cards';
+import HomePage from './views/homePage/homePage';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <Header />
-    <Hero />
-    <Cards />
+    < HomePage />
   </React.StrictMode>
 );
 

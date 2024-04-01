@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import catImage from "../../assets/cat-money-maker.png";
+import './card.css';
 
 interface CardData {
   title: string;

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDonate } from "@fortawesome/free-solid-svg-icons";
+import './header.css';
 
 const Header: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Home");
