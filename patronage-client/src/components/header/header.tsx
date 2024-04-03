@@ -4,7 +4,7 @@ import { faDonate } from "@fortawesome/free-solid-svg-icons";
 import './header.css';
 
 const Header: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("Home");
+  const [activeTab, setActiveTab] = useState("patronage_of_military_units");
 
   const handleTabClick = (tabName: string) => {
     setActiveTab(tabName);
@@ -24,33 +24,33 @@ const Header: React.FC = () => {
         <ul className="nav nav-pills fw-medium">
           <li className="nav-item position-relative">
             <a
-              href="#"
+              href=""
               className="nav-link text-dark"
-              onClick={() => handleTabClick("Home")}
-            >
-              Домашня сторінка
-            </a>
-            {activeTab === "Home" && <div className="highlight"></div>}
-          </li>
-          <li className="nav-item position-relative">
-            <a
-              href="#"
-              className="nav-link text-dark"
-              onClick={() => handleTabClick("Features")}
-            >
-              Активні збори
-            </a>
-            {activeTab === "Features" && <div className="highlight"></div>}
-          </li>
-          <li className="nav-item position-relative">
-            <a
-              href="#"
-              className="nav-link text-dark"
-              onClick={() => handleTabClick("About")}
+              onClick={() => handleTabClick("My-Fundraises")}
             >
               Мої збори
             </a>
-            {activeTab === "About" && <div className="highlight"></div>}
+            {activeTab === "My-Fundraises" && <div className="highlight"></div>}
+          </li>
+          <li className="nav-item position-relative">
+            <a
+              href=""
+              className="nav-link text-dark"
+              onClick={() => handleTabClick("Add-Fundraise")}
+            >
+              Додати збір
+            </a>
+            {activeTab === "My-Fundraises" && <div className="highlight"></div>}
+          </li>
+          <li className="nav-item position-relative">
+            <a
+              href=""
+              className="nav-link text-dark"
+              onClick={() => handleTabClick("Statistics")}
+            >
+              Статистика
+            </a>
+            {activeTab === "Statistics" && <div className="highlight"></div>}
           </li>
         </ul>
         <ul className="nav nav-pills ms-3">

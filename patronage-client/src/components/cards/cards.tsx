@@ -1,48 +1,49 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import catImage from "../../assets/cat-money-maker.png";
-import './card.css';
-
-interface CardData {
-  title: string;
-  owner: string;
-  img: string;
-  id: number;
-}
+import './cards.css';
+import { CardData } from "../../types/CardData";
 
 const Cards: React.FC = () => {
   // Mocked data for cards
   const cardsData: CardData[] = [
-    { title: "Content for Card 1", owner: "3 Окрема Танкова Бригада", img: catImage, id: 1 },
-    { title: "Content for Card 2", owner: "3 Окрема Танкова Бригада", img: catImage, id: 2 },
-    { title: "Content for Card 3", owner: "3 Окрема Танкова Бригада", img: catImage, id: 3 },
-    { title: "Content for Card 4", owner: "3 Окрема Танкова Бригада", img: catImage, id: 4 },
-    { title: "Content for Card 5", owner: "3 Окрема Танкова Бригада", img: catImage, id: 5 },
-    { title: "Content for Card 6", owner: "3 Окрема Танкова Бригада", img: catImage, id: 6 },
-    { title: "Content for Card 7", owner: "3 Окрема Танкова Бригада", img: catImage, id: 7 },
-    { title: "Content for Card 8", owner: "3 Окрема Танкова Бригада", img: catImage, id: 8 },
-    { title: "Content for Card 9", owner: "3 Окрема Танкова Бригада", img: catImage, id: 9 },
-    { title: "Content for Card 10", owner: "3 Окрема Танкова Бригада", img: catImage, id: 10 },
-    { title: "Content for Card 11", owner: "3 Окрема Танкова Бригада", img: catImage, id: 11 },
-    { title: "Content for Card 12", owner: "3 Окрема Танкова Бригада", img: catImage, id: 12 },
+    { title: "Content for Card 1", owner: "3 Окрема Танкова Бригада", img: catImage, id: 1, linkToBank: '' },
+    { title: "Content for Card 2", owner: "3 Окрема Танкова Бригада", img: catImage, id: 2, linkToBank: '' },
+    { title: "Content for Card 3", owner: "3 Окрема Танкова Бригада", img: catImage, id: 3, linkToBank: '' },
+    { title: "Content for Card 4", owner: "3 Окрема Танкова Бригада", img: catImage, id: 4, linkToBank: '' },
+    { title: "Content for Card 5", owner: "3 Окрема Танкова Бригада", img: catImage, id: 5, linkToBank: '' },
+    { title: "Content for Card 6", owner: "3 Окрема Танкова Бригада", img: catImage, id: 6, linkToBank: '' },
+    { title: "Content for Card 7", owner: "3 Окрема Танкова Бригада", img: catImage, id: 7, linkToBank: '' },
+    { title: "Content for Card 8", owner: "3 Окрема Танкова Бригада", img: catImage, id: 8, linkToBank: '' },
+    { title: "Content for Card 9", owner: "3 Окрема Танкова Бригада", img: catImage, id: 9, linkToBank: '' },
+    { title: "Content for Card 10", owner: "3 Окрема Танкова Бригада", img: catImage, id: 10, linkToBank: '' },
+    { title: "Content for Card 11", owner: "3 Окрема Танкова Бригада", img: catImage, id: 11, linkToBank: '' },
+    { title: "Content for Card 12", owner: "3 Окрема Танкова Бригада", img: catImage, id: 12, linkToBank: '' },
+    { title: "Content for Card 13", owner: "3 Окрема Танкова Бригада", img: catImage, id: 13, linkToBank: '' },
   ];
 
-  const cardsPerPage = 6; // Number of cards per page
+  const cardsPerPage = 6;
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Calculate the index range for the current page
   const indexOfLastCard = currentPage * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
   const currentCards = cardsData.slice(indexOfFirstCard, indexOfLastCard);
 
-  // Function to handle pagination clicks
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
 
   const navigate = useNavigate();
-  const handleCardClick = (cardId: number) => {
-    navigate(`/fundraise/${cardId}`);
+  const handleCardClick = (card: CardData) => {
+    navigate(`/fundraise/${card.id}`, { state: card });
+  };
+
+  const handlePayNowClick = (card: CardData) => {
+    navigate(`/subscribe/${card.id}`, { state: card }); // add link to bank
+  };
+
+  const handleSubscribeClick = (card: CardData) => {
+    navigate(`/subscribe/${card.id}`, { state: card });
   };
 
   return (
@@ -50,14 +51,20 @@ const Cards: React.FC = () => {
       <div className="d-flex flex-wrap gap-1 container">
         {currentCards.map((card, index) => (
           <div className="card-width" key={index}>
-            <div className="card">
+            <div className="card card-scale">
               <div className="card-body">
-                <div className="d-flex flex-column align-items-center gap-1">
+                <div className="d-flex flex-column gap-1 cursor-pointer" onClick={() => handleCardClick(card)}>
                   <img className="col-12 object-fit-contain" src={card.img} alt={card.title} />
                   <h5 className="card-text fw-semibold">{card.title}</h5>
                 </div>
-                <button className="btn btn-light ps-0 fw-medium" onClick={() => handleCardClick(card.id)}>
+                <button className="btn btn-light ps-0 fw-medium d-block my-2" onClick={() => handleCardClick(card)}>
                   До {card.owner}
+                </button>
+                <button className="btn btn-outline-secondary fw-medium d-block mb-2" onClick={() => handlePayNowClick(card)}>
+                  Задонатити зараз
+                </button>
+                <button className="btn btn-secondary fw-medium d-block" onClick={() => handleSubscribeClick(card)}>
+                  Підписатись
                 </button>
               </div>
             </div>
