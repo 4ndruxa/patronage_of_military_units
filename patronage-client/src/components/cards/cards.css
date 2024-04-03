@@ -7,8 +7,11 @@
     color: white !important;
 }
 
+.card-scale {
+    transition: all 0.5s ease;
+} 
+
 .card-scale:hover {
     transform: scale(1.010);
     box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
-    transition: all 0.5s ease;
 }
