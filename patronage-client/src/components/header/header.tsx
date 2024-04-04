@@ -2,9 +2,15 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDonate } from "@fortawesome/free-solid-svg-icons";
 import './header.css';
+import { useNavigate } from "react-router-dom";
 
 const Header: React.FC = () => {
   const [activeTab, setActiveTab] = useState("patronage_of_military_units");
+
+  const navigate = useNavigate();
+  const handleLoginClick = () => {
+    navigate('/login');
+  };
 
   const handleTabClick = (tabName: string) => {
     setActiveTab(tabName);
@@ -24,23 +30,23 @@ const Header: React.FC = () => {
         <ul className="nav nav-pills fw-medium">
           <li className="nav-item position-relative">
             <a
-              href=""
+              href="/my-fundraises"
               className="nav-link text-dark"
-              onClick={() => handleTabClick("My-Fundraises")}
+              onClick={() => handleTabClick("my-fundraises")}
             >
               Мої збори
             </a>
-            {activeTab === "My-Fundraises" && <div className="highlight"></div>}
+            {activeTab === "my-fundraises" && <div className="highlight"></div>}
           </li>
           <li className="nav-item position-relative">
             <a
-              href=""
+              href="/add-fundraise"
               className="nav-link text-dark"
-              onClick={() => handleTabClick("Add-Fundraise")}
+              onClick={() => handleTabClick("add-fundraise")}
             >
               Додати збір
             </a>
-            {activeTab === "My-Fundraises" && <div className="highlight"></div>}
+            {activeTab === "add-fundraise" && <div className="highlight"></div>}
           </li>
           <li className="nav-item position-relative">
             <a
@@ -55,7 +61,7 @@ const Header: React.FC = () => {
         </ul>
         <ul className="nav nav-pills ms-3">
           <li className="nav-item">
-            <button type="button" className="btn btn-sm btn-light me-2 fw-medium">
+            <button type="button" className="btn btn-sm btn-light me-2 fw-medium" onClick={() => handleLoginClick()}>
               Login
             </button>
           </li>
