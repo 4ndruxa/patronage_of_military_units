@@ -50,7 +50,7 @@ const Header: React.FC = () => {
           </li>
           <li className="nav-item position-relative">
             <a
-              href=""
+              href="/statistics"
               className="nav-link text-dark"
               onClick={() => handleTabClick("Statistics")}
             >
