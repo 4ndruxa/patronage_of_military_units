@@ -14,6 +14,7 @@ const Header: React.FC = () => {
 
   const handleTabClick = (tabName: string) => {
     setActiveTab(tabName);
+    navigate(`/${tabName}`);
   };
 
   return (
@@ -21,7 +22,7 @@ const Header: React.FC = () => {
       <header className="d-flex flex-wrap justify-content-center align-items-center pt-3 mb-4 border-bottom">
         <a
           href="/patronage_of_military_units"
-          className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none"
+          className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none cursor-pointer"
         >
           <FontAwesomeIcon icon={faDonate} className="fs-3 me-2" />
           <span className="fs-4 fw-bold">Громадське патронування</span>
@@ -30,8 +31,7 @@ const Header: React.FC = () => {
         <ul className="nav nav-pills fw-medium">
           <li className="nav-item position-relative">
             <a
-              href="/my-fundraises"
-              className="nav-link text-dark"
+              className="nav-link text-dark cursor-pointer"
               onClick={() => handleTabClick("my-fundraises")}
             >
               Мої збори
@@ -40,8 +40,7 @@ const Header: React.FC = () => {
           </li>
           <li className="nav-item position-relative">
             <a
-              href="/add-fundraise"
-              className="nav-link text-dark"
+              className="nav-link text-dark cursor-pointer"
               onClick={() => handleTabClick("add-fundraise")}
             >
               Додати збір
@@ -50,13 +49,12 @@ const Header: React.FC = () => {
           </li>
           <li className="nav-item position-relative">
             <a
-              href="/statistics"
-              className="nav-link text-dark"
-              onClick={() => handleTabClick("Statistics")}
+              className="nav-link text-dark cursor-pointer"
+              onClick={() => handleTabClick("statistics")}
             >
               Статистика
             </a>
-            {activeTab === "Statistics" && <div className="highlight"></div>}
+            {activeTab === "statistics" && <div className="highlight"></div>}
           </li>
         </ul>
         <ul className="nav nav-pills ms-3">

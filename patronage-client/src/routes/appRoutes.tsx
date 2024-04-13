@@ -14,6 +14,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/fundraise/:id" element={<FundraisePage />} />
       <Route path="/add-fundraise" element={<AddFundraisePage />} />
       <Route path="/my-fundraises" element={<MyFundraisesPage />} />
+      <Route path="/statistics" element={<MyFundraisesPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/secure" element={<Secure />} />
     </Routes>
