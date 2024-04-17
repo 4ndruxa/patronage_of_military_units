@@ -8,8 +8,7 @@ export default function Login() {
 
   const handleClick = () => {
     const callbackUrl = `${window.location.origin}`;
-    const googleClientId =
-      "164703334246-rqmc5d1r8q6oakka2q702pahvdrvetqh.apps.googleusercontent.com";
+    const googleClientId = "164703334246-rqmc5d1r8q6oakka2q702pahvdrvetqh.apps.googleusercontent.com";
     const targetUrl = `https://accounts.google.com/o/oauth2/auth?redirect_uri=${encodeURIComponent(
       callbackUrl
     )}&response_type=token&client_id=${googleClientId}&scope=openid%20email%20profile`;
@@ -57,7 +56,7 @@ export default function Login() {
         <div className="container text-center mt-2">
           <div>
             <div className="btn-container">
-              <button className="btn btn-secondary" onClick={handleClick}>
+              <button type="button" className="btn btn-secondary" onClick={handleClick}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 326667 333333"
