@@ -1,35 +1,107 @@
+from typing import Optional, List
 from pydantic import BaseModel
 
+class UsersBase(BaseModel):
+    name: str
+    email: str
+    isCreator: bool = False
+    isVerified: bool = False
+    isApplied: bool = False
+    isDenied: bool = False
 
-class FundraiseBase(BaseModel):
-    title: str
-    description: str | None = None
+class UsersCreate(UsersBase):
+    password: str
 
-
-class ItemCreate(FundraiseBase):
-    pass
-
-
-class Item(FundraiseBase):
+class Users(UsersBase):
     id: int
-    owner_id: int
 
     class Config:
         orm_mode = True
 
+class OrganizationsBase(BaseModel):
+    name: str
+    description: Optional[str] = None
 
-class UserBase(BaseModel):
-    email: str
+class OrganizationsCreate(OrganizationsBase):
+    pass
 
-
-class UserCreate(UserBase):
-    password: str
-
-
-class User(UserBase):
+class Organizations(OrganizationsBase):
     id: int
-    is_owner: bool
-    items: list[Item] = []
+    creator_id: int
+
+    class Config:
+        orm_mode = True
+
+class FundraisingsBase(BaseModel):
+    title: str
+    description: Optional[str] = None
+
+class FundraisingsCreate(FundraisingsBase):
+    pass
+
+class Fundraisings(FundraisingsBase):
+    id: int
+    creator_id: int
+    organization_id: int
+    source_id: Optional[int]
+
+    class Config:
+        orm_mode = True
+
+class SourcesBase(BaseModel):
+    title: str
+    type: str
+    url: str
+
+class SourcesCreate(SourcesBase):
+    pass
+
+class Sources(SourcesBase):
+    id: int
+    creator_id: int
+
+    class Config:
+        orm_mode = True
+
+class PostsBase(BaseModel):
+    title: str
+    text: str
+
+class PostsCreate(PostsBase):
+    pass
+
+class Posts(PostsBase):
+    id: int
+    creator_id: int
+
+    class Config:
+        orm_mode = True
+
+class MediaBase(BaseModel):
+    title: str
+    text: str
+    type: str
+
+class MediaCreate(MediaBase):
+    pass
+
+class Media(MediaBase):
+    id: int
+    post_id: int
+    creator_id: int
+
+    class Config:
+        orm_mode = True
+
+class SubscriptionsBase(BaseModel):
+    creator_id: int
+    organization_id: int
+
+class SubscriptionsCreate(SubscriptionsBase):
+    pass
+
+class Subscriptions(SubscriptionsBase):
+    id: int
 
     class Config:
         orm_mode = True
