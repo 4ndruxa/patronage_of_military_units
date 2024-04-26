@@ -6,17 +6,26 @@ import Secure from '../components/login/secure';
 import LoginPage from '../views/loginPage/loginPage';
 import AddFundraisePage from '../views/addFundraisePage/addFundraisePage';
 import MyFundraisesPage from '../views/myFundraisesPage/myFundraisesPage';
+import AddOrganizationPage from '../views/addOrganizationPage/addOrganizationPage';
+import MyOrganizationsPage from '../views/myOrganizationsPage/myOrganizationsPage';
+import MySubscriptionsPage from '../views/mySubscriptionsPage/mySubscriptionsPage';
+import OrganisationPage from '../views/organisationPage/organisationPage';
+import StatisticsPage from '../views/statisticsPage/statisticsPage';
 
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
       <Route path="/patronage_of_military_units" element={<HomePage />} />
-      <Route path="/fundraise/:id" element={<FundraisePage />} />
       <Route path="/add-fundraise" element={<AddFundraisePage />} />
-      <Route path="/my-fundraises" element={<MyFundraisesPage />} />
-      <Route path="/statistics" element={<MyFundraisesPage />} />
+      <Route path="/add-organization" element={<AddOrganizationPage />} />
+      <Route path="/fundraise/:id" element={<FundraisePage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/my-fundraises" element={<MyFundraisesPage />} />
+      <Route path="/my-organizations" element={<MyOrganizationsPage />} />
+      <Route path="/my-subscriptions" element={<MySubscriptionsPage />} />
+      <Route path="/organisation" element={<OrganisationPage />} />
       <Route path="/secure" element={<Secure />} />
+      <Route path="/statistics" element={<StatisticsPage />} />
     </Routes>
   );
 };

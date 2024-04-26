@@ -32,20 +32,81 @@ const Header: React.FC = () => {
           <li className="nav-item position-relative">
             <a
               className="nav-link text-dark cursor-pointer"
-              onClick={() => handleTabClick("my-fundraises")}
+              onClick={() => handleTabClick("organisation")}
             >
-              Мої збори
+              Організації
             </a>
-            {activeTab === "my-fundraises" && <div className="highlight"></div>}
+            {activeTab === "organisation" && <div className="highlight"></div>}
           </li>
-          <li className="nav-item position-relative">
+          <li className="nav-item dropdown">
             <a
-              className="nav-link text-dark cursor-pointer"
-              onClick={() => handleTabClick("add-fundraise")}
+              className="nav-link dropdown-toggle text-dark cursor-pointer"
+              id="profileDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
             >
-              Додати збір
+              Профіль
             </a>
-            {activeTab === "add-fundraise" && <div className="highlight"></div>}
+            <ul className="dropdown-menu" aria-labelledby="profileDropdown">
+              <li>
+                <a
+                  className="dropdown-item"
+                  onClick={() => handleTabClick("my-subscriptions")}
+                >
+                  Мої підписки
+                </a>
+              </li>
+              <li>
+                <a
+                  className="dropdown-item"
+                  onClick={() => handleTabClick("my-fundraises")}
+                >
+                  Мої збори
+                </a>
+              </li>
+              <li>
+                <div className="dropdown-divider"></div>
+              </li>
+              <li>
+                <a
+                  className="dropdown-item"
+                  onClick={() => handleTabClick("my-organizations")}
+                >
+                  Мої організації
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li className="nav-item dropdown">
+            <a
+              className="nav-link dropdown-toggle text-dark cursor-pointer"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Додати
+            </a>
+            <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li>
+                <a
+                  className="dropdown-item"
+                  onClick={() => handleTabClick("add-fundraise")}
+                >
+                  Збір
+                </a>
+              </li>
+              <li>
+                <a
+                  className="dropdown-item"
+                  onClick={() => handleTabClick("add-organization")}
+                >
+                  Організацію
+                </a>
+              </li>
+            </ul>
           </li>
           <li className="nav-item position-relative">
             <a
@@ -59,7 +120,11 @@ const Header: React.FC = () => {
         </ul>
         <ul className="nav nav-pills ms-3">
           <li className="nav-item">
-            <button type="button" className="btn btn-sm btn-light me-2 fw-medium" onClick={() => handleLoginClick()}>
+            <button
+              type="button"
+              className="btn btn-sm btn-light me-2 fw-medium"
+              onClick={() => handleLoginClick()}
+            >
               Login
             </button>
           </li>
