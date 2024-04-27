@@ -40,13 +40,13 @@ const Header: React.FC = () => {
           <img src={logo} alt="Donate" className="fs-3 me-2 py-1 header-logo" />
           <span className="fs-4 fw-bold">Громадське патронування</span>
         </a>
-        <button className="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button className="navbar-toggler d-lg-none pe-3 pe-lg-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <FontAwesomeIcon className="text-primary" icon={faBars} />
         </button>
 
         <div className={`collapse ${isMobile ? 'navbar-collapse' : 'show'}`} id="navbarSupportedContent">
           <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center">
-            <ul className="nav nav-pills navbar-nav fw-medium d-flex flex-column flex-lg-row align-items-end">
+            <ul className="nav nav-pills navbar-nav fw-medium d-flex flex-column flex-lg-row align-items-end pe-3 pe-lg-0">
               <li className="nav-item position-relative me-0 me-lg-4">
                 <a
                   className="nav-link text-dark cursor-pointer"
@@ -135,7 +135,7 @@ const Header: React.FC = () => {
                 {activeTab === "statistics" && <div className="highlight"></div>}
               </li>
             </ul>
-            <ul className="nav nav-pills ms-3 d-flex flex-column flex-lg-row align-items-end">
+            <ul className="nav nav-pills ms-3 d-flex flex-column flex-lg-row align-items-end pe-3 pe-lg-0">
               <li className="nav-item">
                 <button
                   type="button"
