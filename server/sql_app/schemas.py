@@ -1,16 +1,16 @@
-from typing import Optional, List
+from typing import Optional
 from pydantic import BaseModel
 
 class UsersBase(BaseModel):
     name: str
     email: str
-    isCreator: bool = False
-    isVerified: bool = False
-    isApplied: bool = False
-    isDenied: bool = False
+    is_creator: bool = False
+    is_verified: bool = False
+    is_applied: bool = False
+    is_denied: bool = False
 
 class UsersCreate(UsersBase):
-    password: str
+    token: str
 
 class Users(UsersBase):
     id: int
@@ -18,9 +18,13 @@ class Users(UsersBase):
     class Config:
         orm_mode = True
 
+class UsersUpdate(BaseModel):
+    name: Optional[str] = None
+
 class OrganizationsBase(BaseModel):
     name: str
     description: Optional[str] = None
+    creator_id: int
 
 class OrganizationsCreate(OrganizationsBase):
     pass
@@ -31,6 +35,10 @@ class Organizations(OrganizationsBase):
 
     class Config:
         orm_mode = True
+
+class OrganizationsUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
 
 class FundraisingsBase(BaseModel):
     title: str

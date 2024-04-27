@@ -4,12 +4,12 @@ from sqlalchemy.orm import relationship
 from .database import Base
 
 class BaseMixin:
-    createdAt = Column(DateTime, server_default=func.now())
-    updatedAt = Column(DateTime, onupdate=func.now())
-    deletedAt = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, onupdate=func.now())
+    deleted_at = Column(DateTime, nullable=True)
 
-    createdBy = Column(Integer, ForeignKey("users.id"))
-    updatedBy = Column(Integer, ForeignKey("users.id"))
+    created_by = Column(Integer, ForeignKey("users.id"))
+    updated_by = Column(Integer, ForeignKey("users.id"))
 
 class Users(Base, BaseMixin):
     __tablename__ = "users"
@@ -17,18 +17,18 @@ class Users(Base, BaseMixin):
     id = Column(Integer, primary_key=True)
     name = Column(String, index=True)
     email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    isCreator = Column(Boolean, default=False)
-    isVerified = Column(Boolean, default=False)
-    isApplied = Column(Boolean, default=False)
-    isDenied = Column(Boolean, default=False)
+    token = Column(String)
+    is_creator = Column(Boolean, default=False)
+    is_verified = Column(Boolean, default=False)
+    is_applied = Column(Boolean, default=False)
+    is_denied = Column(Boolean, default=False)
 
-    fundraisings = relationship("Fundraisings", back_populates="creator", foreign_keys="Fundraisings.creatorId")
-    organizations = relationship("Organizations", back_populates="creator", foreign_keys="Organizations.creatorId")
-    sources = relationship("Sources", back_populates="creator", foreign_keys="Sources.creatorId")
-    posts = relationship("Posts", back_populates="creator", foreign_keys="Posts.creatorId")
-    media = relationship("Media", back_populates="creator", foreign_keys="Media.creatorId")
-    subscriptions = relationship("Subscriptions", back_populates="creator", foreign_keys="Subscriptions.creatorId")
+    fundraisings = relationship("Fundraisings", back_populates="creator", foreign_keys="Fundraisings.creator_id")
+    organizations = relationship("Organizations", back_populates="creator", foreign_keys="Organizations.creator_id")
+    sources = relationship("Sources", back_populates="creator", foreign_keys="Sources.creator_id")
+    posts = relationship("Posts", back_populates="creator", foreign_keys="Posts.creator_id")
+    media = relationship("Media", back_populates="creator", foreign_keys="Media.creator_id")
+    subscriptions = relationship("Subscriptions", back_populates="creator", foreign_keys="Subscriptions.creator_id")
 
 
 class Organizations(Base, BaseMixin):
@@ -37,10 +37,10 @@ class Organizations(Base, BaseMixin):
     id = Column(Integer, primary_key=True)
     name = Column(String, index=True)
     description = Column(String)
-    creatorId = Column(Integer, ForeignKey("users.id"))
+    creator_id = Column(Integer, ForeignKey("users.id"))
 
-    creator = relationship("Users", back_populates="organizations", foreign_keys="Organizations.creatorId")
-    fundraisings = relationship("Fundraisings", back_populates="organizations", foreign_keys="Fundraisings.organizationId")
+    creator = relationship("Users", back_populates="organizations", foreign_keys="Organizations.creator_id")
+    fundraisings = relationship("Fundraisings", back_populates="organizations", foreign_keys="Fundraisings.organization_id")
     subscriptions = relationship("Subscriptions", back_populates="organizations")
 
 
@@ -50,13 +50,13 @@ class Fundraisings(Base, BaseMixin):
     id = Column(Integer, primary_key=True)
     title = Column(String, index=True)
     description = Column(String)
-    creatorId = Column(Integer, ForeignKey("users.id"))
-    organizationId = Column(Integer, ForeignKey("organizations.id"))
-    sourceId = Column(Integer, ForeignKey("sources.id"))
+    creator_id = Column(Integer, ForeignKey("users.id"))
+    organization_id = Column(Integer, ForeignKey("organizations.id"))
+    source_id = Column(Integer, ForeignKey("sources.id"))
 
-    creator = relationship("Users", back_populates="fundraisings", foreign_keys="Fundraisings.creatorId")
-    sources = relationship("Sources", back_populates="fundraisings", foreign_keys="Fundraisings.sourceId")
-    organizations = relationship("Organizations", back_populates="fundraisings", foreign_keys="Fundraisings.organizationId")
+    creator = relationship("Users", back_populates="fundraisings", foreign_keys="Fundraisings.creator_id")
+    sources = relationship("Sources", back_populates="fundraisings", foreign_keys="Fundraisings.source_id")
+    organizations = relationship("Organizations", back_populates="fundraisings", foreign_keys="Fundraisings.organization_id")
 
 
 class Sources(Base, BaseMixin):
@@ -66,9 +66,9 @@ class Sources(Base, BaseMixin):
     title = Column(String, index=True)
     type = Column(String, index=True)
     url = Column(String)
-    creatorId = Column(Integer, ForeignKey("users.id"))
+    creator_id = Column(Integer, ForeignKey("users.id"))
 
-    creator = relationship("Users", back_populates="sources", foreign_keys="Sources.creatorId")
+    creator = relationship("Users", back_populates="sources", foreign_keys="Sources.creator_id")
     fundraisings = relationship("Fundraisings", back_populates="sources")
 
 
@@ -78,9 +78,9 @@ class Posts(Base, BaseMixin):
     id = Column(Integer, primary_key=True)
     title = Column(String, index=True)
     text = Column(String)
-    creatorId = Column(Integer, ForeignKey("users.id"))
+    creator_id = Column(Integer, ForeignKey("users.id"))
 
-    creator = relationship("Users", back_populates="posts", foreign_keys="Posts.creatorId")
+    creator = relationship("Users", back_populates="posts", foreign_keys="Posts.creator_id")
     media = relationship("Media", back_populates="posts")
 
 
@@ -91,10 +91,10 @@ class Media(Base, BaseMixin):
     title = Column(String, index=True)
     text = Column(String)
     type = Column(String)
-    postId = Column(Integer, ForeignKey("posts.id"))
-    creatorId = Column(Integer, ForeignKey("users.id"))
+    post_id = Column(Integer, ForeignKey("posts.id"))
+    creator_id = Column(Integer, ForeignKey("users.id"))
 
-    creator = relationship("Users", back_populates="media", foreign_keys="Media.creatorId")
+    creator = relationship("Users", back_populates="media", foreign_keys="Media.creator_id")
     posts = relationship("Posts", back_populates="media")
 
 
@@ -102,8 +102,8 @@ class Subscriptions(Base, BaseMixin):
     __tablename__ = "subscriptions"
 
     id = Column(Integer, primary_key=True)
-    creatorId = Column(Integer, ForeignKey("users.id"))
-    organizationId = Column(Integer, ForeignKey("organizations.id"))
+    creator_id = Column(Integer, ForeignKey("users.id"))
+    organization_id = Column(Integer, ForeignKey("organizations.id"))
 
-    creator = relationship("Users", back_populates="subscriptions", foreign_keys="Subscriptions.creatorId")
+    creator = relationship("Users", back_populates="subscriptions", foreign_keys="Subscriptions.creator_id")
     organizations = relationship("Organizations", back_populates="subscriptions")

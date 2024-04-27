@@ -3,7 +3,7 @@ import heroImage from "../../assets/hero.jpeg";
 
 const Hero: React.FC = () => {
   return (
-    <div className="col-12">
+    <div className="col-12 container">
       <div className="card d-flex align-items-start flex-md-row mb-4 border-0">
         <img
           className="card-img-right flex-auto col-5 object-fit-contain"

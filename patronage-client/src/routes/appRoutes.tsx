@@ -9,7 +9,7 @@ import MyFundraisesPage from '../views/myFundraisesPage/myFundraisesPage';
 import AddOrganizationPage from '../views/addOrganizationPage/addOrganizationPage';
 import MyOrganizationsPage from '../views/myOrganizationsPage/myOrganizationsPage';
 import MySubscriptionsPage from '../views/mySubscriptionsPage/mySubscriptionsPage';
-import OrganisationPage from '../views/organisationPage/organisationPage';
+import OrganisationsPage from '../views/organisationsPage/organisationsPage';
 import StatisticsPage from '../views/statisticsPage/statisticsPage';
 
 const AppRoutes: React.FC = () => {
@@ -23,7 +23,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/my-fundraises" element={<MyFundraisesPage />} />
       <Route path="/my-organizations" element={<MyOrganizationsPage />} />
       <Route path="/my-subscriptions" element={<MySubscriptionsPage />} />
-      <Route path="/organisation" element={<OrganisationPage />} />
+      <Route path="/organisations" element={<OrganisationsPage />} />
       <Route path="/secure" element={<Secure />} />
       <Route path="/statistics" element={<StatisticsPage />} />
     </Routes>

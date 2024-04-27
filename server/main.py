@@ -2,12 +2,21 @@ from http.client import HTTPException
 from typing import List
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
+from fastapi.middleware.cors import CORSMiddleware
 
 from sql_app import crud, models, schemas
 from sql_app.database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def get_db():
     db = SessionLocal()
@@ -18,7 +27,7 @@ def get_db():
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World kiss123)"}
+    return {"message": "Hello World"}
 
 @app.post("/users/", response_model=schemas.Users)
 def create_user(user: schemas.UsersCreate, db: Session = Depends(get_db)):
@@ -41,8 +50,8 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     return db_user
 
 
-@app.put("/users/{user_id}", response_model=schemas.Users)
-def update_user(user_id: int, user: schemas.UsersCreate, db: Session = Depends(get_db)):
+@app.patch("/users/{user_id}", response_model=schemas.Users)
+def update_user(user_id: int, user: schemas.UsersUpdate, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
@@ -96,8 +105,8 @@ def soft_remove_fundraising(fundraising_id: int, db: Session = Depends(get_db)):
     return crud.soft_remove_fundraising(db=db, fundraising_id=fundraising_id)
 
 @app.post("/organizations/", response_model=schemas.Organizations)
-def create_organization(item: schemas.OrganizationsCreate, user_id: int, db: Session = Depends(get_db)):
-    return crud.create_organization(db=db, item=item, user_id=user_id)
+def create_organization(item: schemas.OrganizationsCreate, db: Session = Depends(get_db)):
+    return crud.create_organization(db=db, item=item)
 
 
 @app.get("/organizations/", response_model=List[schemas.Organizations])
@@ -113,8 +122,8 @@ def read_organization(organization_id: int, db: Session = Depends(get_db)):
     return db_organization
 
 
-@app.put("/organizations/{organization_id}", response_model=schemas.Organizations)
-def update_organization(organization_id: int, item: schemas.OrganizationsCreate, db: Session = Depends(get_db)):
+@app.patch("/organizations/{organization_id}", response_model=schemas.Organizations)
+def update_organization(organization_id: int, item: schemas.OrganizationsUpdate, db: Session = Depends(get_db)):
     db_organization = crud.get_organization(db, organization_id=organization_id)
     if db_organization is None:
         raise HTTPException(status_code=404, detail="Organization not found")
