@@ -1,0 +1,28 @@
+@import '../../variables';
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/mixins';
+
+.card-width {
+    width: 49%
+}
+
+@include media-breakpoint-up(lg) {
+    .card-width {
+        width: 33%
+    }    
+  }
+
+.page-item.active-card-page .page-link {
+    background-color: $primary !important;
+    color: white !important;
+}
+
+.card-scale {
+    transition: all 0.5s ease;
+} 
+
+.card-scale:hover {
+    transform: scale(1.010);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 3px;
+}

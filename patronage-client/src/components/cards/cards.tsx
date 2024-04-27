@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import catImage from "../../assets/cat-money-maker.png";
-import './cards.css';
+import './cards.scss';
 import { CardData } from "../../types/CardData";
 
 const Cards: React.FC = () => {
@@ -53,17 +53,14 @@ const Cards: React.FC = () => {
           <div className="card-width" key={index}>
             <div className="card card-scale">
               <div className="card-body">
-                <div className="d-flex flex-column gap-1 cursor-pointer" onClick={() => handleCardClick(card)}>
+                <div className="d-flex flex-column gap-1 cursor-pointer mb-2" onClick={() => handleCardClick(card)}>
                   <img className="col-12 object-fit-contain" src={card.img} alt={card.title} />
                   <h5 className="card-text fw-semibold">{card.title}</h5>
                 </div>
-                <button className="btn btn-light ps-0 fw-medium d-block my-2" onClick={() => handleCardClick(card)}>
-                  До {card.owner}
-                </button>
                 <button className="btn btn-outline-secondary fw-medium d-block mb-2" onClick={() => handlePayNowClick(card)}>
                   Задонатити зараз
                 </button>
-                <button className="btn btn-secondary fw-medium d-block" onClick={() => handleSubscribeClick(card)}>
+                <button className="btn btn-primary fw-medium d-block" onClick={() => handleSubscribeClick(card)}>
                   Підписатись
                 </button>
               </div>
@@ -75,9 +72,8 @@ const Cards: React.FC = () => {
         <ul className="pagination pagination-sm">
           {[...Array(Math.ceil(cardsData.length / cardsPerPage))].map((_, index) => (
             <li className={`page-item ${currentPage === index + 1 ? 'active-card-page' : ''}`} key={index} role="button">
-              <span className="page-link text-dark" onClick={() => handlePageChange(index + 1)}>
+              <span className="page-link text-primary" onClick={() => handlePageChange(index + 1)}>
                 {index + 1}
-                {currentPage === index + 1 && <span className="sr-only">(current)</span>}
               </span>
             </li>
           ))}

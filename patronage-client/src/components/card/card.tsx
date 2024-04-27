@@ -56,7 +56,7 @@ const Card: React.FC = () => {
             location.state
           )}
         </div>
-        <img className="img-main object-fit-contain" src={img} alt={title} />
+        <img className="h-auto object-fit-contain" src={img} alt={title} />
         <p className="fs-18 mt-3">
           {/* add content when back is ready */}
           Lorem Ipsum is simply dummy text of the printing and typesetting

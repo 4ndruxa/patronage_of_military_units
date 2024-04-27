@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDonate } from "@fortawesome/free-solid-svg-icons";
+import React, { useEffect, useState } from "react";
+import logo from "../../assets/logo.png";
 import './header.css';
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 const Header: React.FC = () => {
   const [activeTab, setActiveTab] = useState("patronage_of_military_units");
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
   const navigate = useNavigate();
   const handleLoginClick = () => {
@@ -17,125 +19,141 @@ const Header: React.FC = () => {
     navigate(`/${tabName}`);
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 992);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <div className="container">
-      <header className="d-flex flex-wrap justify-content-center align-items-center pt-3 mb-4 border-bottom">
+      <nav className="d-flex flex-wrap flex-row justify-content-between align-items-lg-center pt-3 mb-4 border-bottom">
         <a
-          href="/patronage_of_military_units"
-          className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none cursor-pointer"
+          className="d-flex align-items-center mb-0 mb-lg-3 mb-md-0 me-md-auto text-dark text-decoration-none cursor-pointer"
+          onClick={() => handleTabClick("patronage_of_military_units")}
         >
-          <FontAwesomeIcon icon={faDonate} className="fs-3 me-2" />
+          <img src={logo} alt="Donate" className="fs-3 me-2 py-1 header-logo" />
           <span className="fs-4 fw-bold">Громадське патронування</span>
         </a>
+        <button className="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <FontAwesomeIcon className="text-primary" icon={faBars} />
+        </button>
 
-        <ul className="nav nav-pills fw-medium">
-          <li className="nav-item position-relative">
-            <a
-              className="nav-link text-dark cursor-pointer"
-              onClick={() => handleTabClick("organisations")}
-            >
-              Організації
-            </a>
-            {activeTab === "organisation" && <div className="highlight"></div>}
-          </li>
-          <li className="nav-item dropdown">
-            <a
-              className="nav-link dropdown-toggle text-dark cursor-pointer"
-              id="profileDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Профіль
-            </a>
-            <ul className="dropdown-menu" aria-labelledby="profileDropdown">
-              <li>
+        <div className={`collapse ${isMobile ? 'navbar-collapse' : 'show'}`} id="navbarSupportedContent">
+          <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center">
+            <ul className="nav nav-pills navbar-nav fw-medium d-flex flex-column flex-lg-row align-items-end">
+              <li className="nav-item position-relative me-0 me-lg-4">
                 <a
-                  className="dropdown-item cursor-pointer"
-                  onClick={() => handleTabClick("my-subscriptions")}
+                  className="nav-link text-dark cursor-pointer"
+                  onClick={() => handleTabClick("organisations")}
                 >
-                  Мої підписки
+                  Організації
                 </a>
+                {activeTab === "organisation" && <div className="highlight"></div>}
               </li>
-              <li>
+              <li className="nav-item dropdown me-0 me-lg-4">
                 <a
-                  className="dropdown-item cursor-pointer"
-                  onClick={() => handleTabClick("my-fundraises")}
+                  className="nav-link dropdown-toggle text-dark cursor-pointer"
+                  id="profileDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
                 >
-                  Мої збори
+                  Профіль
                 </a>
+                <ul className="dropdown-menu" aria-labelledby="profileDropdown">
+                  <li>
+                    <a
+                      className="dropdown-item cursor-pointer"
+                      onClick={() => handleTabClick("my-subscriptions")}
+                    >
+                      Мої підписки
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className="dropdown-item cursor-pointer"
+                      onClick={() => handleTabClick("my-fundraises")}
+                    >
+                      Мої збори
+                    </a>
+                  </li>
+                  <li>
+                    <div className="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a
+                      className="dropdown-item cursor-pointer"
+                      onClick={() => handleTabClick("my-organizations")}
+                    >
+                      Мої організації
+                    </a>
+                  </li>
+                </ul>
               </li>
-              <li>
-                <div className="dropdown-divider"></div>
-              </li>
-              <li>
+              <li className="nav-item dropdown me-0 me-lg-4">
                 <a
-                  className="dropdown-item cursor-pointer"
-                  onClick={() => handleTabClick("my-organizations")}
+                  className="nav-link dropdown-toggle text-dark cursor-pointer"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
                 >
-                  Мої організації
+                  Додати
                 </a>
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <a
+                      className="dropdown-item cursor-pointer"
+                      onClick={() => handleTabClick("add-fundraise")}
+                    >
+                      Збір
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      className="dropdown-item cursor-pointer"
+                      onClick={() => handleTabClick("add-organization")}
+                    >
+                      Організацію
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li className="nav-item position-relative">
+                <a
+                  className="nav-link text-dark cursor-pointer"
+                  onClick={() => handleTabClick("statistics")}
+                >
+                  Статистика
+                </a>
+                {activeTab === "statistics" && <div className="highlight"></div>}
               </li>
             </ul>
-          </li>
-
-          <li className="nav-item dropdown">
-            <a
-              className="nav-link dropdown-toggle text-dark cursor-pointer"
-              id="navbarDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Додати
-            </a>
-            <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li>
-                <a
-                  className="dropdown-item cursor-pointer"
-                  onClick={() => handleTabClick("add-fundraise")}
+            <ul className="nav nav-pills ms-3 d-flex flex-column flex-lg-row align-items-end">
+              <li className="nav-item">
+                <button
+                  type="button"
+                  className="btn btn-sm btn-light me-0 me-lg-2 mb-2 mb-lg-0 fw-medium"
+                  onClick={() => handleLoginClick()}
                 >
-                  Збір
-                </a>
+                  Login
+                </button>
               </li>
-              <li>
-                <a
-                  className="dropdown-item cursor-pointer"
-                  onClick={() => handleTabClick("add-organization")}
-                >
-                  Організацію
-                </a>
+              <li className="nav-item">
+                <button type="button" className="btn btn-sm btn-primary fw-medium">
+                  Sign-up
+                </button>
               </li>
             </ul>
-          </li>
-          <li className="nav-item position-relative">
-            <a
-              className="nav-link text-dark cursor-pointer"
-              onClick={() => handleTabClick("statistics")}
-            >
-              Статистика
-            </a>
-            {activeTab === "statistics" && <div className="highlight"></div>}
-          </li>
-        </ul>
-        <ul className="nav nav-pills ms-3">
-          <li className="nav-item">
-            <button
-              type="button"
-              className="btn btn-sm btn-light me-2 fw-medium"
-              onClick={() => handleLoginClick()}
-            >
-              Login
-            </button>
-          </li>
-          <li className="nav-item">
-            <button type="button" className="btn btn-sm btn-dark fw-medium">
-              Sign-up
-            </button>
-          </li>
-          
-        </ul>
-      </header>
+          </div>
+        </div>
+      </nav>
     </div>
   );
 };

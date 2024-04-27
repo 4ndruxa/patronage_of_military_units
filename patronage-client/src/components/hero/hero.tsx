@@ -1,19 +1,20 @@
 import React from "react";
-import heroImage from "../../assets/hero.jpeg";
+import heroImage from "../../assets/hero-background.webp";
+import './hero.css';
 
 const Hero: React.FC = () => {
   return (
     <div className="col-12 container">
-      <div className="card d-flex align-items-start flex-md-row mb-4 border-0">
+      <div className="card d-flex align-items-start mb-4 border-0">
         <img
-          className="card-img-right flex-auto col-5 object-fit-contain"
+          className="card-img-right flex-auto col-12 object-fit-contain h-auto"
           src={heroImage}
           data-holder-rendered="true"
           alt="hero"
         ></img>
-        <div className="card-body pt-0 d-flex flex-column align-items-start">
+        <div className="card-body pt-0 mt-2 d-flex flex-column align-items-start">
           <h3 className="mb-2">
-            <div className="text-dark">
+            <div className="text-primary">
               Веб-платформа для громадського патронування військових підрозділів
             </div>
           </h3>
