@@ -53,7 +53,7 @@ const Header: React.FC = () => {
             <ul className="dropdown-menu" aria-labelledby="profileDropdown">
               <li>
                 <a
-                  className="dropdown-item"
+                  className="dropdown-item cursor-pointer"
                   onClick={() => handleTabClick("my-subscriptions")}
                 >
                   Мої підписки
@@ -61,7 +61,7 @@ const Header: React.FC = () => {
               </li>
               <li>
                 <a
-                  className="dropdown-item"
+                  className="dropdown-item cursor-pointer"
                   onClick={() => handleTabClick("my-fundraises")}
                 >
                   Мої збори
@@ -72,7 +72,7 @@ const Header: React.FC = () => {
               </li>
               <li>
                 <a
-                  className="dropdown-item"
+                  className="dropdown-item cursor-pointer"
                   onClick={() => handleTabClick("my-organizations")}
                 >
                   Мої організації
@@ -94,7 +94,7 @@ const Header: React.FC = () => {
             <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
               <li>
                 <a
-                  className="dropdown-item"
+                  className="dropdown-item cursor-pointer"
                   onClick={() => handleTabClick("add-fundraise")}
                 >
                   Збір
@@ -102,7 +102,7 @@ const Header: React.FC = () => {
               </li>
               <li>
                 <a
-                  className="dropdown-item"
+                  className="dropdown-item cursor-pointer"
                   onClick={() => handleTabClick("add-organization")}
                 >
                   Організацію
