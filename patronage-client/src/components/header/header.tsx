@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDonate } from "@fortawesome/free-solid-svg-icons";
 import './header.css';
 import { useNavigate } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const Header: React.FC = () => {
   const [activeTab, setActiveTab] = useState("patronage_of_military_units");
@@ -133,6 +135,7 @@ const Header: React.FC = () => {
               Sign-up
             </button>
           </li>
+          
         </ul>
       </header>
     </div>
