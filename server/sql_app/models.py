@@ -52,10 +52,9 @@ class Fundraisings(Base, BaseMixin):
     description = Column(String)
     creator_id = Column(Integer, ForeignKey("users.id"))
     organization_id = Column(Integer, ForeignKey("organizations.id"))
-    source_id = Column(Integer, ForeignKey("sources.id"))
 
     creator = relationship("Users", back_populates="fundraisings", foreign_keys="Fundraisings.creator_id")
-    sources = relationship("Sources", back_populates="fundraisings", foreign_keys="Fundraisings.source_id")
+    sources = relationship('Sources', back_populates='fundraising')
     organizations = relationship("Organizations", back_populates="fundraisings", foreign_keys="Fundraisings.organization_id")
 
 
@@ -67,9 +66,10 @@ class Sources(Base, BaseMixin):
     type = Column(String, index=True)
     url = Column(String)
     creator_id = Column(Integer, ForeignKey("users.id"))
+    fundraising_id = Column(Integer, ForeignKey("fundraisings.id"))
 
     creator = relationship("Users", back_populates="sources", foreign_keys="Sources.creator_id")
-    fundraisings = relationship("Fundraisings", back_populates="sources")
+    fundraising = relationship("Fundraisings", back_populates="sources", foreign_keys="Sources.fundraising_id")
 
 
 class Posts(Base, BaseMixin):

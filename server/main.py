@@ -65,21 +65,22 @@ def soft_remove_user(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return crud.soft_remove_user(db=db, user_id=user_id)
 
-
-@app.get("/fundraisings/", response_model=list[schemas.Fundraisings])
-def read_fundraisings(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    items = crud.get_fundraisings(db, skip=skip, limit=limit)
-    return items
-
 @app.post("/fundraisings/", response_model=schemas.Fundraisings)
-def create_fundraising(item: schemas.FundraisingsCreate, user_id: int, db: Session = Depends(get_db)):
-    return crud.create_fundraising(db=db, item=item, user_id=user_id)
+def create_fundraising(item: schemas.FundraisingsCreate, db: Session = Depends(get_db)):
+    if not db.query(models.Users).filter(models.Users.id == item.creator_id).first():
+        raise HTTPException(status_code=404, detail="Creator not found")
 
+    if not db.query(models.Organizations).filter(models.Organizations.id == item.organization_id).first():
+        raise HTTPException(status_code=404, detail="Organization not found")
+
+    try:
+        return crud.create_fundraising(db=db, item=item)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @app.get("/fundraisings/", response_model=List[schemas.Fundraisings])
 def read_fundraisings(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud.get_all_fundraisings(db, skip=skip, limit=limit)
-
 
 @app.get("/fundraisings/{fundraising_id}", response_model=schemas.Fundraisings)
 def read_fundraising(fundraising_id: int, db: Session = Depends(get_db)):
@@ -88,20 +89,12 @@ def read_fundraising(fundraising_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Fundraising not found")
     return db_fundraising
 
-
 @app.put("/fundraisings/{fundraising_id}", response_model=schemas.Fundraisings)
 def update_fundraising(fundraising_id: int, item: schemas.FundraisingsCreate, db: Session = Depends(get_db)):
-    db_fundraising = crud.get_fundraising(db, fundraising_id=fundraising_id)
-    if db_fundraising is None:
-        raise HTTPException(status_code=404, detail="Fundraising not found")
     return crud.update_fundraising(db=db, fundraising_id=fundraising_id, item=item)
-
 
 @app.delete("/fundraisings/{fundraising_id}", response_model=schemas.Fundraisings)
 def soft_remove_fundraising(fundraising_id: int, db: Session = Depends(get_db)):
-    db_fundraising = crud.get_fundraising(db, fundraising_id=fundraising_id)
-    if db_fundraising is None:
-        raise HTTPException(status_code=404, detail="Fundraising not found")
     return crud.soft_remove_fundraising(db=db, fundraising_id=fundraising_id)
 
 @app.post("/organizations/", response_model=schemas.Organizations)

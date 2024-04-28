@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 from pydantic import BaseModel
 
 class UsersBase(BaseModel):
@@ -40,33 +40,32 @@ class OrganizationsUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
 
-class FundraisingsBase(BaseModel):
-    title: str
-    description: Optional[str] = None
-
-class FundraisingsCreate(FundraisingsBase):
-    pass
-
-class Fundraisings(FundraisingsBase):
-    id: int
-    creator_id: int
-    organization_id: int
-    source_id: Optional[int]
-
-    class Config:
-        orm_mode = True
-
-class SourcesBase(BaseModel):
+class SourceBase(BaseModel):
     title: str
     type: str
     url: str
 
-class SourcesCreate(SourcesBase):
+class SourceCreate(SourceBase):
     pass
 
-class Sources(SourcesBase):
+class Source(SourceBase):
     id: int
+
+    class Config:
+        orm_mode = True
+
+class FundraisingsBase(BaseModel):
+    title: str
+    description: Optional[str] = None
     creator_id: int
+    organization_id: int
+
+class FundraisingsCreate(FundraisingsBase):
+    sources: List[SourceCreate]
+
+class Fundraisings(FundraisingsBase):
+    id: int
+    sources: List[Source]
 
     class Config:
         orm_mode = True

@@ -25,22 +25,46 @@ def update_user(db: Session, user_id: int, user: schemas.UsersUpdate):
     return db.query(models.Users).filter(models.Users.id == user_id).first()
 
 def get_fundraising(db: Session, fundraising_id: int):
-    return db.query(models.Fundraisings).filter(models.Fundraisings.id == fundraising_id).first()
+    return db.query(models.Fundraisings).options(joinedload(models.Fundraisings.sources)).filter(models.Fundraisings.id == fundraising_id).first()
 
 def get_all_fundraisings(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Fundraisings).offset(skip).limit(limit).all()
+    return db.query(models.Fundraisings).options(joinedload(models.Fundraisings.sources)).offset(skip).limit(limit).all()
 
-def create_fundraising(db: Session, item: schemas.FundraisingsCreate, user_id: int):
-    db_item = models.Fundraisings(**item.dict(), creator_id=user_id)
-    db.add(db_item)
+def create_fundraising(db: Session, item: schemas.FundraisingsCreate):
+    db_fundraising = models.Fundraisings(**item.dict(exclude={"sources"}))
+    db.add(db_fundraising)
     db.commit()
-    db.refresh(db_item)
-    return db_item
+    db.refresh(db_fundraising)
+
+    for source_data in item.sources:
+        db_source = models.Sources(**source_data.dict(), fundraising_id=db_fundraising.id, creator_id=db_fundraising.creator_id)
+        db.add(db_source)
+        db.commit()
+        db.refresh(db_source)
+
+    return db_fundraising
 
 def update_fundraising(db: Session, fundraising_id: int, item: schemas.FundraisingsCreate):
-    db.query(models.Fundraisings).filter(models.Fundraisings.id == fundraising_id).update(item.dict())
+    db.query(models.Fundraisings).filter(models.Fundraisings.id == fundraising_id).update(item.dict(exclude={"sources"}))
     db.commit()
-    return db.query(models.Fundraisings).filter(models.Fundraisings.id == fundraising_id).first()
+
+    existing_sources = db.query(models.Sources).filter(models.Sources.fundraising_id == fundraising_id).all()
+    existing_source_ids = {source.id for source in existing_sources}
+    new_source_ids = {source.id for source in item.sources if source.id}
+
+    for source_data in item.sources:
+        if source_data.id in existing_source_ids:
+            db.query(models.Sources).filter(models.Sources.id == source_data.id).update(source_data.dict())
+        else:
+            new_source = models.Sources(**source_data.dict(), fundraising_id=fundraising_id)
+            db.add(new_source)
+
+    sources_to_remove = existing_source_ids - new_source_ids
+    if sources_to_remove:
+        db.query(models.Sources).filter(models.Sources.id.in_(sources_to_remove)).delete(synchronize_session='fetch')
+
+    db.commit()
+    return db.query(models.Fundraisings).options(joinedload(models.Fundraisings.sources)).filter(models.Fundraisings.id == fundraising_id).first()
 
 def soft_remove_fundraising(db: Session, fundraising_id: int):
     db.query(models.Fundraisings).filter(models.Fundraisings.id == fundraising_id).update({"deleted_at": func.now()})
@@ -66,28 +90,6 @@ def update_organization(db: Session, organization_id: int, item: schemas.Organiz
 
 def soft_remove_organization(db: Session, organization_id: int):
     db.query(models.Organizations).filter(models.Organizations.id == organization_id).update({"deleted_at": func.now()})
-    db.commit()
-
-def get_source(db: Session, source_id: int):
-    return db.query(models.Sources).filter(models.Sources.id == source_id).first()
-
-def get_all_sources(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Sources).offset(skip).limit(limit).all()
-
-def create_source(db: Session, item: schemas.SourcesCreate, user_id: int):
-    db_item = models.Sources(**item.dict(), creator_id=user_id)
-    db.add(db_item)
-    db.commit()
-    db.refresh(db_item)
-    return db_item
-
-def update_source(db: Session, source_id: int, item: schemas.SourcesCreate):
-    db.query(models.Sources).filter(models.Sources.id == source_id).update(item.dict())
-    db.commit()
-    return db.query(models.Sources).filter(models.Sources.id == source_id).first()
-
-def soft_remove_source(db: Session, source_id: int):
-    db.query(models.Sources).filter(models.Sources.id == source_id).update({"deleted_at": func.now()})
     db.commit()
 
 def get_post(db: Session, post_id: int):
