@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import fundraisingDefault from "../../assets/fundraising-default.png";
-import { getFundraisings } from '../../services/api/fundraisings/fundraisings';  // API call to get fundraisings
-import { getOrganizations } from '../../services/api/organizations/organizations';  // API call to get organizations
+import { getFundraisings } from '../../services/api/fundraisings/fundraisings';
+import { getOrganizations } from '../../services/api/organizations/organizations';
 import './cards.scss';
 import { Fundraising } from '../../types/FundraisingsData';
 import { Organizations } from "../../types/OrganizationsData";
@@ -48,7 +48,7 @@ const Cards: React.FC = () => {
   };
 
   const handlePayNowClick = (fundraising: Fundraising) => {
-    navigate(`/subscribe/${fundraising.id}`, { state: fundraising });  // Assuming pay now goes to subscribe
+    navigate(`/subscribe/${fundraising.id}`, { state: fundraising });
   };
 
   return (
