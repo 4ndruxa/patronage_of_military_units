@@ -1,6 +1,5 @@
 from sqlalchemy import func
-from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session, joinedload
 from . import models, schemas
 
 def get_user(db: Session, user_id: int):

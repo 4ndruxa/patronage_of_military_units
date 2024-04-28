@@ -1,4 +1,4 @@
-import { SourceCreate } from "./SourceData";
+import { Source, SourceCreate } from "./SourceData";
 
 export interface Fundraising {
     id?: number;
@@ -6,7 +6,7 @@ export interface Fundraising {
     description?: string;
     creator_id: number;
     organization_id: number;
-    source_id?: number;
+    sources: Source[];
   }
   
   export interface FundraisingCreate {
@@ -14,7 +14,6 @@ export interface Fundraising {
     description?: string;
     creator_id: number;
     organization_id: number;
-    source_id?: number;
   }
 
   export interface FundraisingFormData {

@@ -1,76 +1,80 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import catImage from "../../assets/cat-money-maker.png";
+import fundraisingDefault from "../../assets/fundraising-default.png";
+import { getFundraisings } from '../../services/api/fundraisings/fundraisings';  // API call to get fundraisings
+import { getOrganizations } from '../../services/api/organizations/organizations';  // API call to get organizations
 import './cards.scss';
-import { CardData } from "../../types/CardData";
+import { Fundraising } from '../../types/FundraisingsData';
+import { Organizations } from "../../types/OrganizationsData";
 
 const Cards: React.FC = () => {
-  // Mocked data for cards
-  const cardsData: CardData[] = [
-    { title: "Content for Card 1", owner: "3 Окрема Танкова Бригада", img: catImage, id: 1, linkToBank: '' },
-    { title: "Content for Card 2", owner: "3 Окрема Танкова Бригада", img: catImage, id: 2, linkToBank: '' },
-    { title: "Content for Card 3", owner: "3 Окрема Танкова Бригада", img: catImage, id: 3, linkToBank: '' },
-    { title: "Content for Card 4", owner: "3 Окрема Танкова Бригада", img: catImage, id: 4, linkToBank: '' },
-    { title: "Content for Card 5", owner: "3 Окрема Танкова Бригада", img: catImage, id: 5, linkToBank: '' },
-    { title: "Content for Card 6", owner: "3 Окрема Танкова Бригада", img: catImage, id: 6, linkToBank: '' },
-    { title: "Content for Card 7", owner: "3 Окрема Танкова Бригада", img: catImage, id: 7, linkToBank: '' },
-    { title: "Content for Card 8", owner: "3 Окрема Танкова Бригада", img: catImage, id: 8, linkToBank: '' },
-    { title: "Content for Card 9", owner: "3 Окрема Танкова Бригада", img: catImage, id: 9, linkToBank: '' },
-    { title: "Content for Card 10", owner: "3 Окрема Танкова Бригада", img: catImage, id: 10, linkToBank: '' },
-    { title: "Content for Card 11", owner: "3 Окрема Танкова Бригада", img: catImage, id: 11, linkToBank: '' },
-    { title: "Content for Card 12", owner: "3 Окрема Танкова Бригада", img: catImage, id: 12, linkToBank: '' },
-    { title: "Content for Card 13", owner: "3 Окрема Танкова Бригада", img: catImage, id: 13, linkToBank: '' },
-  ];
-
-  const cardsPerPage = 6;
+  const [fundraisings, setFundraisings] = useState<Fundraising[]>([]);
+  const [organizations, setOrganizations] = useState<Organizations[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const cardsPerPage = 6;
 
-  const indexOfLastCard = currentPage * cardsPerPage;
-  const indexOfFirstCard = indexOfLastCard - cardsPerPage;
-  const currentCards = cardsData.slice(indexOfFirstCard, indexOfLastCard);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedFundraisings = await getFundraisings();
+      const fetchedOrganizations = await getOrganizations();
+      setFundraisings(fetchedFundraisings);
+      setOrganizations(fetchedOrganizations);
+    };
+    fetchData();
+  }, []);
+
+  const getOrganizationName = (orgId: number) => {
+    const org = organizations.find(o => o.id === orgId);
+    return org ? org.name : "Unknown Organization";
+  };
+
+  const currentCards = fundraisings
+    .slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage)
+    .map(fundraising => ({
+      ...fundraising,
+      owner: getOrganizationName(fundraising.organization_id),
+      img: fundraisingDefault,
+      linkToBank: fundraising.sources[0]?.url || ''
+    }));
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
 
-  const navigate = useNavigate();
-  const handleCardClick = (card: CardData) => {
-    navigate(`/fundraise/${card.id}`, { state: card });
+  const handleCardClick = (fundraising: Fundraising) => {
+    navigate(`/fundraise/${fundraising.id}`, { state: fundraising });
   };
 
-  const handlePayNowClick = (card: CardData) => {
-    navigate(`/subscribe/${card.id}`, { state: card }); // add link to bank
-  };
-
-  const handleSubscribeClick = (card: CardData) => {
-    navigate(`/subscribe/${card.id}`, { state: card });
+  const handlePayNowClick = (fundraising: Fundraising) => {
+    navigate(`/subscribe/${fundraising.id}`, { state: fundraising });  // Assuming pay now goes to subscribe
   };
 
   return (
-    <div>
-      <div className="d-flex flex-wrap gap-1 container">
-        {currentCards.map((card, index) => (
-          <div className="card-width" key={index}>
-            <div className="card card-scale">
-              <div className="card-body">
-                <div className="d-flex flex-column gap-1 cursor-pointer mb-2" onClick={() => handleCardClick(card)}>
-                  <img className="col-12 object-fit-contain" src={card.img} alt={card.title} />
-                  <h5 className="card-text fw-semibold">{card.title}</h5>
-                </div>
-                <button className="btn btn-outline-secondary fw-medium d-block mb-2" onClick={() => handlePayNowClick(card)}>
-                  Задонатити зараз
-                </button>
-                <button className="btn btn-primary fw-medium d-block" onClick={() => handleSubscribeClick(card)}>
-                  Підписатись
-                </button>
+    <div className="d-flex flex-wrap gap-1 container">
+      {currentCards.map((card, index) => (
+        <div className="card-width" key={index}>
+          <div className="card card-scale">
+            <div className="card-body">
+              <div className="d-flex flex-column gap-1 cursor-pointer mb-2" onClick={() => handleCardClick(card)}>
+                <img className="col-12 object-fit-contain" src={card.img} alt={card.title} />
+                <h5 className="card-text fw-semibold">{card.title}</h5>
+                <h6 className="card-subtitle mb-2 text-muted">{card.owner}</h6>
               </div>
+              <button className="btn btn-outline-secondary fw-medium d-block mb-2" onClick={() => handlePayNowClick(card)}>
+                Задонатити зараз
+              </button>
+              <button className="btn btn-primary fw-medium d-block" onClick={() => navigate(`/subscribe/${card.id}`, { state: card })}>
+                Підписатись
+              </button>
             </div>
           </div>
-        ))}
-      </div>
-      <nav aria-label="..." className="d-flex justify-content-center my-2">
+        </div>
+      ))}
+      <nav aria-label="..." className="d-flex justify-content-center my-2 w-100">
         <ul className="pagination pagination-sm">
-          {[...Array(Math.ceil(cardsData.length / cardsPerPage))].map((_, index) => (
+          {[...Array(Math.ceil(fundraisings.length / cardsPerPage))].map((_, index) => (
             <li className={`page-item ${currentPage === index + 1 ? 'active-card-page' : ''}`} key={index} role="button">
               <span className="page-link text-primary" onClick={() => handlePageChange(index + 1)}>
                 {index + 1}
