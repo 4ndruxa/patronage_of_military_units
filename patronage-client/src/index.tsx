@@ -5,24 +5,27 @@ import './index.scss';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import reportWebVitals from './reportWebVitals';
 import AppRoutes from './routes/appRoutes';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const rootElement = document.getElementById('root');
-
 if (!rootElement) {
   throw new Error('Root element not found in the document.');
 }
 
-const root = ReactDOM.createRoot(rootElement);
+const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+if (!googleClientId) {
+  console.error('Google Client ID is not set.');
+}
 
+const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <Router>
-      <AppRoutes />
-    </Router>
+    <GoogleOAuthProvider clientId={googleClientId || ''}>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </GoogleOAuthProvider>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

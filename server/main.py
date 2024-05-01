@@ -3,9 +3,14 @@ from typing import List
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2AuthorizationCodeBearer
+from authlib.integrations.starlette_client import OAuth
+from fastapi import Request
 
 from sql_app import crud, models, schemas
 from sql_app.database import SessionLocal, engine
+from dotenv import load_dotenv
+import os
 
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
@@ -25,9 +30,43 @@ def get_db():
     finally:
         db.close()
 
+load_dotenv()
+
+google_client_id = os.getenv('GOOGLE_CLIENT_ID')
+google_secret = os.getenv('GOOGLE_SECRET')
+
+oauth = OAuth()
+conf = {
+    "client_id": google_client_id,
+    "client_secret": google_secret,
+    "authorize_url": "https://accounts.google.com/o/oauth2/auth",
+    "authorize_params": None,
+    "token_url": "https://accounts.google.com/o/oauth2/token",
+    "token_placement": "header",
+    "redirect_uri": "http://localhost:3000/auth/google/callback"
+}
+oauth.register(
+    name='google',
+    client_kwargs={
+        'scope': 'openid email profile'
+    },
+    **conf
+)
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+@app.get("/login")
+async def login(request: Request):
+    redirect_uri = request.url_for('auth', _external=True)
+    return await oauth.google.authorize_redirect(request, redirect_uri)
+
+@app.get("/auth")
+async def auth(request: Request):
+    token = await oauth.google.authorize_access_token(request)
+    user = await oauth.google.parse_id_token(request, token)
+    return {"user": user}
 
 @app.post("/users/", response_model=schemas.Users)
 def create_user(user: schemas.UsersCreate, db: Session = Depends(get_db)):
