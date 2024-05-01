@@ -24,15 +24,35 @@ def update_user(db: Session, user_id: int, user: schemas.UsersUpdate):
     return db.query(models.Users).filter(models.Users.id == user_id).first()
 
 def get_fundraising(db: Session, fundraising_id: int):
-    return db.query(models.Fundraisings).options(joinedload(models.Fundraisings.sources)).filter(models.Fundraisings.id == fundraising_id).first()
+    return db.query(models.Fundraisings) \
+        .options(joinedload(models.Fundraisings.sources)) \
+        .options(joinedload(models.Fundraisings.organizations)) \
+        .filter(models.Fundraisings.id == fundraising_id) \
+        .first()
 
 def get_all_fundraisings(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Fundraisings).options(joinedload(models.Fundraisings.sources)).offset(skip).limit(limit).all()
+    return db.query(models.Fundraisings) \
+    .options(joinedload(models.Fundraisings.sources)) \
+    .options(joinedload(models.Fundraisings.organizations)) \
+    .offset(skip) \
+    .limit(limit) \
+    .all()
 
 def get_fundraisings_by_creator(db: Session, creator_id: int, skip: int = 0, limit: int = 100):
     return db.query(models.Fundraisings) \
         .options(joinedload(models.Fundraisings.sources)) \
-        .filter(models.Fundraisings.creator_id == creator_id) \
+        .options(joinedload(models.Fundraisings.organizations)) \
+        .filter(models.Fundraisings.creator_id == creator_id)\
+        .offset(skip)\
+        .limit(limit)\
+        .all()
+
+
+def get_fundraisings_by_organization(db: Session, organization_id: int, skip: int = 0, limit: int = 100):
+    return db.query(models.Fundraisings) \
+        .options(joinedload(models.Fundraisings.sources)) \
+        .options(joinedload(models.Fundraisings.organizations)) \
+        .filter(models.Fundraisings.organization_id == organization_id) \
         .offset(skip) \
         .limit(limit) \
         .all()
@@ -52,29 +72,23 @@ def create_fundraising(db: Session, item: schemas.FundraisingsCreate):
     return db_fundraising
 
 def update_fundraising(db: Session, fundraising_id: int, item: schemas.FundraisingsBase):
-    # Update fundraising without affecting the sources directly
     db.query(models.Fundraisings).filter(models.Fundraisings.id == fundraising_id).update(item.dict(exclude={"sources"}))
     db.commit()
 
-    # Retrieve existing sources from the database
     existing_sources = db.query(models.Sources).filter(models.Sources.fundraising_id == fundraising_id).all()
     existing_source_ids = {source.id for source in existing_sources}
 
-    # Filter out sources with and without IDs (new sources won't have IDs)
     new_sources = [source for source in item.sources if not hasattr(source, 'id')]
     update_sources = [source for source in item.sources if hasattr(source, 'id')]
 
-    # Update existing sources
     for source_data in update_sources:
         if source_data.id in existing_source_ids:
             db.query(models.Sources).filter(models.Sources.id == source_data.id).update(source_data.dict())
     
-    # Create new sources
     for source_data in new_sources:
         new_source = models.Sources(**source_data.dict(), fundraising_id=fundraising_id)
         db.add(new_source)
 
-    # Calculate sources to remove
     new_source_ids = {source.id for source in update_sources}
     sources_to_remove = existing_source_ids - new_source_ids
     if sources_to_remove:
@@ -82,7 +96,6 @@ def update_fundraising(db: Session, fundraising_id: int, item: schemas.Fundraisi
 
     db.commit()
 
-    # Return the updated fundraising with sources loaded
     return db.query(models.Fundraisings).options(joinedload(models.Fundraisings.sources)).filter(models.Fundraisings.id == fundraising_id).first()
 
 def soft_remove_fundraising(db: Session, fundraising_id: int):
@@ -110,6 +123,14 @@ def update_organization(db: Session, organization_id: int, item: schemas.Organiz
 def soft_remove_organization(db: Session, organization_id: int):
     db.query(models.Organizations).filter(models.Organizations.id == organization_id).update({"deleted_at": func.now()})
     db.commit()
+
+def get_organizations_by_creator(db: Session, creator_id: int, skip: int = 0, limit: int = 100):
+    return db.query(models.Organizations) \
+        .filter(models.Organizations.creator_id == creator_id) \
+        .offset(skip) \
+        .limit(limit) \
+        .all()
+
 
 def get_post(db: Session, post_id: int):
     return db.query(models.Posts).filter(models.Posts.id == post_id).first()

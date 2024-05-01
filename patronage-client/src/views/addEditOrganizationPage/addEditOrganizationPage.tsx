@@ -1,6 +1,6 @@
 import React from "react";
 import Header from '../../components/header/header';
-import AddOrganization from "../../components/addOrganization/addOrganization";
+import AddOrganization from "../../components/addEditOrganization/addEditOrganization";
 
 
 const AddOrganizationPage: React.FC = () => {

@@ -34,7 +34,7 @@ export const createFundraising = async (data: FundraisingCreate): Promise<Fundra
 
 export const updateFundraising = async (fundraisingId: number, data: FundraisingCreate): Promise<FundraisingResponse> => {
   try {
-    const response = await axios.put<FundraisingResponse>(`${BASE_URL}/fundraisings/${fundraisingId}`, data);
+    const response = await axios.patch<FundraisingResponse>(`${BASE_URL}/fundraisings/${fundraisingId}`, data);
     return response.data;
   } catch (error) {
     throw error;
@@ -60,3 +60,15 @@ export const getFundraisingsByCreator = async (creatorId: number, skip = 0, limi
       throw error;
     }
   };
+
+  export const getFundraisingsByOrganization = async (organizationId: number, skip = 0, limit = 100): Promise<Fundraising[]> => {
+    try {
+      const response = await axios.get<Fundraising[]>(`${BASE_URL}/fundraisings/by-organization/${organizationId}`, {
+        params: { skip, limit }
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+  

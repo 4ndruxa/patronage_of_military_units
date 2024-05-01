@@ -1,7 +1,7 @@
 import React from "react";
 import Header from '../../components/header/header';
 import Hero from '../../components/hero/hero';
-import Cards from '../../components/organizations/organizations';
+import Cards from '../../components/fundraisings/fundraisings';
 
 const HomePage: React.FC = () => {
   return (

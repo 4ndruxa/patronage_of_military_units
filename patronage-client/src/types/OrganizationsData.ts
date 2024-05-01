@@ -2,6 +2,7 @@
 export interface OrganizationsData {
     id: number;
     name: string;
-    description: string;
+    description?: string;
     creator_id: number;
+    img?: string;
 }

@@ -7,6 +7,10 @@ export interface Fundraising {
     creator_id: number;
     organization_id: number;
     sources: Source[];
+    organizations: {
+        id: number;
+        name: string;
+    }
   }
   
   export interface FundraisingCreate {

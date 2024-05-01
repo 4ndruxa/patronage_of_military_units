@@ -93,6 +93,12 @@ def read_fundraising(fundraising_id: int, db: Session = Depends(get_db)):
 def read_fundraisings_by_creator(creator_id: int, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud.get_fundraisings_by_creator(db, creator_id=creator_id, skip=skip, limit=limit)
 
+@app.get("/fundraisings/by-organization/{organization_id}", response_model=List[schemas.Fundraisings])
+def read_fundraisings_by_organization(organization_id: int, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    fundaisings = crud.get_fundraisings_by_organization(db, organization_id=organization_id, skip=skip, limit=limit)
+    if not fundaisings:
+        raise HTTPException(status_code=404, detail="No fundraisings found for this organization")
+    return fundaisings
 
 @app.patch("/fundraisings/{fundraising_id}", response_model=schemas.Fundraisings)
 def update_fundraising(fundraising_id: int, item: schemas.FundraisingsBase, db: Session = Depends(get_db)):
@@ -134,6 +140,13 @@ def soft_remove_organization(organization_id: int, db: Session = Depends(get_db)
     if db_organization is None:
         raise HTTPException(status_code=404, detail="Organization not found")
     return crud.soft_remove_organization(db=db, organization_id=organization_id)
+
+@app.get("/organizations/by-creator/{creator_id}", response_model=List[schemas.Organizations])
+def read_organizations_by_creator(creator_id: int, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    organizations = crud.get_organizations_by_creator(db, creator_id=creator_id, skip=skip, limit=limit)
+    if not organizations:
+        raise HTTPException(status_code=404, detail="No organizations found for this creator")
+    return organizations
 
 @app.post("/posts/", response_model=schemas.Posts)
 def create_post(item: schemas.PostsCreate, user_id: int, db: Session = Depends(get_db)):

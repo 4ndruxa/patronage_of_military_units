@@ -48,3 +48,15 @@ export const deleteOrganization = async (id: number) => {
     throw error;
   }
 };
+
+export const getOrganizationsByCreatorId = async (creatorId: number, skip = 0, limit = 100) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/organizations/by-creator/${creatorId}`, {
+        params: { skip, limit }
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+  

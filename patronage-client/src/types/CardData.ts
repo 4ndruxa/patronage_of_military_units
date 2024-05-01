@@ -1,7 +1,11 @@
 export interface CardData {
-    title: string;
-    owner: string;
-    img: string;
-    id: number;
-    linkToBank: string;
-  }
+  id: number;
+  title: string;
+  description?: string;
+  img: string;
+  linkToBank: string;
+  organizations: {
+      id: number;
+      name: string;
+  };
+}

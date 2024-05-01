@@ -1,62 +1,37 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CardData } from "../../types/CardData";
-import "./fundraising.css";
 
 const Fundraising: React.FC = () => {
   const location = useLocation();
-  const { title, owner, img } = location.state as CardData;
-
-  // Mocked data for items
-  const items: String[] = [
-    "Ми дуже хороші, дайте грошей",
-    "Ми дуже хороші, дайте грошей",
-    "Ми дуже хороші, дайте грошей",
-    "Ми дуже хороші, дайте грошей",
-  ];
+  const { title, organizations, img, linkToBank } = location.state as CardData;
 
   const navigate = useNavigate();
-  const handlePayNowClick = (card: CardData) => {
-    navigate(`/subscribe/${card.id}`, { state: card }); // add link to bank
+
+  // Navigation function to go to organization details page
+  const navigateToOrganization = (organizationId: number) => {
+    navigate(`/organizations/${organizationId}`);
   };
 
-  const handleSubscribeClick = (card: CardData) => {
-    navigate(`/subscribe/${card.id}`, { state: card });
-  };
-
-  const renderButton = (
-    text: string,
-    style: string,
-    onClick: (card: CardData) => void,
-    card: CardData
-  ) => {
-    return (
-      <button className={`btn ${style} fw-medium`} onClick={() => onClick(card)}>
-        {text}
-      </button>
-    );
-  };
+  // Function to render buttons
+  const renderButton = (text: string, style: string, onClick: () => void) => (
+    <button className={`btn ${style} fw-medium`} onClick={onClick}>
+      {text}
+    </button>
+  );
 
   return (
     <div className="container">
       <div className="d-flex flex-column align-items-center">
         <h1 className="mt-5 mb-2">{title}</h1>
-        <h4 className="text-secondary mb-3">{owner}</h4>
+        <button className="btn btn-light mb-3" onClick={() => navigateToOrganization(organizations.id)}>
+          {organizations.name}
+        </button>
         <div className="d-flex gap-2 mb-5">
-          {renderButton(
-            "Задонатити зараз",
-            "btn-outline-secondary",
-            handlePayNowClick,
-            location.state
-          )}
-          {renderButton(
-            "Підписатись",
-            "btn-secondary",
-            handleSubscribeClick,
-            location.state
-          )}
+          {renderButton("Задонатити зараз", "btn-outline-secondary", () => navigate(linkToBank))}
+          {renderButton("Підписатись", "btn-primary", () => navigate(`/subscribe/${location.state.id}`))}
         </div>
-        <img className="h-auto object-fit-contain" src={img} alt={title} />
+        <img className="h-auto object-fit-contain w-75" src={img} alt={title} />
         <p className="fs-18 mt-3">
           {/* add content when back is ready */}
           Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -87,26 +62,9 @@ const Fundraising: React.FC = () => {
           Aldus PageMaker including versions of Lorem Ipsum.
         </p>
       </div>
-      <div>
-        <ul>
-          {items.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
-      </div>
       <div className="d-flex gap-2 mb-5">
-        {renderButton(
-          "Задонатити зараз",
-          "btn-outline-secondary",
-          handlePayNowClick,
-          location.state
-        )}
-        {renderButton(
-          "Підписатись",
-          "btn-secondary",
-          handleSubscribeClick,
-          location.state
-        )}
+        {renderButton("Задонатити зараз", "btn-outline-secondary", () => navigate(linkToBank))}
+        {renderButton("Підписатись", "btn-primary", () => navigate(`/subscribe/${location.state.id}`))}
       </div>
     </div>
   );

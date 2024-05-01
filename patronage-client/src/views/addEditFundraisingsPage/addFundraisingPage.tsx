@@ -1,6 +1,6 @@
 import React from "react";
 import Header from '../../components/header/header';
-import AddFundraisings from "../../components/addFundraising/addFundraising";
+import AddFundraisings from "../../components/addEditFundraising/addEditFundraising";
 
 const AddFundraisingsPage: React.FC = () => {
   return (

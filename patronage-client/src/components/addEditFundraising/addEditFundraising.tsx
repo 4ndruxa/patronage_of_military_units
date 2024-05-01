@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { createFundraising } from '../../services/api/fundraisings/fundraisings';
+import { useParams, useNavigate } from 'react-router-dom';
+import { createFundraising, updateFundraising, getFundraisingById } from '../../services/api/fundraisings/fundraisings';
 import { FundraisingFormData } from "../../types/FundraisingsData";
 import { getOrganizations } from "../../services/api/organizations/organizations";
 
-const AddFundraising: React.FC = () => {
+const AddEditFundraising: React.FC = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FundraisingFormData>({
     title: "",
     description: "",
@@ -13,23 +16,26 @@ const AddFundraising: React.FC = () => {
       type: "",
       url: ""
     }],
-    creator_id: 1,
+    creator_id: 1, // This should be fetched based on the logged-in user's context
   });
-
   const [organizations, setOrganizations] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchOrganizations = async () => {
+    const fetchOrganizationsAndData = async () => {
       try {
         const fetchedOrganizations = await getOrganizations();
         setOrganizations(fetchedOrganizations);
+        if (id) {
+          const fetchedFundraising = await getFundraisingById(parseInt(id));
+          setFormData({ ...formData, ...fetchedFundraising });
+        }
       } catch (error) {
-        console.error("Failed to fetch organizations", error);
+        console.error("Failed to fetch data", error);
       }
     };
 
-    fetchOrganizations();
-  }, []);
+    fetchOrganizationsAndData();
+  }, [id]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
@@ -46,7 +52,7 @@ const AddFundraising: React.FC = () => {
   };
 
   const allSourcesFilled = () => {
-    return formData.sources.every(source => source.title && source.type && source.url);
+    return formData.sources.every(source => source.title.trim() !== "" && source.type.trim() !== "" && source.url.trim() !== "");
   };
 
   const addSource = () => {
@@ -62,10 +68,17 @@ const AddFundraising: React.FC = () => {
     event.preventDefault();
     if (allSourcesFilled()) {
       try {
-        const response = await createFundraising(formData);
-        console.log("Fundraising Created:", response);
+        if (id) {
+          await updateFundraising(parseInt(id), formData);
+          console.log("Fundraising Updated");
+          navigate('/my-fundraisings');
+        } else {
+          const response = await createFundraising(formData);
+          console.log("Fundraising Created:", response);
+          navigate('/my-fundraisings');
+        }
       } catch (error) {
-        console.error("Error creating fundraising:", error);
+        console.error("Error submitting fundraising:", error);
       }
     } else {
       console.error("Please fill all fields for all sources.");
@@ -74,7 +87,7 @@ const AddFundraising: React.FC = () => {
 
   return (
     <div className="container mt-4">
-      <h2>Додати новий збір</h2>
+      <h2>{id ? "Редагувати збір" : "Додати новий збір"}</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="title" className="form-label">Назва збору</label>
@@ -117,12 +130,12 @@ const AddFundraising: React.FC = () => {
           </div>
         ))}
         {allSourcesFilled() && (
-          <button type="button" className="btn btn-secondary mt-3 d-block" onClick={addSource}>Додати ще одне джерело</button>
+          <button type="button" className="btn btn-secondary mt-3 mb-3 d-block" onClick={addSource}>Додати ще одне джерело</button>
         )}
-        <button type="submit" className="btn btn-primary mt-3">Зберегти збір</button>
+        <button type="submit" className="btn btn-primary">{id ? 'Оновити' : 'Зберегти збір'}</button>
       </form>
     </div>
   );
 };
 
-export default AddFundraising;
+export default AddEditFundraising;

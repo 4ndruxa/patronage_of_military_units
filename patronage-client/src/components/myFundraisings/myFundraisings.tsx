@@ -9,7 +9,7 @@ const MyFundraisings: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 6;
   const navigate = useNavigate();
-  const creatorId = 1; // This should ideally be fetched from user's session or context
+  const creatorId = 1;
 
   useEffect(() => {
     const fetchFundraisings = async () => {
@@ -42,10 +42,12 @@ const MyFundraisings: React.FC = () => {
                 <h5 className="card-text fw-semibold">{card.title}</h5>
                 <p>{card.description}</p>
               </div>
-              <button className="btn btn-outline-secondary fw-medium d-block mb-2" onClick={() => navigate(`/add-fundraising`, { state: card })}>Edit</button>
-              <button className="btn btn-danger fw-medium d-block" onClick={() => {
+              <button className="btn btn-outline-secondary fw-medium d-block mb-2" onClick={() => navigate(`/edit-fundraising/${card.id}`, { state: card })}>
+                Редагувати
+              </button>
+              <button className="btn btn-dark fw-medium d-block" onClick={() => {
                 deleteFundraising(card.id).then(() => setFundraisings(fundraisings.filter(f => f.id !== card.id)));
-              }}>Remove</button>
+              }}>Видалити</button>
             </div>
           </div>
         </div>

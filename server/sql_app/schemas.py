@@ -54,10 +54,18 @@ class Source(SourceBase):
     class Config:
         orm_mode = True
 
+class OrganizationInfo(BaseModel):
+    id: int
+    name: str
+
 class FundraisingsBase(BaseModel):
+    id: int
     title: str
     description: Optional[str] = None
-    sources: List[SourceCreate]
+    creator_id: int
+
+    class Config:
+        orm_mode = True
 
 class FundraisingsCreate(FundraisingsBase):
     creator_id: int
@@ -66,6 +74,8 @@ class FundraisingsCreate(FundraisingsBase):
 class Fundraisings(FundraisingsBase):
     id: int
     sources: List[Source]
+    organization_id: int
+    organizations: OrganizationInfo
 
     class Config:
         orm_mode = True
