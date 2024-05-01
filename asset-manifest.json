@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "/patronage_of_military_units/static/css/main.6aaca206.css",
-    "main.js": "/patronage_of_military_units/static/js/main.2da99e41.js",
+    "main.js": "/patronage_of_military_units/static/js/main.78a035a1.js",
     "static/js/453.7cd6df65.chunk.js": "/patronage_of_military_units/static/js/453.7cd6df65.chunk.js",
     "static/media/logo.png": "/patronage_of_military_units/static/media/logo.12820dc98d5a385d9333.png",
-    "static/media/fundraising-default.png": "/patronage_of_military_units/static/media/fundraising-default.7e7625961f2daa013455.png",
+    "static/media/fundraising-default.png": "/patronage_of_military_units/static/media/fundraising-default.ac07ade1cbc6016fa9b3.png",
     "static/media/hero-background.webp": "/patronage_of_military_units/static/media/hero-background.553c04f2af229362531f.webp",
     "index.html": "/patronage_of_military_units/index.html",
     "main.6aaca206.css.map": "/patronage_of_military_units/static/css/main.6aaca206.css.map",
-    "main.2da99e41.js.map": "/patronage_of_military_units/static/js/main.2da99e41.js.map",
+    "main.78a035a1.js.map": "/patronage_of_military_units/static/js/main.78a035a1.js.map",
     "453.7cd6df65.chunk.js.map": "/patronage_of_military_units/static/js/453.7cd6df65.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6aaca206.css",
-    "static/js/main.2da99e41.js"
+    "static/js/main.78a035a1.js"
   ]
 }
