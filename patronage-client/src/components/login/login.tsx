@@ -9,9 +9,9 @@ const Login = () => {
   });
 
   return (
-    <div className="login-container">
-      <h1>Login Page</h1>
-      <button onClick={() => login()} className="btn btn-primary">
+    <div className="login-container d-flex flex-column align-items-center">
+      <h1>Увійти з Google</h1>
+      <button onClick={() => login()} className="btn btn-primary w-25">
         Login with Google
       </button>
     </div>
@@ -19,4 +19,3 @@ const Login = () => {
 };
 
 export default Login;
-
