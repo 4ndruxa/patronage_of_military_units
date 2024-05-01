@@ -1,9 +1,9 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CardData } from "../../types/CardData";
-import "./card.css";
+import "./fundraising.css";
 
-const Card: React.FC = () => {
+const Fundraising: React.FC = () => {
   const location = useLocation();
   const { title, owner, img } = location.state as CardData;
 
@@ -112,4 +112,4 @@ const Card: React.FC = () => {
   );
 };
 
-export default Card;
+export default Fundraising;

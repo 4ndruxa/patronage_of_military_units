@@ -89,8 +89,13 @@ def read_fundraising(fundraising_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Fundraising not found")
     return db_fundraising
 
-@app.put("/fundraisings/{fundraising_id}", response_model=schemas.Fundraisings)
-def update_fundraising(fundraising_id: int, item: schemas.FundraisingsCreate, db: Session = Depends(get_db)):
+@app.get("/fundraisings/by-creator/{creator_id}", response_model=List[schemas.Fundraisings])
+def read_fundraisings_by_creator(creator_id: int, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return crud.get_fundraisings_by_creator(db, creator_id=creator_id, skip=skip, limit=limit)
+
+
+@app.patch("/fundraisings/{fundraising_id}", response_model=schemas.Fundraisings)
+def update_fundraising(fundraising_id: int, item: schemas.FundraisingsBase, db: Session = Depends(get_db)):
     return crud.update_fundraising(db=db, fundraising_id=fundraising_id, item=item)
 
 @app.delete("/fundraisings/{fundraising_id}", response_model=schemas.Fundraisings)

@@ -29,6 +29,14 @@ def get_fundraising(db: Session, fundraising_id: int):
 def get_all_fundraisings(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Fundraisings).options(joinedload(models.Fundraisings.sources)).offset(skip).limit(limit).all()
 
+def get_fundraisings_by_creator(db: Session, creator_id: int, skip: int = 0, limit: int = 100):
+    return db.query(models.Fundraisings) \
+        .options(joinedload(models.Fundraisings.sources)) \
+        .filter(models.Fundraisings.creator_id == creator_id) \
+        .offset(skip) \
+        .limit(limit) \
+        .all()
+
 def create_fundraising(db: Session, item: schemas.FundraisingsCreate):
     db_fundraising = models.Fundraisings(**item.dict(exclude={"sources"}))
     db.add(db_fundraising)
@@ -43,26 +51,38 @@ def create_fundraising(db: Session, item: schemas.FundraisingsCreate):
 
     return db_fundraising
 
-def update_fundraising(db: Session, fundraising_id: int, item: schemas.FundraisingsCreate):
+def update_fundraising(db: Session, fundraising_id: int, item: schemas.FundraisingsBase):
+    # Update fundraising without affecting the sources directly
     db.query(models.Fundraisings).filter(models.Fundraisings.id == fundraising_id).update(item.dict(exclude={"sources"}))
     db.commit()
 
+    # Retrieve existing sources from the database
     existing_sources = db.query(models.Sources).filter(models.Sources.fundraising_id == fundraising_id).all()
     existing_source_ids = {source.id for source in existing_sources}
-    new_source_ids = {source.id for source in item.sources if source.id}
 
-    for source_data in item.sources:
+    # Filter out sources with and without IDs (new sources won't have IDs)
+    new_sources = [source for source in item.sources if not hasattr(source, 'id')]
+    update_sources = [source for source in item.sources if hasattr(source, 'id')]
+
+    # Update existing sources
+    for source_data in update_sources:
         if source_data.id in existing_source_ids:
             db.query(models.Sources).filter(models.Sources.id == source_data.id).update(source_data.dict())
-        else:
-            new_source = models.Sources(**source_data.dict(), fundraising_id=fundraising_id)
-            db.add(new_source)
+    
+    # Create new sources
+    for source_data in new_sources:
+        new_source = models.Sources(**source_data.dict(), fundraising_id=fundraising_id)
+        db.add(new_source)
 
+    # Calculate sources to remove
+    new_source_ids = {source.id for source in update_sources}
     sources_to_remove = existing_source_ids - new_source_ids
     if sources_to_remove:
         db.query(models.Sources).filter(models.Sources.id.in_(sources_to_remove)).delete(synchronize_session='fetch')
 
     db.commit()
+
+    # Return the updated fundraising with sources loaded
     return db.query(models.Fundraisings).options(joinedload(models.Fundraisings.sources)).filter(models.Fundraisings.id == fundraising_id).first()
 
 def soft_remove_fundraising(db: Session, fundraising_id: int):

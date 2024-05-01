@@ -57,11 +57,11 @@ class Source(SourceBase):
 class FundraisingsBase(BaseModel):
     title: str
     description: Optional[str] = None
-    creator_id: int
-    organization_id: int
+    sources: List[SourceCreate]
 
 class FundraisingsCreate(FundraisingsBase):
-    sources: List[SourceCreate]
+    creator_id: int
+    organization_id: int
 
 class Fundraisings(FundraisingsBase):
     id: int

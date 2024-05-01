@@ -1,11 +1,11 @@
 import React from "react";
 
-const Organisations: React.FC = () => {
+const Organizations: React.FC = () => {
   return (
     <div className="container">
-      Hello from organisations
+      Hello from organizations
     </div>
   );
 };
 
-export default Organisations;
+export default Organizations;

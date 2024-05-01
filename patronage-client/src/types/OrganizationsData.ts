@@ -1,5 +1,5 @@
 
-export interface Organizations {
+export interface OrganizationsData {
     id: number;
     name: string;
     description: string;

@@ -49,3 +49,14 @@ export const deleteFundraising = async (fundraisingId: number): Promise<Fundrais
     throw error;
   }
 };
+
+export const getFundraisingsByCreator = async (creatorId: number, skip = 0, limit = 100) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/fundraisings/by-creator/${creatorId}`, {
+        params: { skip, limit }
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };

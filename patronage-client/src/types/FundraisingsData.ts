@@ -1,7 +1,7 @@
 import { Source, SourceCreate } from "./SourceData";
 
 export interface Fundraising {
-    id?: number;
+    id: number;
     title: string;
     description?: string;
     creator_id: number;

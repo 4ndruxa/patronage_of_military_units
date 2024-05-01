@@ -3,7 +3,7 @@ import { createFundraising } from '../../services/api/fundraisings/fundraisings'
 import { FundraisingFormData } from "../../types/FundraisingsData";
 import { getOrganizations } from "../../services/api/organizations/organizations";
 
-const AddFundraise: React.FC = () => {
+const AddFundraising: React.FC = () => {
   const [formData, setFormData] = useState<FundraisingFormData>({
     title: "",
     description: "",
@@ -125,4 +125,4 @@ const AddFundraise: React.FC = () => {
   );
 };
 
-export default AddFundraise;
+export default AddFundraising;

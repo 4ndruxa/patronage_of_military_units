@@ -50,7 +50,7 @@ const Header: React.FC = () => {
               <li className="nav-item position-relative me-0 me-lg-4">
                 <a
                   className="nav-link text-dark cursor-pointer"
-                  onClick={() => handleTabClick("organisations")}
+                  onClick={() => handleTabClick("organizations")}
                 >
                   Організації
                 </a>
@@ -78,7 +78,7 @@ const Header: React.FC = () => {
                   <li>
                     <a
                       className="dropdown-item cursor-pointer"
-                      onClick={() => handleTabClick("my-fundraises")}
+                      onClick={() => handleTabClick("my-fundraisings")}
                     >
                       Мої збори
                     </a>
@@ -110,7 +110,7 @@ const Header: React.FC = () => {
                   <li>
                     <a
                       className="dropdown-item cursor-pointer"
-                      onClick={() => handleTabClick("add-fundraise")}
+                      onClick={() => handleTabClick("add-fundraising")}
                     >
                       Збір
                     </a>

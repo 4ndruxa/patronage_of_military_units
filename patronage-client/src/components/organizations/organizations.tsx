@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import fundraisingDefault from "../../assets/fundraising-default.png";
 import { getFundraisings } from '../../services/api/fundraisings/fundraisings';
 import { getOrganizations } from '../../services/api/organizations/organizations';
-import './cards.scss';
+import './organizations.scss';
 import { Fundraising } from '../../types/FundraisingsData';
-import { Organizations } from "../../types/OrganizationsData";
+import { OrganizationsData } from "../../types/OrganizationsData";
 
-const Cards: React.FC = () => {
+const Organizations: React.FC = () => {
   const [fundraisings, setFundraisings] = useState<Fundraising[]>([]);
-  const [organizations, setOrganizations] = useState<Organizations[]>([]);
+  const [organizations, setOrganizations] = useState<OrganizationsData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 6;
 
@@ -44,7 +44,7 @@ const Cards: React.FC = () => {
   };
 
   const handleCardClick = (fundraising: Fundraising) => {
-    navigate(`/fundraise/${fundraising.id}`, { state: fundraising });
+    navigate(`/fundraisings/${fundraising.id}`, { state: fundraising });
   };
 
   const handlePayNowClick = (fundraising: Fundraising) => {
@@ -87,4 +87,4 @@ const Cards: React.FC = () => {
   );
 };
 
-export default Cards;
+export default Organizations;
