@@ -1,6 +1,9 @@
 from typing import List, Optional
 from pydantic import BaseModel
 
+class TokenRequest(BaseModel):
+    code: str
+
 class UsersBase(BaseModel):
     name: str
     email: str
