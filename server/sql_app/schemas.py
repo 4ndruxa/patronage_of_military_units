@@ -12,9 +12,6 @@ class UsersBase(BaseModel):
     is_applied: bool = False
     is_denied: bool = False
 
-class UsersCreate(UsersBase):
-    token: str
-
 class Users(UsersBase):
     id: int
 

@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import HomePage from '../views/homePage/homePage';
 import FundraisingPage from '../views/fundraisingPage/fundraisingPage';
-import Secure from '../components/login/secure';
 import LoginPage from '../views/loginPage/loginPage';
 import MyFundraisingsPage from '../views/myFundraisingsPage/myFundraisingsPage';
 import AddOrganizationPage from '../views/addEditOrganizationPage/addEditOrganizationPage';
@@ -28,7 +27,6 @@ const AppRoutes: React.FC = () => {
       <Route path="/my-subscriptions" element={<MySubscriptionsPage />} />
       <Route path="/organizations" element={<OrganizationsPage />} />
       <Route path="/organizations/:id" element={<OrganizationPage />} />
-      <Route path="/secure" element={<Secure />} />
       <Route path="/statistics" element={<StatisticsPage />} />
     </Routes>
   );

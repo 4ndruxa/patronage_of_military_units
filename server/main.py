@@ -3,8 +3,6 @@ from fastapi import Depends, FastAPI, HTTPException, Request, Cookie
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2AuthorizationCodeBearer
-from authlib.integrations.starlette_client import OAuth
 
 from sql_app import crud, models, schemas
 from sql_app.database import SessionLocal, engine
@@ -40,43 +38,6 @@ google_secret = os.getenv('GOOGLE_SECRET')
 google_certs_url = os.getenv('GOOGLE_CERTS_URL')
 google_redirect_uri = os.getenv('GOOGLE_REDIRECT_URI')
 
-oauth = OAuth()
-conf = {
-    "client_id": google_client_id,
-    "client_secret": google_secret,
-    "authorize_url": "https://accounts.google.com/o/oauth2/auth",
-    "authorize_params": None,
-    "token_url": "https://accounts.google.com/o/oauth2/token",
-    "token_placement": "header",
-    "redirect_uri": "http://localhost:3000/auth/google/callback"
-}
-oauth.register(
-    name='google',
-    client_kwargs={
-        'scope': 'openid email profile'
-    },
-    **conf
-)
-
-def get_google_public_keys():
-    response = requests.get(google_certs_url)
-    return response.json()
-
-def verify_google_token(token: str):
-    keys = get_google_public_keys()
-    try:
-        decoded_token = jwt.decode(
-            token,
-            keys,
-            algorithms=["RS256"],
-            audience=google_client_id
-        )
-        return decoded_token
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    
 @app.post("/oauth/google/callback")
 async def exchange_code_for_token(token_request: Dict[str, str], db: Session = Depends(get_db)):
     code = token_request["code"]
@@ -97,7 +58,6 @@ async def exchange_code_for_token(token_request: Dict[str, str], db: Session = D
     if not access_token:
         raise HTTPException(status_code=400, detail="Could not retrieve access token")
 
-    # Retrieve user info from Google API
     user_info_response = requests.get(
         "https://www.googleapis.com/oauth2/v3/userinfo",
         headers={"Authorization": f"Bearer {access_token}"}
@@ -110,56 +70,19 @@ async def exchange_code_for_token(token_request: Dict[str, str], db: Session = D
     email = user_info["email"]
     name = user_info["name"]
 
-    # Check if the user exists in the database
     user = crud.get_user_by_email(db, email=email)
     if not user:
-        # Create a new user if not exists
-        user = crud.create_user(db, schemas.UsersCreate(email=email, name=name))
+        user = crud.create_user(db, schemas.UsersBase(email=email, name=name))
 
-    # Set the cookie with the access token or any session identifier
-    response = JSONResponse(content={"message": "Authenticated"})
-    response.set_cookie("access_token", access_token, httponly=True, secure=True, max_age=3600)
-    return response
+    new_token = jwt.encode({"email": email}, "SECRET", algorithm="HS256")
 
+    response.set_cookie("access_token", new_token, httponly=True, secure=True, max_age=3600)
 
-@app.get("/me")
-async def get_current_user(access_token: Optional[str] = Cookie(None), db: Session = Depends(get_db)):
-    if not access_token:
-        raise HTTPException(status_code=401, detail="Authentication required")
+    return {"message": "Authentication successful"}
 
-    user_info_response = requests.get(
-        "https://www.googleapis.com/oauth2/v3/userinfo",
-        headers={"Authorization": f"Bearer {access_token}"}
-    )
-
-    if user_info_response.status_code != 200:
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
-
-    user_info = user_info_response.json()
-    email = user_info["email"]
-    user = crud.get_user_by_email(db, email=email)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    return user
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-# @app.get("/login")
-# async def login(request: Request):
-#     redirect_uri = request.url_for('auth', _external=True)
-#     return await oauth.google.authorize_redirect(request, redirect_uri)
-
-# @app.get("/auth")
-# async def auth(request: Request):
-#     token = await oauth.google.authorize_access_token(request)
-#     user = await oauth.google.parse_id_token(request, token)
-#     return {"user": user}
 
 @app.post("/users/", response_model=schemas.Users)
-def create_user(user: schemas.UsersCreate, db: Session = Depends(get_db)):
+def create_user(user: schemas.UsersBase, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -375,19 +298,3 @@ def soft_remove_subscription(subscription_id: int, db: Session = Depends(get_db)
     if db_subscription is None:
         raise HTTPException(status_code=404, detail="Subscription not found")
     return crud.soft_remove_subscription(db=db, subscription_id=subscription_id)
-
-# class GoogleAuthMiddleware(BaseHTTPMiddleware):
-#     async def dispatch(self, request: Request, call_next):
-#         token = request.cookies.get("access_token")
-#         if token:
-#             try:
-#                 user_info = verify_google_token(token)
-#                 request.state.user = user_info
-#             except HTTPException as ex:
-#                 return JSONResponse(content={"detail": str(ex)}, status_code=ex.status_code)
-#         else:
-#             return JSONResponse(content={"detail": "Authentication required"}, status_code=401)
-        
-#         return await call_next(request)
-
-# app.add_middleware(GoogleAuthMiddleware)
