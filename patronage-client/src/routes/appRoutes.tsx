@@ -8,7 +8,6 @@ import AddOrganizationPage from '../views/addEditOrganizationPage/addEditOrganiz
 import MyOrganizationsPage from '../views/myOrganizationsPage/myOrganizationsPage';
 import MySubscriptionsPage from '../views/mySubscriptionsPage/mySubscriptionsPage';
 import OrganizationsPage from '../views/organizationsPage/organizationsPage';
-import StatisticsPage from '../views/statisticsPage/statisticsPage';
 import OrganizationPage from '../views/organizationPage/organizationPage';
 import AddEditFundraising from '../components/addEditFundraising/addEditFundraising';
 
@@ -27,7 +26,6 @@ const AppRoutes: React.FC = () => {
       <Route path="/my-subscriptions" element={<MySubscriptionsPage />} />
       <Route path="/organizations" element={<OrganizationsPage />} />
       <Route path="/organizations/:id" element={<OrganizationPage />} />
-      <Route path="/statistics" element={<StatisticsPage />} />
     </Routes>
   );
 };

@@ -125,15 +125,6 @@ const Header: React.FC = () => {
                   </li>
                 </ul>
               </li>
-              <li className="nav-item position-relative">
-                <a
-                  className="nav-link text-dark cursor-pointer"
-                  onClick={() => handleTabClick("statistics")}
-                >
-                  Статистика
-                </a>
-                {activeTab === "statistics" && <div className="highlight"></div>}
-              </li>
             </ul>
             <ul className="nav nav-pills ms-3 d-flex flex-column flex-lg-row align-items-end pe-3 pe-lg-0">
               <li className="nav-item">

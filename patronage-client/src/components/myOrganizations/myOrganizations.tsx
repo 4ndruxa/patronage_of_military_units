@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import organizationDefault from "../../assets/organization-default.png";  // Assuming this is similar to fundraisingDefault
+import organizationDefault from "../../assets/organization-default.png";  
 import { getOrganizationsByCreatorId, deleteOrganization } from '../../services/api/organizations/organizations';
 import { OrganizationsData } from "../../types/OrganizationsData";
 
@@ -9,7 +9,7 @@ const MyOrganizations: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 6;
   const navigate = useNavigate();
-  const creatorId = 1; // This would typically come from a user context or auth context
+  const creatorId = 1; 
 
   useEffect(() => {
     const fetchOrganizations = async () => {
@@ -27,7 +27,7 @@ const MyOrganizations: React.FC = () => {
     .slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage)
     .map(org => ({
       ...org,
-      img: org.img || organizationDefault  // Using a default image if none is specified
+      img: org.img || organizationDefault  
     }));
 
   return (
