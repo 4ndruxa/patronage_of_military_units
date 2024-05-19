@@ -14,7 +14,8 @@ const AlertComponent: React.FC = () => {
     const currentDate = new Date();
     const firstDayNextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1, 9, 0, 0, 0);
 
-    const timeToNextFirst = firstDayNextMonth.getTime() - currentDate.getTime();
+    // const timeToNextFirst = firstDayNextMonth.getTime() - currentDate.getTime();
+    const timeToNextFirst = 5000;
 
     const timeoutId = setTimeout(() => {
       showAlert();
@@ -40,19 +41,19 @@ const AlertComponent: React.FC = () => {
             <div className="text-center mb-5">
               <h2>Підтримай українську армію!</h2>
               <p className="fs-18">
-                Дякуємо, що ви підтримуєте наші благодійні збори. Нижче ви знайдете збір коштів, за які ви відповідальні. 
+                Дякуємо, що ви підтримуєте наші благодійні збори. Натисніть 'Перейти до моїх зборів' і ви знайдете збір коштів, за які ви відповідальні. 
                 Вони з нетерпінням чекають на ваші пожертви, які є надзвичайно важливими для наших військових. 
-                Будь ласка, пам'ятайте, що кожного місяця, на перший день, наш фонд очікує на ваші внески.
+                Будь ласка, пам'ятайте, що кожного місяця, на перший день, фонди очікують на ваші внески.
               </p>
               <p className="fs-18">
-                Натисніть на кнопку "Задонатити зараз", щоб зробити свій внесок та допомогти нашим героям на передовій. 
+                Натисніть на кнопку 'Задонатити зараз' в розділі 'Мої збори', щоб зробити свій внесок та допомогти нашим героям на передовій. 
                 Ваші пожертви роблять реальну різницю!
               </p>
             </div>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" onClick={() => setShow(false)}>Закрити</button>
-              <button type="button" className="btn btn-primary" onClick={handleDonateClick}>Задонатити зараз</button>
+              <button type="button" className="btn btn-primary" onClick={handleDonateClick}>Перейти до моїх зборів</button>
             </div>
           </div>
         </div>
