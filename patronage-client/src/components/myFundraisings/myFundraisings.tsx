@@ -28,7 +28,7 @@ const MyFundraisings: React.FC = () => {
     .slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage)
     .map(fundraising => ({
       ...fundraising,
-      img: fundraisingDefault // Assuming all use the same default image
+      img: fundraisingDefault
     }));
 
   return (
@@ -54,7 +54,7 @@ const MyFundraisings: React.FC = () => {
       ))}
       <nav aria-label="..." className="d-flex justify-content-center my-2 w-100">
         <ul className="pagination pagination-sm">
-          {[...Array(Math.ceil(fundraisings.length / cardsPerPage))].map((_, index) => (
+          {[...Array(Math.ceil(fundraisings && (fundraisings.length / cardsPerPage)))].map((_, index) => (
             <li className={`page-item ${currentPage === index + 1 ? 'active-card-page' : ''}`} key={index} role="button">
               <span className="page-link text-primary" onClick={() => handlePageChange(index + 1)}>
                 {index + 1}

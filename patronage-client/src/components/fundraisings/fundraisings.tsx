@@ -5,7 +5,11 @@ import { getFundraisings, getFundraisingsByOrganization } from '../../services/a
 import './fundraisings.scss';
 import { Fundraising } from '../../types/FundraisingsData';
 
-const Fundraisings: React.FC<{ organizationId?: number }> = ({ organizationId }) => {
+interface FundraisingsProps {
+  organizationId?: number;
+}
+
+const Fundraisings: React.FC<FundraisingsProps> = ({ organizationId }) => {
   const [fundraisings, setFundraisings] = useState<Fundraising[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 6;
@@ -16,7 +20,10 @@ const Fundraisings: React.FC<{ organizationId?: number }> = ({ organizationId })
       const fetchedFundraisings = organizationId ? 
         await getFundraisingsByOrganization(organizationId) : 
         await getFundraisings();
-      setFundraisings(fetchedFundraisings);
+
+      if (fetchedFundraisings) {
+        setFundraisings(fetchedFundraisings);
+      }
     };
     fetchData();
   }, [organizationId]);

@@ -28,7 +28,7 @@ class Users(Base, BaseMixin):
     sources = relationship("Sources", back_populates="creator", foreign_keys="Sources.creator_id")
     posts = relationship("Posts", back_populates="creator", foreign_keys="Posts.creator_id")
     media = relationship("Media", back_populates="creator", foreign_keys="Media.creator_id")
-    subscriptions = relationship("Subscriptions", back_populates="creator", foreign_keys="Subscriptions.creator_id")
+    subscriptions = relationship("Subscriptions", back_populates="creator", foreign_keys="Subscriptions.user_id")
 
 
 class Organizations(Base, BaseMixin):
@@ -41,7 +41,6 @@ class Organizations(Base, BaseMixin):
 
     creator = relationship("Users", back_populates="organizations", foreign_keys="Organizations.creator_id")
     fundraisings = relationship("Fundraisings", back_populates="organizations", foreign_keys="Fundraisings.organization_id")
-    subscriptions = relationship("Subscriptions", back_populates="organizations")
 
 
 class Fundraisings(Base, BaseMixin):
@@ -56,6 +55,7 @@ class Fundraisings(Base, BaseMixin):
     creator = relationship("Users", back_populates="fundraisings", foreign_keys="Fundraisings.creator_id")
     sources = relationship('Sources', back_populates='fundraising')
     organizations = relationship("Organizations", back_populates="fundraisings", foreign_keys="Fundraisings.organization_id")
+    subscriptions = relationship("Subscriptions", back_populates="fundraisings")
 
 
 class Sources(Base, BaseMixin):
@@ -102,8 +102,8 @@ class Subscriptions(Base, BaseMixin):
     __tablename__ = "subscriptions"
 
     id = Column(Integer, primary_key=True)
-    creator_id = Column(Integer, ForeignKey("users.id"))
-    organization_id = Column(Integer, ForeignKey("organizations.id"))
+    user_id = Column(Integer, ForeignKey("users.id"))
+    fundraising_id = Column(Integer, ForeignKey("fundraisings.id"))
 
-    creator = relationship("Users", back_populates="subscriptions", foreign_keys="Subscriptions.creator_id")
-    organizations = relationship("Organizations", back_populates="subscriptions")
+    creator = relationship("Users", back_populates="subscriptions", foreign_keys="Subscriptions.user_id")
+    fundraisings = relationship("Fundraisings", back_populates="subscriptions")

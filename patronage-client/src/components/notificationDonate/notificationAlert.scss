@@ -1,0 +1,52 @@
+@import '../../variables';
+.modal.show {
+    display: block;
+  }
+  
+  .modal-dialog {
+    max-width: 600px;
+  }
+  
+  .modal-content {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-header {
+    background-color: $secondary;
+    color: #fff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  
+  .modal-header .close {
+    color: #fff;
+    opacity: 1;
+  }
+  
+  .modal-body {
+    font-size: 1.2rem;
+  }
+  
+  .modal-footer .btn {
+    min-width: 100px;
+    font-size: 1rem;
+  }
+  
+  .modal-footer .btn-primary {
+    background-color: $secondary;
+    border-color: $secondary;
+  }
+  
+  .modal-backdrop.show {
+    opacity: 0.5;
+  }
+  
+  .modal-backdrop {
+    z-index: 1040;
+  }
+  
+  .modal {
+    z-index: 1050;
+  }
+  

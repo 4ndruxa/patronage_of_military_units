@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 import { createFundraising, updateFundraising, getFundraisingById } from '../../services/api/fundraisings/fundraisings';
 import { FundraisingFormData } from "../../types/FundraisingsData";
 import { getOrganizations } from "../../services/api/organizations/organizations";
+import { handleError } from '../../services/errorHandler';
 
 const AddEditFundraising: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.auth.user);
+  
   const [formData, setFormData] = useState<FundraisingFormData>({
     title: "",
     description: "",
-    organization_id: 1,
+    organization_id: 0,
     sources: [{
       title: "",
       type: "",
       url: ""
     }],
-    creator_id: 1, // This should be fetched based on the logged-in user's context
+    creator_id: user!.id,
   });
   const [organizations, setOrganizations] = useState<any[]>([]);
 
@@ -27,15 +32,15 @@ const AddEditFundraising: React.FC = () => {
         setOrganizations(fetchedOrganizations);
         if (id) {
           const fetchedFundraising = await getFundraisingById(parseInt(id));
-          setFormData({ ...formData, ...fetchedFundraising });
+          setFormData({ ...formData, ...fetchedFundraising, creator_id: user!.id});
         }
       } catch (error) {
-        console.error("Failed to fetch data", error);
+        handleError(error);
       }
     };
 
     fetchOrganizationsAndData();
-  }, [id]);
+  }, [id, user]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
@@ -70,15 +75,13 @@ const AddEditFundraising: React.FC = () => {
       try {
         if (id) {
           await updateFundraising(parseInt(id), formData);
-          console.log("Fundraising Updated");
           navigate('/my-fundraisings');
         } else {
           const response = await createFundraising(formData);
-          console.log("Fundraising Created:", response);
           navigate('/my-fundraisings');
         }
       } catch (error) {
-        console.error("Error submitting fundraising:", error);
+        handleError(error);
       }
     } else {
       console.error("Please fill all fields for all sources.");

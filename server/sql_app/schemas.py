@@ -59,7 +59,6 @@ class OrganizationInfo(BaseModel):
     name: str
 
 class FundraisingsBase(BaseModel):
-    id: int
     title: str
     description: Optional[str] = None
     creator_id: int
@@ -68,8 +67,12 @@ class FundraisingsBase(BaseModel):
         orm_mode = True
 
 class FundraisingsCreate(FundraisingsBase):
-    creator_id: int
     organization_id: int
+    sources: List[SourceCreate]
+
+class FundraisingsUpdate(FundraisingsBase):
+    organization_id: int
+    sources: List[Source]
 
 class Fundraisings(FundraisingsBase):
     id: int
@@ -111,8 +114,8 @@ class Media(MediaBase):
         orm_mode = True
 
 class SubscriptionsBase(BaseModel):
-    creator_id: int
-    organization_id: int
+    fundraising_id: int
+    user_id: int
 
 class SubscriptionsCreate(SubscriptionsBase):
     pass

@@ -66,20 +66,31 @@ def get_fundraisings_by_organization(db: Session, organization_id: int, skip: in
     )
 
 def create_fundraising(db: Session, item: schemas.FundraisingsCreate):
-    db_fundraising = models.Fundraisings(**item.dict(exclude={"sources"}))
+    db_fundraising = models.Fundraisings(
+        title=item.title,
+        description=item.description,
+        creator_id=item.creator_id,
+        organization_id=item.organization_id
+    )
     db.add(db_fundraising)
     db.commit()
     db.refresh(db_fundraising)
 
     for source_data in item.sources:
-        db_source = models.Sources(**source_data.dict(), fundraising_id=db_fundraising.id, creator_id=db_fundraising.creator_id)
+        db_source = models.Sources(
+            title=source_data.title,
+            type=source_data.type,
+            url=source_data.url,
+            fundraising_id=db_fundraising.id,
+            creator_id=db_fundraising.creator_id
+        )
         db.add(db_source)
         db.commit()
         db.refresh(db_source)
 
     return db_fundraising
 
-def update_fundraising(db: Session, fundraising_id: int, item: schemas.FundraisingsBase):
+def update_fundraising(db: Session, fundraising_id: int, item: schemas.FundraisingsUpdate):
     db.query(models.Fundraisings).filter(models.Fundraisings.id == fundraising_id).update(item.dict(exclude={"sources"}))
     db.commit()
 
@@ -94,7 +105,7 @@ def update_fundraising(db: Session, fundraising_id: int, item: schemas.Fundraisi
             db.query(models.Sources).filter(models.Sources.id == source_data.id).update(source_data.dict())
     
     for source_data in new_sources:
-        new_source = models.Sources(**source_data.dict(), fundraising_id=fundraising_id)
+        new_source = models.Sources(**source_data.dict(), fundraising_id=fundraising_id, creator_id=item.creator_id)
         db.add(new_source)
 
     new_source_ids = {source.id for source in update_sources}
@@ -191,8 +202,8 @@ def get_subscription(db: Session, subscription_id: int):
 def get_all_subscriptions(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Subscriptions).offset(skip).limit(limit).all()
 
-def create_subscription(db: Session, item: schemas.SubscriptionsCreate, user_id: int):
-    db_item = models.Subscriptions(**item.dict(), creator_id=user_id)
+def create_subscription(db: Session, item: schemas.SubscriptionsCreate):
+    db_item = models.Subscriptions(**item.dict())
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
@@ -206,3 +217,6 @@ def update_subscription(db: Session, subscription_id: int, item: schemas.Subscri
 def soft_remove_subscription(db: Session, subscription_id: int):
     db.query(models.Subscriptions).filter(models.Subscriptions.id == subscription_id).update({"deleted_at": func.now()})
     db.commit()
+
+def get_subscriptions_by_user(db: Session, user_id: int):
+    return db.query(models.Fundraisings).join(models.Subscriptions).filter(models.Subscriptions.user_id == user_id).all()

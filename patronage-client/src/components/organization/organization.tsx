@@ -30,8 +30,8 @@ const OrganizationDetails: React.FC = () => {
     return (
         <div className="container mt-4">
             <div className="d-flex flex-column align-items-center justify-content-center">
-            <h1 className="my-5">{organization.name}</h1>
-            <img className="h-auto object-fit-contain w-75 mb-4" src={organizationDefault} alt={organization.name} />
+                <h1 className="my-5">{organization.name}</h1>
+                <img className="h-auto object-fit-contain w-75 mb-4" src={organizationDefault} alt={organization.name} />
             </div>
             <p className="fs-18">{organization.description}</p>
             {id && <Fundraisings organizationId={parseInt(id)} />}

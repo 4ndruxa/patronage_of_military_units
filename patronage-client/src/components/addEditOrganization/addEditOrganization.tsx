@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 import { createOrganization, updateOrganization, getOrganizationById } from '../../services/api/organizations/organizations';
+import { handleError } from '../../services/errorHandler';
 
 const AddEditOrganization: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', description: '' });
   const { id } = useParams();
   const navigate = useNavigate();
-  const userId = 1;
+  const user = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
     if (id) {
@@ -15,7 +18,7 @@ const AddEditOrganization: React.FC = () => {
           const orgData = await getOrganizationById(Number(id));
           setFormData({ name: orgData.name, description: orgData.description || '' });
         } catch (error) {
-          console.error('Failed to fetch organization details', error);
+          handleError(error);
         }
       };
       fetchOrganization();
@@ -35,15 +38,15 @@ const AddEditOrganization: React.FC = () => {
     try {
       if (id) {
         const updatedOrganization = await updateOrganization(Number(id), formData);
-        console.log('Organization updated:', updatedOrganization);
         navigate(`/organizations`);
-      } else {
-        const createdOrganization = await createOrganization(formData, userId);
-        console.log('Organization created:', createdOrganization);
+      } else if (user) {
+        const createdOrganization = await createOrganization(formData, user.id);
         navigate('/organizations');
+      } else {
+        console.error('User not authenticated');
       }
     } catch (error) {
-      console.error('Error handling organization:', error);
+      handleError(error);
     }
   };
 

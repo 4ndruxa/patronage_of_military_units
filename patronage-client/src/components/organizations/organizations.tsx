@@ -18,7 +18,7 @@ const Organizations: React.FC = () => {
         fetchOrganizations();
     }, []);
 
-    const currentOrganizations = organizations.slice(
+    const currentOrganizations = organizations && organizations.slice(
         (currentPage - 1) * cardsPerPage,
         currentPage * cardsPerPage
     );
@@ -29,7 +29,7 @@ const Organizations: React.FC = () => {
 
     return (
         <div className="d-flex flex-wrap gap-1 container">
-            {currentOrganizations.map((org, index) => (
+            {currentOrganizations && currentOrganizations.map((org, index) => (
                 <div className="card-width" key={index} onClick={() => navigate(`/organizations/${org.id}`)}>
                     <div className="card card-scale">
                         <img src={organizationDefault} alt={org.name} className="card-img-top" />
@@ -42,7 +42,7 @@ const Organizations: React.FC = () => {
             ))}
             <nav aria-label="..." className="d-flex justify-content-center my-2 w-100">
                 <ul className="pagination pagination-sm">
-                    {[...Array(Math.ceil(organizations.length / cardsPerPage))].map((_, index) => (
+                    {[...Array(Math.ceil(organizations && ((organizations && []).length / cardsPerPage)))].map((_, index) => (
                         <li className={`page-item ${currentPage === index + 1 ? 'active-card-page' : ''}`} key={index} role="button">
                             <span className="page-link text-primary" onClick={() => handlePageChange(index + 1)}>
                                 {index + 1}

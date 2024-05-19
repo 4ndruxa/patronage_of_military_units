@@ -3,32 +3,42 @@ import { useNavigate } from 'react-router-dom';
 import organizationDefault from "../../assets/organization-default.png";  
 import { getOrganizationsByCreatorId, deleteOrganization } from '../../services/api/organizations/organizations';
 import { OrganizationsData } from "../../types/OrganizationsData";
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { handleError } from '../../services/errorHandler';
 
 const MyOrganizations: React.FC = () => {
   const [organizations, setOrganizations] = useState<OrganizationsData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 6;
   const navigate = useNavigate();
-  const creatorId = 1; 
+  const user = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
-    const fetchOrganizations = async () => {
-      const data = await getOrganizationsByCreatorId(creatorId);
-      setOrganizations(data);
-    };
-    fetchOrganizations();
-  }, [creatorId]);
+    if (user) {
+      const fetchOrganizations = async () => {
+        try {
+          const data = await getOrganizationsByCreatorId(user.id);
+          setOrganizations(data || []);
+        } catch (error) {
+          handleError(error);
+        }
+      };
+      fetchOrganizations();
+    }
+  }, [user]);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
 
-  const currentOrganizations = organizations
-    .slice((currentPage - 1) * cardsPerPage, currentPage * cardsPerPage)
-    .map(org => ({
-      ...org,
-      img: org.img || organizationDefault  
-    }));
+  const currentOrganizations = (organizations || []).slice(
+    (currentPage - 1) * cardsPerPage, 
+    currentPage * cardsPerPage
+  ).map(org => ({
+    ...org,
+    img: org.img || organizationDefault  
+  }));
 
   return (
     <div className="d-flex flex-wrap gap-1 container">
@@ -45,8 +55,12 @@ const MyOrganizations: React.FC = () => {
                 Редагувати
               </button>
               <button className="btn btn-dark fw-medium d-block" onClick={async () => {
-                await deleteOrganization(org.id);
-                setOrganizations(organizations.filter(o => o.id !== org.id));
+                try {
+                  await deleteOrganization(org.id);
+                  setOrganizations(organizations.filter(o => o.id !== org.id));
+                } catch (error) {
+                  handleError(error);
+                }
               }}>Видалити</button>
             </div>
           </div>

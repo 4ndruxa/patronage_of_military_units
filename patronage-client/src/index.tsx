@@ -1,11 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from 'react-router-dom';
 import './index.scss';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import reportWebVitals from './reportWebVitals';
 import AppRoutes from './routes/appRoutes';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import ErrorAlert from './components/error/errorAlert';
+import AlertComponent from './components/notificationDonate/notificationAlert';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -20,11 +24,15 @@ if (!googleClientId) {
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId={googleClientId || ''}>
-      <Router>
-        <AppRoutes />
-      </Router>
-    </GoogleOAuthProvider>
+    <Provider store={store}>
+      <GoogleOAuthProvider clientId={googleClientId || ''}>
+        <Router>
+          <ErrorAlert />
+          <AppRoutes />
+          <AlertComponent />
+        </Router>
+      </GoogleOAuthProvider>
+    </Provider>
   </React.StrictMode>
 );
 
