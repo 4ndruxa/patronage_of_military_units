@@ -14,8 +14,7 @@ const AlertComponent: React.FC = () => {
     const currentDate = new Date();
     const firstDayNextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1, 9, 0, 0, 0);
 
-    // const timeToNextFirst = firstDayNextMonth.getTime() - currentDate.getTime();
-    const timeToNextFirst = 5000;
+    const timeToNextFirst = firstDayNextMonth.getTime() - currentDate.getTime();
 
     const timeoutId = setTimeout(() => {
       showAlert();
