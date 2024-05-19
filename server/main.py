@@ -176,7 +176,10 @@ def update_fundraising(fundraising_id: int, item: schemas.FundraisingsUpdate, db
 
 @app.delete("/fundraisings/{fundraising_id}", response_model=schemas.Fundraisings)
 def soft_remove_fundraising(fundraising_id: int, db: Session = Depends(get_db)):
-    return crud.soft_remove_fundraising(db=db, fundraising_id=fundraising_id)
+    fundraising = crud.soft_remove_fundraising(db=db, fundraising_id=fundraising_id)
+    if not fundraising:
+        raise HTTPException(status_code=404, detail="Fundraising not found")
+    return fundraising
 
 @app.post("/organizations/", response_model=schemas.Organizations)
 def create_organization(item: schemas.OrganizationsCreate, db: Session = Depends(get_db)):

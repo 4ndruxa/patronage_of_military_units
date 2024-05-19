@@ -7,10 +7,6 @@ class TokenRequest(BaseModel):
 class UsersBase(BaseModel):
     name: str
     email: str
-    is_creator: bool = False
-    is_verified: bool = False
-    is_applied: bool = False
-    is_denied: bool = False
 
 class Users(UsersBase):
     id: int
