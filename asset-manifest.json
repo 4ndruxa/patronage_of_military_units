@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/patronage_of_military_units/static/css/main.17fcb8ae.css",
-    "main.js": "/patronage_of_military_units/static/js/main.8229ba2d.js",
+    "main.css": "/patronage_of_military_units/static/css/main.16c12cf7.css",
+    "main.js": "/patronage_of_military_units/static/js/main.46167e24.js",
     "static/js/453.7cd6df65.chunk.js": "/patronage_of_military_units/static/js/453.7cd6df65.chunk.js",
     "static/media/organization-default.png": "/patronage_of_military_units/static/media/organization-default.bf032c3123404899f1ac.png",
     "static/media/logo.png": "/patronage_of_military_units/static/media/logo.12820dc98d5a385d9333.png",
@@ -9,12 +9,12 @@
     "static/media/hero-background.webp": "/patronage_of_military_units/static/media/hero-background.553c04f2af229362531f.webp",
     "index.html": "/patronage_of_military_units/index.html",
     "static/media/google-logo.svg": "/patronage_of_military_units/static/media/google-logo.d7f092af888a54de79ed9c9303d689d7.svg",
-    "main.17fcb8ae.css.map": "/patronage_of_military_units/static/css/main.17fcb8ae.css.map",
-    "main.8229ba2d.js.map": "/patronage_of_military_units/static/js/main.8229ba2d.js.map",
+    "main.16c12cf7.css.map": "/patronage_of_military_units/static/css/main.16c12cf7.css.map",
+    "main.46167e24.js.map": "/patronage_of_military_units/static/js/main.46167e24.js.map",
     "453.7cd6df65.chunk.js.map": "/patronage_of_military_units/static/js/453.7cd6df65.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.17fcb8ae.css",
-    "static/js/main.8229ba2d.js"
+    "static/css/main.16c12cf7.css",
+    "static/js/main.46167e24.js"
   ]
 }
