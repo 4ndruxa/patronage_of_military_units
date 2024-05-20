@@ -15,35 +15,19 @@ Cписок зборів, де користувач (патронат) змож�
 ### Структура проєкту (Back-end):
 ```
 fastapi-project
-├── alembic/
-├── src
-│   ├── posts
-│   │   ├── router.py
-│   │   ├── schemas.py
-│   │   ├── models.py
-│   │   ├── dependencies.py
-│   │   ├── constants.py
-│   │   ├── exceptions.py
-│   │   ├── service.py
-│   │   └── utils.py
-│   ├── config.py  
-│   ├── models.py  
-│   ├── exceptions.py  
-│   ├── pagination.py  
-│   ├── database.py  
-│   └── main.py
-├── tests/
-│   └── posts
-├── templates/
-│   └── index.html
-├── requirements
-│   ├── base.txt
-│   ├── dev.txt
-│   └── prod.txt
+├── sql_app
+│   ├── crud.py
+│   ├── database.py
+│   └── models.py
+│   └── schemas.py
 ├── .env
-├── .gitignore
-├── logging.ini
-└── alembic.ini
+├── docker-compose.yaml
+├── Dockerfile
+├── main.py
+└── requirement.txt
+├── test_main.py
+├── virtualenv
+
 ```
 ### Структура проєкту (Front-end):
 ```
@@ -52,8 +36,6 @@ src
 ├── assets
 |
 ├── components
-|
-├── config
 |
 ├── views   
 |
@@ -65,7 +47,7 @@ src
 |
 ├── routes
 |
-├── stores
+├── store
 |
 ├── test
 |
@@ -79,8 +61,18 @@ src
   2. Bootstrap.
   3. FastAPI.
   4. PostgreSQL.
-- Залежності нижнього рівня (tbd):
-
-### Розгортання (tbd):
-1. Google Cloud
-2. Oracle
+- Залежності нижнього рівня (виділено основні):
+  1. Auth0-react.
+  2. Reduxjs.
+  3. Js-cookie.
+  4. Jest.
+  5. PyJWT.
+  
+  ### Розгортання:
+  1. client:
+    - npm install
+    - npm start
+  2. server:
+    -docker-compose up
+  3. client-tests: npm test
+  4. server-tests: PYTHONPATH=$(pwd) pytest test_main.py
