@@ -1,4 +1,4 @@
-from sqlalchemy import func
+from sqlalchemy import and_, func
 from sqlalchemy.orm import Session, joinedload
 from . import models, schemas
 
@@ -218,8 +218,13 @@ def update_subscription(db: Session, subscription_id: int, item: schemas.Subscri
     db.commit()
     return db.query(models.Subscriptions).filter(models.Subscriptions.id == subscription_id).first()
 
-def soft_remove_subscription(db: Session, subscription_id: int):
-    db.query(models.Subscriptions).filter(models.Subscriptions.id == subscription_id).update({"deleted_at": func.now()})
+def soft_remove_subscription(db: Session, user_id: int, fundraising_id: int):
+    db.query(models.Subscriptions).filter(
+        and_(
+            models.Subscriptions.fundraising_id == fundraising_id,
+            models.Subscriptions.user_id == user_id
+        )
+    ).update({"deleted_at": func.now()})
     db.commit()
 
 def get_subscriptions_by_user(db: Session, user_id: int):

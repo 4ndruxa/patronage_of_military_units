@@ -297,12 +297,13 @@ def update_subscription(subscription_id: int, item: schemas.SubscriptionsCreate,
         raise HTTPException(status_code=404, detail="Subscription not found")
     return crud.update_subscription(db=db, subscription_id=subscription_id, item=item)
 
-@app.delete("/subscriptions/{subscription_id}", response_model=schemas.Subscriptions)
-def soft_remove_subscription(subscription_id: int, db: Session = Depends(get_db)):
-    db_subscription = crud.get_subscription(db, subscription_id=subscription_id)
-    if db_subscription is None:
+@app.delete("/subscriptions/{user_id}/{fundraising_id}", response_model=schemas.Subscriptions)
+def soft_remove_subscription(user_id: int, fundraising_id: int, db: Session = Depends(get_db)):
+
+    subscription = crud.soft_remove_subscription(db=db, user_id=user_id, fundraising_id=fundraising_id)
+    if not subscription:
         raise HTTPException(status_code=404, detail="Subscription not found")
-    return crud.soft_remove_subscription(db=db, subscription_id=subscription_id)
+    return subscription
 
 @app.get("/subscriptions/by-user/{user_id}", response_model=List[schemas.Fundraisings])
 def get_subscriptions_by_user(user_id: int, db: Session = Depends(get_db)):

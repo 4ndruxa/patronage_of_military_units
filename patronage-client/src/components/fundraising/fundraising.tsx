@@ -46,7 +46,7 @@ const Fundraising: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  const { title, organizations, img, sources, id } = fundraisingData;
+  const { title, description, organizations, img, sources, id } = fundraisingData;
 
   return (
     <div className="container">
@@ -63,18 +63,10 @@ const Fundraising: React.FC = () => {
             Підписатись
           </button>
         </div>
-        <img className="h-auto object-fit-contain w-75" src={img} alt={title} />
+        <img className="h-auto object-fit-contain w-50" src={img} alt={title} />
         <p className="fs-18 mt-3">
-          {/* add content when back is ready */}
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-          industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type
-          specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-          It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
-          publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+          {description}
+          
         </p>
       </div>
       <div className="d-flex gap-2 mb-5">

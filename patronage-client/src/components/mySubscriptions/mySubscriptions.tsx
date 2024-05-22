@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import fundraisingDefault from "../../assets/fundraising-default.png";
-import { getSubscriptionsByUser } from '../../services/api/subscriptions/subscriptions';
+import { getSubscriptionsByUser, deleteSubscription } from '../../services/api/subscriptions/subscriptions';
 import { Fundraising } from '../../types/FundraisingsData';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
@@ -28,6 +28,20 @@ const MySubscriptions: React.FC = () => {
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
+  };
+
+  const handleRemoveSubscription = async (subscriptionId: number) => {
+    try {
+      if (user) {
+        await deleteSubscription(user.id, subscriptionId);
+        const data = await getSubscriptionsByUser(user.id);
+        if (data) {
+          setFundraisings(data);
+        }
+      }
+    } catch (error) {
+      console.error("Error removing subscription:", error);
+    }
   };
 
   const currentCards = fundraisings
@@ -64,8 +78,11 @@ const MySubscriptions: React.FC = () => {
                 <button className="btn btn-outline-secondary fw-medium d-block mb-2" onClick={() => navigate(`/fundraisings/${card.id}`, { state: card })}>
                   Переглянути
                 </button>
-                <button className="btn btn-primary fw-medium d-block" onClick={() => navigate(`/fundraisings/${card.id}`, { state: card })}>
+                <button className="btn btn-primary fw-medium d-block mb-2" onClick={() => navigate(`/fundraisings/${card.id}`, { state: card })}>
                   Задонатити зараз
+                </button>
+                <button className="btn btn-dark fw-medium d-block" onClick={() => handleRemoveSubscription(card.id)}>
+                  Відписатись
                 </button>
               </div>
             </div>

@@ -9,7 +9,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import ErrorAlert from './components/error/errorAlert';
-import AlertComponent from './components/notificationDonate/notificationAlert';
+import AlertComponent from './components/notificationAlert/notificationAlert';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

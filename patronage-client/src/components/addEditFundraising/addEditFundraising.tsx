@@ -32,7 +32,12 @@ const AddEditFundraising: React.FC = () => {
         setOrganizations(fetchedOrganizations);
         if (id) {
           const fetchedFundraising = await getFundraisingById(parseInt(id));
-          setFormData({ ...formData, ...fetchedFundraising, creator_id: user!.id});
+          setFormData({ ...formData, ...fetchedFundraising, creator_id: user!.id });
+        } else if (fetchedOrganizations.length > 0) {
+          setFormData(prevData => ({
+            ...prevData,
+            organization_id: fetchedOrganizations[0].id
+          }));
         }
       } catch (error) {
         handleError(error);
@@ -46,13 +51,14 @@ const AddEditFundraising: React.FC = () => {
     const { name, value } = event.target;
     setFormData(prevData => ({
       ...prevData,
-      [name]: value
+      [name]: name === "organization_id" ? parseInt(value) : value
     }));
   };
 
   const handleSourceChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = event.target;
     const newSources = [...formData.sources];
-    newSources[index] = { ...newSources[index], [event.target.name]: event.target.value };
+    newSources[index] = { ...newSources[index], [name]: value };
     setFormData({ ...formData, sources: newSources });
   };
 
@@ -77,7 +83,7 @@ const AddEditFundraising: React.FC = () => {
           await updateFundraising(parseInt(id), formData);
           navigate('/my-fundraisings');
         } else {
-          const response = await createFundraising(formData);
+          await createFundraising(formData);
           navigate('/my-fundraisings');
         }
       } catch (error) {
@@ -106,6 +112,7 @@ const AddEditFundraising: React.FC = () => {
           <label htmlFor="organization_id" className="form-label">Організація</label>
           <select className="form-control" id="organization_id" name="organization_id"
             value={formData.organization_id} onChange={handleChange} required>
+            <option value="" disabled>Оберіть організацію</option>
             {organizations.map(org => (
               <option key={org.id} value={org.id}>{org.name}</option>
             ))}

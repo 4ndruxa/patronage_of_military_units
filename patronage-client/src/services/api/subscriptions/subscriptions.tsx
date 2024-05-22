@@ -23,3 +23,11 @@ export const getSubscriptionsByUser = async (userId: number): Promise<Fundraisin
       handleError(error);
     }
 };
+
+export const deleteSubscription = async (userId: number, subscriptionId: number): Promise<void> => {
+  try {
+    await axiosInstance.delete<void>(`${BASE_URL}/subscriptions/${userId}/${subscriptionId}`);
+  } catch (error) {
+    handleError(error);
+  }
+};
