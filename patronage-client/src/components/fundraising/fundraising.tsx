@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 
 const SUBSCRIBE_EXPLAINER =
-  'Раз на місяць ми нагадаємо вам про цей збір у застосунку. Гроші ми не збираємо: донат ви робите на сторінці організації.';
+  'Раз на місяць ми нагадаємо вам про цей збір у застосунку. Гроші ми не збираємо: донат ви робите на сторінці оплати.';
 
 const TOAST_TIMEOUT_MS = 5000;
 
@@ -120,11 +120,19 @@ const Fundraising: React.FC = () => {
   // The first source with a web url; non-http(s) urls are never followed.
   const donateUrl = fundraisingData?.sources?.find((source) => isWebUrl(source.url))?.url;
 
-  const navigateToBankLink = () => {
-    if (donateUrl) {
-      navigate('/redirect-bank-link', { state: { url: donateUrl } });
-    }
-  };
+  // A plain external link in a new tab: the visitor keeps this page, guests can
+  // donate too, and popup blockers don't interfere.
+  const renderDonate = (className: string, children: React.ReactNode) =>
+    donateUrl ? (
+      <a className={className} href={donateUrl} target="_blank" rel="noopener noreferrer">
+        {children}
+        <span className="visually-hidden"> (відкриється в новій вкладці)</span>
+      </a>
+    ) : (
+      <button type="button" className={className} disabled>
+        {children}
+      </button>
+    );
 
   const handleSubscribe = async () => {
     if (!user || !fundraisingData || subscribing) {
@@ -232,12 +240,10 @@ const Fundraising: React.FC = () => {
         <div className="pm-panel-col">
           <aside className="pm-panel" aria-label="Підтримати збір">
             {/* TODO(Е4): термометр */}
-            <button type="button" className="btn btn-donate btn-lg w-100" onClick={navigateToBankLink} disabled={!canDonate}>
-              Задонатити <Icon name="arrow" className="pm-i-end" />
-            </button>
+            {renderDonate('btn btn-donate btn-lg w-100', <>Задонатити <Icon name="ext" className="pm-i-end" /></>)}
             <p className="pm-caption text-center mt-2 mb-0">
               {canDonate
-                ? 'Ви перейдете на сторінку організації. Там ви самі обираєте суму.'
+                ? 'Сторінка оплати відкриється в новій вкладці. Суму ви обираєте самі.'
                 : 'Організація ще не додала способи оплати'}
             </p>
             <hr />
@@ -266,9 +272,7 @@ const Fundraising: React.FC = () => {
       </div>
 
       <div className="pm-actionbar" role="group" aria-label="Швидкі дії">
-        <button type="button" className="btn btn-donate" onClick={navigateToBankLink} disabled={!canDonate}>
-          Задонатити
-        </button>
+        {renderDonate('btn btn-donate', 'Задонатити')}
         {!user ? (
           <Link className="btn btn-primary" to="/login">Увійти, щоб підписатись</Link>
         ) : !subscribed && (

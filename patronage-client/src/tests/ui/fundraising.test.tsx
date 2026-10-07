@@ -119,14 +119,16 @@ describe('Fundraising', () => {
     expect(currentLocation()).toBe('/login');
   });
 
-  test('«Задонатити» goes to /redirect-bank-link with the first source url', async () => {
+  test('«Задонатити» is a new-tab link to the first source, with a caption', async () => {
     renderWithProviders(<Fundraising />, { path, route: { pathname: '/fundraisings/5', state: data } });
 
-    fireEvent.click((await panel()).getByRole('button', { name: 'Задонатити' }));
+    const donate = (await panel()).getByRole('link', { name: /^Задонатити/ });
 
-    expect(currentLocation()).toBe(
-      `/redirect-bank-link ${JSON.stringify({ url: data.sources[0].url })}`,
-    );
+    expect(donate).toHaveAttribute('href', data.sources[0].url);
+    expect(donate).toHaveAttribute('target', '_blank');
+    expect(donate).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(donate).toHaveAccessibleName(/відкриється в новій вкладці/);
+    expect(screen.getByText('Сторінка оплати відкриється в новій вкладці. Суму ви обираєте самі.')).toBeInTheDocument();
   });
 
   test('without sources «Задонатити» is disabled with a caption', async () => {
@@ -178,10 +180,9 @@ describe('Fundraising', () => {
       route: { pathname: '/fundraisings/5', state: { ...data, sources } },
     });
 
-    fireEvent.click((await actionBar()).getByRole('button', { name: 'Задонатити' }));
-
-    expect(currentLocation()).toBe(
-      `/redirect-bank-link ${JSON.stringify({ url: data.sources[0].url })}`,
+    expect((await actionBar()).getByRole('link', { name: /^Задонатити/ })).toHaveAttribute(
+      'href',
+      data.sources[0].url,
     );
   });
 
@@ -241,7 +242,7 @@ describe('Fundraising', () => {
       });
 
       fireEvent.click(screen.getByRole('button', { name: 'Підписатись на щомісячне нагадування' }));
-      await act(async () => {});
+      await act(() => Promise.resolve());
       expect(screen.getByText('Підписку оформлено')).toBeInTheDocument();
 
       act(() => { jest.advanceTimersByTime(4999); });

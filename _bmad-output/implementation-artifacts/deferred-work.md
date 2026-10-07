@@ -70,3 +70,6 @@
 - source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-3-1-fundraising-page.md`
   summary: Живий регіон тосту успіху змонтований разом із текстом, кнопка підписки без aria-busy; скидання стану підписки при зміні routeId без тесту.
   evidence: Рев'ю spec-3-1; a11y-прохід Е8.1. Severity low.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-3-2-direct-donate.md`
+  summary: Прибрати мертвий маршрут /redirect-bank-link і компонент BankLinkRedirect (після переходу на пряме посилання викликів немає).
+  evidence: Зміна маршрутів поза межами spec-3-2; разом із layout-маршрутом і ProtectedRoutes (D18). Severity low.
