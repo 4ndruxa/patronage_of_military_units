@@ -3,22 +3,27 @@ import { useNavigate } from 'react-router-dom';
 import fundraisingDefault from "../../assets/fundraising-default.png";
 import { getFundraisingsByCreator, deleteFundraising } from '../../services/api/fundraisings/fundraisings';
 import { Fundraising } from '../../types/FundraisingsData';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 const MyFundraisings: React.FC = () => {
   const [fundraisings, setFundraisings] = useState<Fundraising[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 6;
   const navigate = useNavigate();
-  const creatorId = 1;
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
 
   useEffect(() => {
+    if (userId === undefined) {
+      return;
+    }
     const fetchFundraisings = async () => {
-      const data = await getFundraisingsByCreator(creatorId);
-      setFundraisings(data);
+      const data = await getFundraisingsByCreator(userId);
+      setFundraisings(data || []);
     };
 
     fetchFundraisings();
-  }, [creatorId]);
+  }, [userId]);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);

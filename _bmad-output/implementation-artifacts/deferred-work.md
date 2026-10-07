@@ -22,3 +22,6 @@
 - source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-1-access-security.md`
   summary: POST /users/ дозволяє будь-якому автентифікованому створювати акаунти для інших (маршрут не використовується клієнтом; користувачі створюються через OAuth).
   evidence: Раніше маршрут був відкритий навіть гостям; зараз звужено, але рольової перевірки немає. Severity low — прибрати маршрут разом із тестом.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-2-my-fundraisings-owner.md`
+  summary: «Видалити» в «Мої збори» прибирає картку навіть при невдалому запиті (сервіс ковтає помилку і повертає undefined) — перевіряти результат перед оновленням стану.
+  evidence: Стара поведінка (myFundraisings.tsx, onClick видалення); з перевіркою власності 403 можливий для чужих даних, а мережевий збій — завжди. Брати разом з 7.3 (підтвердження видалення). Severity medium.

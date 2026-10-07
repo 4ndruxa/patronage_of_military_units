@@ -51,9 +51,9 @@ export const deleteFundraising = async (fundraisingId: number): Promise<Fundrais
   }
 };
 
-export const getFundraisingsByCreator = async (creatorId: number, skip = 0, limit = 100) => {
+export const getFundraisingsByCreator = async (creatorId: number, skip = 0, limit = 100): Promise<Fundraising[] | void> => {
     try {
-      const response = await axiosInstance.get(`${BASE_URL}/fundraisings/by-creator/${creatorId}`, {
+      const response = await axiosInstance.get<Fundraising[]>(`${BASE_URL}/fundraisings/by-creator/${creatorId}`, {
         params: { skip, limit }
       });
       return response.data;
