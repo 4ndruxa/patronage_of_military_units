@@ -161,3 +161,5 @@ cython_debug/
 
 # Backend test database (server/run_tests.sh)
 test.db
+server/sql_app.db
+server/virtualenv
