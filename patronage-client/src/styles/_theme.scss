@@ -32,6 +32,8 @@ h3, .h3 { font-family: var(--pm-font-body); font-weight: 700; font-size: 1.125re
 
 // Buttons
 .btn { --bs-btn-border-radius: 9999px; --bs-btn-font-weight: 700; --bs-btn-padding-x: 1.35rem; --bs-btn-padding-y: .65rem; font-family: var(--pm-font-body); transition: background-color .15s, box-shadow .15s, transform .15s; }
+.btn:active { transform: scale(.98); }
+@media (prefers-reduced-motion: reduce) { .btn:active { transform: none; } }
 .btn-lg { --bs-btn-padding-y: .85rem; --bs-btn-padding-x: 1.75rem; --bs-btn-font-size: 1.0625rem; }
 .btn-sm { --bs-btn-padding-y: .4rem; --bs-btn-padding-x: .95rem; --bs-btn-font-size: .875rem; }
 .btn-primary { --bs-btn-bg: var(--pm-primary); --bs-btn-border-color: var(--pm-primary); --bs-btn-hover-bg: var(--pm-primary-hover); --bs-btn-hover-border-color: var(--pm-primary-hover); --bs-btn-active-bg: var(--pm-primary-hover); --bs-btn-active-border-color: var(--pm-primary-hover); --bs-btn-disabled-bg: var(--pm-primary); --bs-btn-disabled-border-color: var(--pm-primary); }

@@ -58,3 +58,15 @@
 - source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-2-2-shell.md`
   summary: FontAwesome (@fortawesome/*) більше ніде не використовується — прибрати з package.json.
   evidence: Єдині імпорти (faBars) прибрано разом зі старим хедером. Severity low.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-3-1-fundraising-page.md`
+  summary: «Задонатити» для гостя веде на /login (маршрут /redirect-bank-link під ProtectedRoutes), а для користувача — відкриває банку й перекидає поточну вкладку на головну (bankLinkRedirect). Треба відкривати джерело напряму window.open(url,'_blank','noopener,noreferrer') без переходу.
+  evidence: Старий шлях донату, знайдено рев'ю spec-3-1 (edge, blind); intent spec-3-1 вимагав «той самий navigateToBankLink». Severity HIGH — гість не може задонатити. Перший у списку виправлень після дизайну (D18).
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-3-1-fundraising-page.md`
+  summary: Повернення на збір після входу («Увійти, щоб підписатись» → /login → назад), підпис про це прибрано до реалізації.
+  evidence: login.tsx перезавантажує сторінку, PublicRoutes кидає на головну. Разом із D18. Severity medium.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-3-1-fundraising-page.md`
+  summary: Мобільна нижня панель: показувати лише коли основна «Задонатити» за екраном (IntersectionObserver, рішення Sally з MOBILE.md), індикатор «Ви підписані» в панелі, хардкод кольорів сторінки збору → токени.
+  evidence: Подвійні кнопки на мобільному — як у старому макеті; Sally змінила це в раунді 6. Брати разом із темною темою й мобільними правками. Severity low.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-3-1-fundraising-page.md`
+  summary: Живий регіон тосту успіху змонтований разом із текстом, кнопка підписки без aria-busy; скидання стану підписки при зміні routeId без тесту.
+  evidence: Рев'ю spec-3-1; a11y-прохід Е8.1. Severity low.

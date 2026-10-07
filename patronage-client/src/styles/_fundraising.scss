@@ -1,0 +1,60 @@
+// Fundraising page from the approved mockup (mockups/v2/02-fundraising.html, pm.css):
+// 7/5 grid, sticky action panel, payment sources list, mobile action bar.
+
+// Layout: one column on mobile (main, panel, sources), 7/5 on desktop with the
+// panel spanning both rows so it can stay in view while the description scrolls.
+.pm-detail { display: grid; gap: 1.75rem; grid-template-columns: minmax(0, 1fr); grid-template-areas: "main" "panel" "sources"; }
+.pm-detail__main { grid-area: main; }
+.pm-detail__sources { grid-area: sources; }
+.pm-panel-col { grid-area: panel; align-self: start; }
+@media (min-width: 992px) {
+  .pm-detail { gap: 2rem 3rem; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-areas: "main panel" "sources panel"; grid-template-rows: auto 1fr; }
+  .pm-panel-col { position: sticky; top: 96px; }
+}
+.pm-detail__desc { white-space: pre-line; overflow-wrap: anywhere; }
+
+// Cover: a palette gradient picked by id (the full cover system comes in E6.3).
+.pm-cover { height: 120px; border-radius: var(--pm-r-lg) var(--pm-r-lg) 0 0; position: relative; overflow: hidden; }
+.pm-cover::after { content: ""; position: absolute; width: 180px; height: 180px; border-radius: 50%; right: -40px; top: -60px; background: rgba(255, 255, 255, .1); }
+.pm-cover::before { content: ""; position: absolute; width: 90px; height: 90px; border-radius: 50%; left: 18px; bottom: -48px; background: rgba(255, 255, 255, .08); }
+.pm-cover--tall { height: 200px; border-radius: var(--pm-r-lg); }
+.pm-g1 { background: linear-gradient(135deg, #0A6E9C, #0B4F7A); }
+.pm-g2 { background: linear-gradient(135deg, #0E7A74, #0B3F5C); }
+.pm-g3 { background: linear-gradient(135deg, #0B1E3A, #14607F); }
+.pm-g4 { background: linear-gradient(135deg, #17795D, #0B3A55); }
+.pm-g5 { background: linear-gradient(135deg, #0A6E9C, #0B1E3A); }
+.pm-g6 { background: linear-gradient(135deg, #0B1E3A, #0A6E9C); }
+
+// Organization badge
+.badge.pm-badge-org { background: var(--pm-sky-soft); color: var(--pm-primary); font-weight: 700; font-size: .78rem; border-radius: 9999px; padding: .35rem .75rem; text-decoration: none; margin-bottom: .6rem; white-space: normal; text-align: left; }
+a.pm-badge-org:hover { background: #D1E9F4; color: var(--pm-primary-hover); }
+
+// Action panel
+.pm-panel { background: #fff; border: 1px solid var(--pm-border); border-radius: var(--pm-r-xl); box-shadow: var(--pm-shadow-2); padding: 1.5rem; }
+.pm-panel hr { border-color: var(--pm-border); opacity: 1; margin-block: 1.1rem; }
+.pm-checkline { display: flex; gap: .55rem; align-items: center; color: var(--pm-success); font-weight: 700; }
+.btn .pm-i-end { margin-inline: .4rem 0; }
+.btn .pm-i-start { margin-inline: 0 .4rem; }
+
+// Payment sources
+.pm-source { display: flex; align-items: center; gap: .9rem; padding: .85rem 1rem; border: 1px solid var(--pm-border); border-radius: var(--pm-r-md); background: #fff; text-decoration: none; color: var(--pm-ink); }
+a.pm-source:hover { border-color: var(--pm-primary); box-shadow: var(--pm-shadow-1); color: var(--pm-ink); }
+.pm-source__ico { width: 40px; height: 40px; border-radius: 12px; background: var(--pm-sky-soft); color: var(--pm-primary); display: flex; align-items: center; justify-content: center; flex: none; }
+.pm-source__body { flex-grow: 1; min-width: 0; overflow-wrap: anywhere; }
+.pm-source small { display: block; color: var(--pm-ink-muted); font-weight: 500; }
+
+// Mobile action bar: fixed to the bottom, glass where supported, solid white otherwise.
+.pm-actionbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1030; background: #fff; border-top: 1px solid var(--pm-border); padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom)); display: flex; gap: .6rem; box-shadow: 0 -6px 20px rgba(11, 30, 58, .1); }
+@supports ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
+  .pm-actionbar { background: rgba(255, 255, 255, .92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+}
+.pm-actionbar .btn { flex: 1; padding-inline: .75rem; }
+@media (min-width: 992px) { .pm-actionbar { display: none; } }
+
+// Room under the content and the footer so the action bar never covers them.
+@media (max-width: 991.98px) {
+  .pm-fundraising { padding-bottom: 3rem; }
+  body.pm-has-actionbar .pm-footer { padding-bottom: calc(6rem + env(safe-area-inset-bottom)); }
+  // Keep toasts above the action bar instead of covering it.
+  body.pm-has-actionbar .pm-toast-area { bottom: calc(5.5rem + env(safe-area-inset-bottom)); }
+}
