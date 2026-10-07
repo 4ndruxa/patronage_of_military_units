@@ -25,3 +25,6 @@
 - source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-2-my-fundraisings-owner.md`
   summary: «Видалити» в «Мої збори» прибирає картку навіть при невдалому запиті (сервіс ковтає помилку і повертає undefined) — перевіряти результат перед оновленням стану.
   evidence: Стара поведінка (myFundraisings.tsx, onClick видалення); з перевіркою власності 403 можливий для чужих даних, а мережевий збій — завжди. Брати разом з 7.3 (підтвердження видалення). Severity medium.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-4-fundraising-by-id.md`
+  summary: Сторінка збору не розрізняє 404 і мережеву/серверну помилку — будь-який збій показує «Збір не знайдено» (плюс сира глобальна плашка).
+  evidence: Сервіси ковтають помилки й повертають undefined (handleError); розрізнення потребує, щоб сервіс повертав статус. Брати разом із тостами Е2.5. Severity low–medium.

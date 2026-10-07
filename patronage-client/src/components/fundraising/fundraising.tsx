@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CardData } from "../../types/CardData";
 import { createSubscription } from '../../services/api/subscriptions/subscriptions';
+import { getFundraisingById } from '../../services/api/fundraisings/fundraisings';
+import fundraisingDefault from "../../assets/fundraising-default.png";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 
@@ -10,13 +12,43 @@ const Fundraising: React.FC = () => {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
 
+  const { id: routeId } = useParams<{ id: string }>();
+
   const [fundraisingData, setFundraisingData] = useState<CardData | null>(null);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
+    setNotFound(false);
+    // Cards pass the fundraising in navigation state (it survives a reload via
+    // history.state); a direct link or a new tab arrives without it and has to
+    // be fetched by the id in the URL.
     if (location.state) {
       setFundraisingData(location.state as CardData);
+      return;
     }
-  }, [location.state]);
+
+    setFundraisingData(null);
+    if (!routeId || !/^\d+$/.test(routeId) || Number(routeId) === 0) {
+      setNotFound(true);
+      return;
+    }
+    const fundraisingId = Number(routeId);
+
+    let cancelled = false;
+    getFundraisingById(fundraisingId).then((data) => {
+      if (cancelled) {
+        return;
+      }
+      if (data) {
+        setFundraisingData({ ...data, description: data.description ?? '', img: fundraisingDefault });
+      } else {
+        setNotFound(true);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [location.state, routeId]);
 
   const navigateToBankLink = () => {
     if (fundraisingData && fundraisingData.sources && fundraisingData.sources.length > 0) {
@@ -41,6 +73,20 @@ const Fundraising: React.FC = () => {
       console.error("User is not authenticated or fundraising data is missing");
     }
   };
+
+  if (notFound) {
+    return (
+      <div className="container">
+        <div className="d-flex flex-column align-items-center">
+          <h1 className="mt-5 mb-3">Збір не знайдено</h1>
+          <p className="fs-18">Можливо, його видалили або посилання неправильне.</p>
+          <button className="btn btn-primary fw-medium" onClick={() => navigate('/patronage_of_military_units')}>
+            До всіх зборів
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (!fundraisingData) {
     return <div>Loading...</div>;
