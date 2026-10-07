@@ -34,3 +34,9 @@
 - source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-5-idempotent-subscriptions.md`
   summary: Тест шляху для БД з кількома рядками на пару (порядок у _find_subscription, відписка всіх активних) і прогін скрипта дедуплікації на Postgres.
   evidence: Усі crud-тести працюють на БД з унікальним індексом, де дублі неможливі; скрипт тестується лише на SQLite. Бойова БД вже очищена (--apply двічі, 0 рядків). Severity medium (unverified).
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-8-ui-smoke-tests.md`
+  summary: Смоук-тести режиму редагування форм збору й організації (префіл + update) і валідації порожньої форми.
+  evidence: 1.8 покриває лише створення; форми переробляються в Е7 — додати ці тести перед Е7.2. Severity medium.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-8-ui-smoke-tests.md`
+  summary: Помилки в UI-тестах не видно: handleError диспатчить у глобальний store, а не в тестовий; тест «невдалий запит показує повідомлення» неможливий.
+  evidence: services/errorHandler.tsx імпортує store/index; брати разом із тостами Е2.5 (інжекція store або мок errorHandler). Severity low–medium.
