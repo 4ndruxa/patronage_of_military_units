@@ -13,5 +13,6 @@ exec docker compose -f "$repo_root/server/docker-compose.yaml" run --rm --no-dep
   --user "$(id -u):$(id -g)" \
   -v "$repo_root":/repo -w /repo \
   -e DATABASE_URL=sqlite:///./test.db \
+  -e JWT_SECRET=test-secret \
   -e PYTHONPATH=/repo:/repo/server \
   backend python -m pytest server/test_main.py "$@"

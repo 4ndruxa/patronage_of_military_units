@@ -10,3 +10,15 @@
 - source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-0-1-test-baseline.md`
   summary: Додати CI (GitHub Actions), що запускає npm ci + jest + tsc і server/run_tests.sh.
   evidence: Зараз регресії ловляться лише вручну; .github/workflows відсутній.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-1-access-security.md`
+  summary: Збір можна прив'язати до чужої організації (create/update_fundraising не перевіряє власника organization_id).
+  evidence: Поведінка існувала до зміни; форма збору показує всі організації, тож обмеження — продуктове рішення (хто може збирати від імені організації) разом із модерацією Е10. Severity medium.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-1-access-security.md`
+  summary: Без JWT_SECRET сервер стартує з публічним dev-ключем (лише WARNING) — перед будь-яким деплоєм вимагати змінну або явний dev-прапорець.
+  evidence: Поведінку свідомо зафіксовано в intent (рядок матриці «Немає JWT_SECRET»); для публікації (D11/Е10) це має стати fail-closed. Severity medium.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-1-access-security.md`
+  summary: Клієнт не обробляє прострочену сесію: 401 на мутаціях показує сиру плашку «Request failed with status code 401», стан auth не скидається, повторний вхід не пропонується.
+  evidence: Стара UX-прогалина (раніше так само з 403); з exp 24 год стане помітнішою. Severity medium.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-1-access-security.md`
+  summary: POST /users/ дозволяє будь-якому автентифікованому створювати акаунти для інших (маршрут не використовується клієнтом; користувачі створюються через OAuth).
+  evidence: Раніше маршрут був відкритий навіть гостям; зараз звужено, але рольової перевірки немає. Severity low — прибрати маршрут разом із тестом.
