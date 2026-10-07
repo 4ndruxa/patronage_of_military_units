@@ -4,6 +4,7 @@ import Fundraising from '../../components/fundraising/fundraising';
 import { getFundraisingById } from '../../services/api/fundraisings/fundraisings';
 import { createSubscription } from '../../services/api/subscriptions/subscriptions';
 import { renderWithProviders, currentLocation, testUser } from './renderWithProviders';
+import type { MockIntersectionObserver } from '../../setupTests';
 
 jest.mock('../../services/api/fundraisings/fundraisings');
 jest.mock('../../services/api/subscriptions/subscriptions');
@@ -264,5 +265,119 @@ describe('Fundraising', () => {
     expect(document.body).toHaveClass('pm-has-actionbar');
     unmount();
     expect(document.body).not.toHaveClass('pm-has-actionbar');
+  });
+
+  describe('mobile action bar and the panel «Задонатити»', () => {
+    const observers = () => (window.IntersectionObserver as unknown as typeof MockIntersectionObserver).instances;
+    const bar = async () => screen.findByRole('group', { name: 'Швидкі дії' });
+    const rootBounds = { top: 72 } as DOMRectReadOnly;
+
+    test('hidden while the panel button is in view, shown once it scrolls away above', async () => {
+      renderWithProviders(<Fundraising />, { path, route: { pathname: '/fundraisings/5', state: data } });
+
+      expect(await bar()).not.toHaveClass('pm-actionbar--visible');
+      const observer = observers().find((o) => o.targets.size > 0)!;
+      expect(Array.from(observer.targets)).toEqual([
+        (await panel()).getByRole('link', { name: /^Задонатити/ }),
+      ]);
+
+      act(() => observer.trigger({ isIntersecting: true, boundingClientRect: { top: 300, bottom: 360 } as DOMRectReadOnly, rootBounds }));
+      expect(await bar()).not.toHaveClass('pm-actionbar--visible');
+
+      act(() => observer.trigger({ isIntersecting: false, boundingClientRect: { top: -80, bottom: -20 } as DOMRectReadOnly, rootBounds }));
+      expect(await bar()).toHaveClass('pm-actionbar--visible');
+
+      act(() => observer.trigger({ isIntersecting: true, boundingClientRect: { top: 100, bottom: 160 } as DOMRectReadOnly, rootBounds }));
+      expect(await bar()).not.toHaveClass('pm-actionbar--visible');
+    });
+
+    test('stays hidden while the panel button is still below the screen', async () => {
+      renderWithProviders(<Fundraising />, { path, route: { pathname: '/fundraisings/5', state: data } });
+
+      await bar();
+      const observer = observers().find((o) => o.targets.size > 0)!;
+      act(() => observer.trigger({ isIntersecting: false, boundingClientRect: { top: 900, bottom: 960 } as DOMRectReadOnly, rootBounds }));
+      expect(await bar()).not.toHaveClass('pm-actionbar--visible');
+    });
+
+    test('without sources the observer watches the disabled panel button', async () => {
+      renderWithProviders(<Fundraising />, {
+        path,
+        route: { pathname: '/fundraisings/5', state: { ...data, sources: [] } },
+      });
+
+      await bar();
+      const observer = observers().find((o) => o.targets.size > 0)!;
+      expect(Array.from(observer.targets)).toEqual([(await panel()).getByRole('button', { name: 'Задонатити' })]);
+      act(() => observer.trigger({ isIntersecting: false, boundingClientRect: { top: -80, bottom: -20 } as DOMRectReadOnly, rootBounds }));
+      expect(await bar()).toHaveClass('pm-actionbar--visible');
+    });
+
+    test('toasts are lifted above the bar only while it is shown', async () => {
+      const { unmount } = renderWithProviders(<Fundraising />, { path, route: { pathname: '/fundraisings/5', state: data } });
+
+      await bar();
+      expect(document.body).not.toHaveClass('pm-actionbar-shown');
+      const observer = observers().find((o) => o.targets.size > 0)!;
+      act(() => observer.trigger({ isIntersecting: false, boundingClientRect: { top: -80, bottom: -20 } as DOMRectReadOnly, rootBounds }));
+      expect(document.body).toHaveClass('pm-actionbar-shown');
+      act(() => observer.trigger({ isIntersecting: true, boundingClientRect: { top: 100, bottom: 160 } as DOMRectReadOnly, rootBounds }));
+      expect(document.body).not.toHaveClass('pm-actionbar-shown');
+      act(() => observer.trigger({ isIntersecting: false, boundingClientRect: { top: -80, bottom: -20 } as DOMRectReadOnly, rootBounds }));
+      unmount();
+      expect(document.body).not.toHaveClass('pm-actionbar-shown');
+    });
+
+    test('without IntersectionObserver the bar is always visible', async () => {
+      const original = window.IntersectionObserver;
+      // @ts-expect-error: simulate a browser without IntersectionObserver
+      delete window.IntersectionObserver;
+      try {
+        renderWithProviders(<Fundraising />, { path, route: { pathname: '/fundraisings/5', state: data } });
+        expect(await bar()).toHaveClass('pm-actionbar--visible');
+      } finally {
+        window.IntersectionObserver = original;
+      }
+    });
+  });
+
+  test('payment sources show the type in plain words, not the raw type', async () => {
+    const sources = [
+      { id: 1, title: 'Банка', type: 'monobank', url: 'https://send.monobank.ua/jar/abc', creator_id: 1 },
+      { id: 2, title: 'Картка ПриватБанку', type: 'card', url: 'https://example.com/card', creator_id: 1 },
+      { id: 3, title: 'PayPal фонду', type: 'PayPal', url: 'https://paypal.me/fund', creator_id: 1 },
+      { id: 4, title: 'Інше', type: 'liqpay', url: 'https://liqpay.ua/x', creator_id: 1 },
+    ];
+    renderWithProviders(<Fundraising />, {
+      path,
+      route: { pathname: '/fundraisings/5', state: { ...data, sources } },
+    });
+
+    expect(await screen.findByRole('link', { name: /Банка Відкриється сторінка банки/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Картка ПриватБанку Відкриється сторінка оплати/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /PayPal фонду Відкриється PayPal/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Інше Відкриється сторінка оплати/ })).toBeInTheDocument();
+    for (const raw of ['monobank', 'card', 'PayPal', 'liqpay']) {
+      expect(screen.queryByText(raw)).not.toBeInTheDocument();
+    }
+  });
+
+  test('sources without a web link: a card says «Реквізити картки», others get no label', async () => {
+    const sources = [
+      data.sources[0],
+      { id: 2, title: 'Картка фонду', type: 'card', url: '4441 1111 2222 3333', creator_id: 1 },
+      { id: 3, title: 'Інший спосіб', type: 'other', url: 'javascript:alert(1)', creator_id: 1 },
+    ];
+    renderWithProviders(<Fundraising />, {
+      path,
+      route: { pathname: '/fundraisings/5', state: { ...data, sources } },
+    });
+
+    const card = (await screen.findByText('Картка фонду')).closest('.pm-source') as HTMLElement;
+    expect(card).toHaveTextContent('Картка фондуРеквізити картки');
+    const other = screen.getByText('Інший спосіб').closest('.pm-source') as HTMLElement;
+    expect(other).toHaveTextContent(/^Інший спосіб$/);
+    expect(within(other).queryByText(/Відкриється/)).not.toBeInTheDocument();
+    expect(screen.queryByText('other')).not.toBeInTheDocument();
   });
 });

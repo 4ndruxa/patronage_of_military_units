@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/index';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo-144.png';
 import { HOME_PATH } from '../header/header';
 
 export const REPO_URL = 'https://github.com/4ndruxa/patronage_of_military_units';
@@ -32,7 +32,7 @@ const Footer: React.FC = () => {
         </div>
         <hr className="my-4" />
         <small>
-          Ми не збираємо гроші: донат ви робите на сторінці організації. Проєкт розробив Андрій Боднар.{' '}
+          Ми не збираємо гроші: донат ви робите на сторінці оплати. Проєкт розробив Андрій Боднар.{' '}
           <a href={REPO_URL} target="_blank" rel="noopener noreferrer">Код на GitHub</a>
         </small>
       </div>

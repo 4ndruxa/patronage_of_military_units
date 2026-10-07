@@ -4,7 +4,8 @@
   // Header: the logo sits in a light circle, never inverted.
   .pm-nav .navbar-brand img { background: var(--pm-logo-chip-bg); border-radius: 50%; padding: 3px; }
   .pm-nav .navbar-toggler { border-color: var(--pm-border-strong); }
-  .pm-theme-toggle { border-color: var(--pm-border-strong); }
+  .pm-theme-toggle, .pm-bellbtn { border-color: var(--pm-border-strong); }
+  .pm-bellbtn.active { border-color: var(--pm-teal-strong); }
   .pm-avatar { background: var(--pm-surface-2); border: 2px solid var(--pm-border-strong); color: var(--pm-ink); }
   .dropdown-menu { --bs-dropdown-bg: var(--pm-surface); --bs-dropdown-color: var(--pm-ink); --bs-dropdown-link-color: var(--pm-ink); --bs-dropdown-link-hover-bg: var(--pm-surface-2); --bs-dropdown-link-hover-color: var(--pm-ink); --bs-dropdown-divider-bg: var(--pm-border); }
 

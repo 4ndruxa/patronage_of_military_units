@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import fundraisingDefault from "../../assets/fundraising-default.png";
+import fundraisingDefault from "../../assets/fundraising-default.webp";
 import { getFundraisings, getFundraisingsByOrganization } from '../../services/api/fundraisings/fundraisings';
 import './fundraisings.scss';
 import { Fundraising } from '../../types/FundraisingsData';

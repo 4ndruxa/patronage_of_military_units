@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/index';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo-144.png';
 
 const AlertComponent: React.FC = () => {
   const [show, setShow] = useState(false);

@@ -1,0 +1,17 @@
+// Touch targets on phones and tablets (mockups/v2/MOBILE.md §2, pm.css «мобільні доробки»):
+// every tappable control is at least 44px below lg; form fields are 48px with
+// a 16px font so iOS does not zoom the page on focus.
+@media (max-width: 991.98px) {
+  .btn, .btn-sm { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: .4rem; }
+  // The gap spaces text and icons; drop the desktop icon margins so it is not doubled.
+  .btn .pm-i-start, .btn .pm-i-end { margin-inline: 0; }
+  .pm-nav .nav-link { min-height: 44px; display: flex; align-items: center; margin-inline: 0; }
+  .page-link { min-width: 44px; width: auto; height: 44px; padding-inline: .5rem; }
+  .btn-close { width: 44px; height: 44px; padding: 0; background-size: 14px; }
+  .breadcrumb a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; padding: .6rem .15rem; }
+  .form-control, .form-select { min-height: 48px; font-size: 1rem; }
+  .pm-source { min-height: 64px; }
+  .dropdown-item { min-height: 44px; display: flex; align-items: center; }
+}
+.breadcrumb { align-items: center; }
+.breadcrumb-item { display: flex; align-items: center; }

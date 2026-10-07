@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getOrganizations } from '../../services/api/organizations/organizations';
-import organizationDefault from '../../assets/organization-default.png';
+import organizationDefault from '../../assets/organization-default.webp';
 import { OrganizationsData } from '../../types/OrganizationsData';
 
 const Organizations: React.FC = () => {

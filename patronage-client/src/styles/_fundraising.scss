@@ -50,6 +50,11 @@ a.pm-source:hover { border-color: var(--pm-primary); box-shadow: var(--pm-shadow
   .pm-actionbar { background: var(--pm-actionbar-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 }
 .pm-actionbar .btn { flex: 1; padding-inline: .75rem; }
+// Hidden until the panel's «Задонатити» scrolls out of view (fundraising.tsx), so
+// one gold button is on screen at a time. visibility also drops it from the tab
+// order and the accessibility tree; the global reduced-motion rule kills the slide.
+.pm-actionbar { transform: translateY(100%); opacity: 0; visibility: hidden; pointer-events: none; transition: transform .2s ease, opacity .2s ease, visibility 0s linear .2s; }
+.pm-actionbar--visible { transform: none; opacity: 1; visibility: visible; pointer-events: auto; transition: transform .2s ease, opacity .2s ease, visibility 0s; }
 @media (min-width: 992px) { .pm-actionbar { display: none; } }
 
 // Room under the content and the footer so the action bar never covers them.
@@ -57,5 +62,5 @@ a.pm-source:hover { border-color: var(--pm-primary); box-shadow: var(--pm-shadow
   .pm-fundraising { padding-bottom: 3rem; }
   body.pm-has-actionbar .pm-footer { padding-bottom: calc(6rem + env(safe-area-inset-bottom)); }
   // Keep toasts above the action bar instead of covering it.
-  body.pm-has-actionbar .pm-toast-area { bottom: calc(5.5rem + env(safe-area-inset-bottom)); }
+  body.pm-actionbar-shown .pm-toast-area { bottom: calc(5.5rem + env(safe-area-inset-bottom)); }
 }

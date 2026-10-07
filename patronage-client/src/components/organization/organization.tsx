@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getOrganizationById } from '../../services/api/organizations/organizations';
 import Fundraisings from '../fundraisings/fundraisings';
-import organizationDefault from '../../assets/organization-default.png';
+import organizationDefault from '../../assets/organization-default.webp';
 import { OrganizationsData } from '../../types/OrganizationsData';
 
 const OrganizationDetails: React.FC = () => {

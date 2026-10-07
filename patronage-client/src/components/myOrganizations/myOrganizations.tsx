@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import organizationDefault from "../../assets/organization-default.png";  
+import organizationDefault from "../../assets/organization-default.webp";  
 import { getOrganizationsByCreatorId, deleteOrganization } from '../../services/api/organizations/organizations';
 import { OrganizationsData } from "../../types/OrganizationsData";
 import { useSelector } from 'react-redux';

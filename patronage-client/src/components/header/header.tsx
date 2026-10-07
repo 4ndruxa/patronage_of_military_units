@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo-144.png";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { logout } from '../../store/authSlice';
@@ -96,6 +96,20 @@ const Header: React.FC = () => {
         </Link>
         {/* Next to the burger on mobile, after the avatar / «Увійти» on desktop. */}
         <div className="d-flex align-items-center gap-2 order-lg-last ms-auto ms-lg-3">
+          {user && (
+            <NavLink
+              className={({ isActive }) => `pm-bellbtn d-lg-none${isActive ? ' active' : ''}`}
+              to="/my-subscriptions"
+              aria-label="Мої підписки"
+              title="Мої підписки"
+              onClick={closeMenu}
+            >
+              <svg className="pm-i" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" />
+              </svg>
+              {/* TODO(API): лічильник «ще не позначено: N» — Е5 */}
+            </NavLink>
+          )}
           <button
             className="pm-theme-toggle"
             type="button"

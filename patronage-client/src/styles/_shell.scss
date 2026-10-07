@@ -44,3 +44,9 @@
 .pm-theme-toggle { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--pm-border); background: transparent; color: var(--pm-ink); display: inline-flex; align-items: center; justify-content: center; padding: 0; flex: none; transition: background-color .15s; }
 .pm-theme-toggle:hover { background: var(--pm-sky-soft); }
 .pm-theme-toggle .pm-i { width: 1.25rem; height: 1.25rem; }
+
+// Bell: a quick link to «Мої підписки» for signed-in users, 44px target next to the theme toggle.
+.pm-bellbtn { position: relative; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--pm-border); display: inline-flex; align-items: center; justify-content: center; color: var(--pm-ink); text-decoration: none; flex: none; transition: background-color .15s; }
+.pm-bellbtn:hover { background: var(--pm-sky-soft); color: var(--pm-ink); }
+.pm-bellbtn.active { border-color: var(--pm-teal-strong); }
+.pm-bellbtn .pm-i { width: 1.25rem; height: 1.25rem; }

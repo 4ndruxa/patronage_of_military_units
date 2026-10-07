@@ -28,4 +28,18 @@ describe('Header', () => {
     expect(store.getState().auth.user).toBeNull();
     expect(sessionStorage.getItem('user')).toBeNull();
   });
+
+  test('a signed-in user gets a bell link to «Мої підписки» next to the theme toggle', () => {
+    renderWithProviders(<Header />, { user: testUser });
+
+    const bell = screen.getAllByRole('link', { name: 'Мої підписки' }).find((link) => link.classList.contains('pm-bellbtn'));
+    expect(bell).toBeDefined();
+    fireEvent.click(bell!);
+    expect(currentLocation()).toBe('/my-subscriptions');
+  });
+
+  test('a guest has no bell', () => {
+    renderWithProviders(<Header />);
+    expect(screen.queryByRole('link', { name: 'Мої підписки' })).not.toBeInTheDocument();
+  });
 });

@@ -3,9 +3,14 @@
   "name": "Громадське патронування",
   "icons": [
     {
-      "src": "logo.png",
+      "src": "logo-192.png",
       "type": "image/png",
-      "sizes": "1024x1024"
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
   "start_url": ".",

@@ -25,6 +25,29 @@ const Icon: React.FC<{ name: keyof typeof ICON_PATHS; className?: string }> = ({
   </svg>
 );
 
+// Payment source types in plain words; the raw type (monobank, card...) means nothing to a donor.
+const SOURCE_TYPE_LABELS: Record<string, string> = {
+  monobank: 'Відкриється сторінка банки',
+  mono: 'Відкриється сторінка банки',
+  card: 'Реквізити картки',
+  paypal: 'Відкриється PayPal',
+};
+
+const PAYMENT_PAGE_LABEL = 'Відкриється сторінка оплати';
+
+// A card with a link still opens a page; a source without a link opens nothing,
+// so only a card keeps a label («Реквізити картки»).
+export const sourceTypeLabel = (type: string | undefined, isLink = true): string | null => {
+  const key = (type ?? '').trim().toLowerCase();
+  if (key === 'card') {
+    return isLink ? PAYMENT_PAGE_LABEL : SOURCE_TYPE_LABELS.card;
+  }
+  return isLink ? SOURCE_TYPE_LABELS[key] ?? PAYMENT_PAGE_LABEL : null;
+};
+
+// Without IntersectionObserver the bottom bar stays visible, as before.
+const canObserve = () => typeof window !== 'undefined' && 'IntersectionObserver' in window;
+
 // Only http(s) sources become links; anything else (javascript:, data:, typos) is plain text.
 const isWebUrl = (url: string | undefined): boolean => {
   if (!url) {
@@ -50,10 +73,17 @@ const Fundraising: React.FC = () => {
   const [subscribing, setSubscribing] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  // The mobile bottom bar shows only once the panel's «Задонатити» has scrolled
+  // out of view above, so there is never a second gold button on screen.
+  const [actionBarVisible, setActionBarVisible] = useState(() => !canObserve());
+  const panelDonateRef = useRef<HTMLElement | null>(null);
   // Bumped on unmount and on every route change, so a late subscription
   // response never lands on another fundraising or an unmounted page.
   const requestEpoch = useRef(0);
   const hasData = fundraisingData !== null;
+  // The first source with a web url; non-http(s) urls are never followed.
+  const donateUrl = fundraisingData?.sources?.find((source) => isWebUrl(source.url))?.url;
+  const hasDonateUrl = Boolean(donateUrl);
 
   useEffect(() => () => {
     requestEpoch.current += 1;
@@ -67,6 +97,37 @@ const Fundraising: React.FC = () => {
     document.body.classList.add('pm-has-actionbar');
     return () => document.body.classList.remove('pm-has-actionbar');
   }, [hasData]);
+
+  useEffect(() => {
+    const target = panelDonateRef.current;
+    if (!hasData || !target || !canObserve()) {
+      return;
+    }
+    // The sticky navbar grows when the brand wraps: measure it instead of assuming 72px.
+    const navHeight = document.querySelector('.pm-nav')?.getBoundingClientRect().height || 72;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry) {
+        return;
+      }
+      // Hidden while the button is on screen or still below it; shown once it has
+      // scrolled away above the viewport (under the sticky header counts as away).
+      const rootTop = entry.rootBounds?.top ?? 0;
+      setActionBarVisible(!entry.isIntersecting && entry.boundingClientRect.bottom <= rootTop);
+    }, { rootMargin: `-${Math.round(navHeight)}px 0px 0px 0px` });
+    observer.observe(target);
+    return () => observer.disconnect();
+  },
+  // The panel button is an <a> or a disabled <button>: observe whichever is rendered.
+  [hasData, hasDonateUrl]);
+
+  // Toasts are lifted above the bar only while it is actually shown.
+  useEffect(() => {
+    if (!hasData || !actionBarVisible) {
+      return;
+    }
+    document.body.classList.add('pm-actionbar-shown');
+    return () => document.body.classList.remove('pm-actionbar-shown');
+  }, [hasData, actionBarVisible]);
 
   useEffect(() => {
     if (!showToast) {
@@ -117,19 +178,16 @@ const Fundraising: React.FC = () => {
     };
   }, [location.state, routeId]);
 
-  // The first source with a web url; non-http(s) urls are never followed.
-  const donateUrl = fundraisingData?.sources?.find((source) => isWebUrl(source.url))?.url;
-
   // A plain external link in a new tab: the visitor keeps this page, guests can
   // donate too, and popup blockers don't interfere.
-  const renderDonate = (className: string, children: React.ReactNode) =>
+  const renderDonate = (className: string, children: React.ReactNode, ref?: React.Ref<HTMLElement>) =>
     donateUrl ? (
-      <a className={className} href={donateUrl} target="_blank" rel="noopener noreferrer">
+      <a ref={ref as React.Ref<HTMLAnchorElement>} className={className} href={donateUrl} target="_blank" rel="noopener noreferrer">
         {children}
         <span className="visually-hidden"> (відкриється в новій вкладці)</span>
       </a>
     ) : (
-      <button type="button" className={className} disabled>
+      <button ref={ref as React.Ref<HTMLButtonElement>} type="button" className={className} disabled>
         {children}
       </button>
     );
@@ -210,18 +268,20 @@ const Fundraising: React.FC = () => {
             <h2 className="h3 mb-3">Способи оплати</h2>
             <ul className="list-unstyled d-grid gap-2">
               {sources.map((source, index) => {
+                const isLink = isWebUrl(source.url);
+                const label = sourceTypeLabel(source.type, isLink);
                 const content = (
                   <>
                     <span className="pm-source__ico"><Icon name="card" /></span>
                     <span className="pm-source__body">
                       <strong>{source.title}</strong>
-                      {source.type && <small>{source.type}</small>}
+                      {label && <small>{label}</small>}
                     </span>
                   </>
                 );
                 return (
                   <li key={source.id ?? index}>
-                    {isWebUrl(source.url) ? (
+                    {isLink ? (
                       <a className="pm-source" href={source.url} target="_blank" rel="noopener noreferrer">
                         {content}
                         <Icon name="ext" />
@@ -240,7 +300,7 @@ const Fundraising: React.FC = () => {
         <div className="pm-panel-col">
           <aside className="pm-panel" aria-label="Підтримати збір">
             {/* TODO(Е4): термометр */}
-            {renderDonate('btn btn-donate btn-lg w-100', <>Задонатити <Icon name="ext" className="pm-i-end" /></>)}
+            {renderDonate('btn btn-donate btn-lg w-100', <>Задонатити <Icon name="ext" className="pm-i-end" /></>, panelDonateRef)}
             <p className="pm-caption text-center mt-2 mb-0">
               {canDonate
                 ? 'Сторінка оплати відкриється в новій вкладці. Суму ви обираєте самі.'
@@ -271,7 +331,7 @@ const Fundraising: React.FC = () => {
         </div>
       </div>
 
-      <div className="pm-actionbar" role="group" aria-label="Швидкі дії">
+      <div className={`pm-actionbar${actionBarVisible ? ' pm-actionbar--visible' : ''}`} role="group" aria-label="Швидкі дії">
         {renderDonate('btn btn-donate', 'Задонатити')}
         {!user ? (
           <Link className="btn btn-primary" to="/login">Увійти, щоб підписатись</Link>

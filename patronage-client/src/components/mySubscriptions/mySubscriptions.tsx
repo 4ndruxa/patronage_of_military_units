@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import fundraisingDefault from "../../assets/fundraising-default.png";
+import fundraisingDefault from "../../assets/fundraising-default.webp";
 import { getSubscriptionsByUser, deleteSubscription } from '../../services/api/subscriptions/subscriptions';
 import { Fundraising } from '../../types/FundraisingsData';
 import { useSelector } from 'react-redux';
