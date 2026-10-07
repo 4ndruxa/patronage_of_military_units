@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 import logging
 from fastapi import Depends, FastAPI, HTTPException, Response, Cookie, Request
 from fastapi.responses import JSONResponse
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -343,6 +344,8 @@ def soft_remove_media(media_id: int, db: Session = Depends(get_db), current_user
 @app.post("/subscriptions/", response_model=schemas.Subscriptions)
 def create_subscription(item: schemas.SubscriptionsCreate, db: Session = Depends(get_db), current_user: models.Users = Depends(get_current_user)):
     ensure_owner(item.user_id, current_user)
+    if crud.get_fundraising(db, fundraising_id=item.fundraising_id) is None:
+        raise HTTPException(status_code=404, detail="Fundraising not found")
     return crud.create_subscription(db=db, item=item)
 
 @app.get("/subscriptions/", response_model=List[schemas.Subscriptions])
@@ -371,14 +374,19 @@ def update_subscription(subscription_id: int, item: schemas.SubscriptionsCreate,
         raise HTTPException(status_code=404, detail="Subscription not found")
     ensure_owner(db_subscription.user_id, current_user)
     ensure_owner(item.user_id, current_user)
-    return crud.update_subscription(db=db, subscription_id=subscription_id, item=item)
+    try:
+        return crud.update_subscription(db=db, subscription_id=subscription_id, item=item)
+    except IntegrityError:
+        # The target (user_id, fundraising_id) pair already has a row (unique index).
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Subscription already exists")
 
 @app.delete("/subscriptions/{user_id}/{fundraising_id}", response_model=schemas.Subscriptions)
 def soft_remove_subscription(user_id: int, fundraising_id: int, db: Session = Depends(get_db), current_user: models.Users = Depends(get_current_user)):
     ensure_owner(user_id, current_user)
 
     subscription = crud.soft_remove_subscription(db=db, user_id=user_id, fundraising_id=fundraising_id)
-    if not subscription:
+    if subscription is None:
         raise HTTPException(status_code=404, detail="Subscription not found")
     return subscription
 

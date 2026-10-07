@@ -28,3 +28,9 @@
 - source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-4-fundraising-by-id.md`
   summary: Сторінка збору не розрізняє 404 і мережеву/серверну помилку — будь-який збій показує «Збір не знайдено» (плюс сира глобальна плашка).
   evidence: Сервіси ковтають помилки й повертають undefined (handleError); розрізнення потребує, щоб сервіс повертав статус. Брати разом із тостами Е2.5. Severity low–medium.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-5-idempotent-subscriptions.md`
+  summary: «Мої підписки» показують збори, видалені після підписки (get_subscriptions_by_user не фільтрує Fundraisings.deleted_at), а повторно підписатися на них уже не можна.
+  evidence: Стара поведінка crud.get_subscriptions_by_user; тепер помітніше, бо POST на видалений збір дає 404. Severity low–medium.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-5-idempotent-subscriptions.md`
+  summary: Тест шляху для БД з кількома рядками на пару (порядок у _find_subscription, відписка всіх активних) і прогін скрипта дедуплікації на Postgres.
+  evidence: Усі crud-тести працюють на БД з унікальним індексом, де дублі неможливі; скрипт тестується лише на SQLite. Бойова БД вже очищена (--apply двічі, 0 рядків). Severity medium (unverified).

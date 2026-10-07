@@ -1,4 +1,5 @@
-from sqlalchemy import and_, func
+from sqlalchemy import case, func
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, joinedload
 from . import models, schemas
 
@@ -206,12 +207,45 @@ def get_subscription(db: Session, subscription_id: int):
 def get_all_subscriptions(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Subscriptions).filter(models.Subscriptions.deleted_at == None).offset(skip).limit(limit).all()
 
+def _find_subscription(db: Session, user_id: int, fundraising_id: int):
+    """The row for a (user, fundraising) pair, active or not. Picks the same row
+    the dedupe script keeps (pre-dedupe databases may hold several per pair):
+    the active one with the smallest id, else the most recently soft-deleted."""
+    s = models.Subscriptions
+    return (
+        db.query(s)
+        .filter(s.user_id == user_id, s.fundraising_id == fundraising_id)
+        .order_by(
+            s.deleted_at.isnot(None),
+            s.deleted_at.desc(),
+            case((s.deleted_at == None, s.id), else_=-s.id),
+        )
+        .first()
+    )
+
 def create_subscription(db: Session, item: schemas.SubscriptionsCreate):
-    db_item = models.Subscriptions(**item.dict())
-    db.add(db_item)
-    db.commit()
-    db.refresh(db_item)
-    return db_item
+    """Idempotent: returns the existing row for the pair, reactivating it if it
+    was soft-deleted; inserts only when the pair has never been subscribed."""
+    existing = _find_subscription(db, item.user_id, item.fundraising_id)
+    if existing is None:
+        db_item = models.Subscriptions(**item.dict())
+        db.add(db_item)
+        try:
+            db.commit()
+        except IntegrityError:
+            # A concurrent request inserted the pair first (unique index).
+            db.rollback()
+            existing = _find_subscription(db, item.user_id, item.fundraising_id)
+            if existing is None:
+                raise
+        else:
+            db.refresh(db_item)
+            return db_item
+    if existing.deleted_at is not None:
+        existing.deleted_at = None
+        db.commit()
+        db.refresh(existing)
+    return existing
 
 def update_subscription(db: Session, subscription_id: int, item: schemas.SubscriptionsCreate):
     db.query(models.Subscriptions).filter(models.Subscriptions.id == subscription_id, models.Subscriptions.deleted_at == None).update(item.dict())
@@ -219,13 +253,26 @@ def update_subscription(db: Session, subscription_id: int, item: schemas.Subscri
     return db.query(models.Subscriptions).filter(models.Subscriptions.id == subscription_id).first()
 
 def soft_remove_subscription(db: Session, user_id: int, fundraising_id: int):
-    db.query(models.Subscriptions).filter(
-        and_(
+    """Soft-deletes the active subscription of the pair and returns it, or None
+    when there is no active subscription."""
+    active = (
+        db.query(models.Subscriptions)
+        .filter(
+            models.Subscriptions.user_id == user_id,
             models.Subscriptions.fundraising_id == fundraising_id,
-            models.Subscriptions.user_id == user_id
+            models.Subscriptions.deleted_at == None,
         )
-    ).update({"deleted_at": func.now()})
+        .order_by(models.Subscriptions.id)
+        .all()
+    )
+    if not active:
+        return None
+    db.query(models.Subscriptions).filter(
+        models.Subscriptions.id.in_([row.id for row in active])
+    ).update({"deleted_at": func.now()}, synchronize_session=False)
     db.commit()
+    db.refresh(active[0])
+    return active[0]
 
 def get_subscriptions_by_user(db: Session, user_id: int):
     return db.query(models.Fundraisings).join(models.Subscriptions).filter(models.Subscriptions.user_id == user_id, models.Subscriptions.deleted_at == None).all()

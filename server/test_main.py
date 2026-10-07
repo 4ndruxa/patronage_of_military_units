@@ -307,9 +307,8 @@ def test_unsubscribe_foreign_is_403(auth_token, setup_database):
 def test_unsubscribe_own(other_token, setup_database):
     client.cookies.set("access_token", other_token)
     response = client.delete("/subscriptions/2/1")
-    # Status is B5's concern (the route currently answers 404 even on success);
-    # here we only check the owner is allowed through and the row is soft-deleted.
-    assert response.status_code not in (401, 403)
+    assert response.status_code == 200
+    assert response.json()["id"] == 1
     db = TestingSessionLocal()
     try:
         row = db.query(models.Subscriptions).filter(models.Subscriptions.id == 1).first()
@@ -441,3 +440,188 @@ def test_missing_jwt_secret_falls_back_with_warning(monkeypatch, caplog):
 def test_jwt_secret_from_env(monkeypatch):
     monkeypatch.setenv("JWT_SECRET", "from-env")
     assert server_main.load_jwt_secret() == "from-env"
+
+
+# --- B5: idempotent subscriptions ---
+
+def subscription_rows(user_id, fundraising_id):
+    db = TestingSessionLocal()
+    try:
+        return (
+            db.query(models.Subscriptions)
+            .filter(models.Subscriptions.user_id == user_id, models.Subscriptions.fundraising_id == fundraising_id)
+            .all()
+        )
+    finally:
+        db.close()
+
+def test_first_subscribe_creates_row(auth_token, setup_database):
+    client.cookies.set("access_token", auth_token)
+    response = client.post("/subscriptions/", json=test_subscription_data)
+    assert response.status_code == 200
+    assert len(subscription_rows(1, 1)) == 1
+
+def test_repeat_subscribe_returns_same_row(auth_token, setup_database):
+    client.cookies.set("access_token", auth_token)
+    ids = [client.post("/subscriptions/", json=test_subscription_data).json()["id"] for _ in range(3)]
+    assert len(set(ids)) == 1
+    assert len(subscription_rows(1, 1)) == 1
+    listed = client.get("/subscriptions/by-user/1").json()
+    assert [f["id"] for f in listed] == [1]
+
+def test_resubscribe_after_unsubscribe_reactivates(other_token, setup_database):
+    client.cookies.set("access_token", other_token)
+    assert client.delete("/subscriptions/2/1").status_code == 200
+    response = client.post("/subscriptions/", json={"fundraising_id": 1, "user_id": 2})
+    assert response.status_code == 200
+    assert response.json()["id"] == 1
+    rows = subscription_rows(2, 1)
+    assert len(rows) == 1
+    assert rows[0].deleted_at is None
+    assert [f["id"] for f in client.get("/subscriptions/by-user/2").json()] == [1]
+
+def test_subscribe_missing_fundraising_is_404(auth_token, setup_database):
+    client.cookies.set("access_token", auth_token)
+    response = client.post("/subscriptions/", json={"fundraising_id": 999, "user_id": 1})
+    assert response.status_code == 404
+    assert subscription_rows(1, 999) == []
+
+def test_subscribe_deleted_fundraising_is_404(auth_token, setup_database):
+    client.cookies.set("access_token", auth_token)
+    assert client.delete("/fundraisings/1").status_code == 200
+    response = client.post("/subscriptions/", json=test_subscription_data)
+    assert response.status_code == 404
+    assert subscription_rows(1, 1) == []
+
+def test_subscribe_race_returns_existing_row(other_token, setup_database, monkeypatch):
+    # Simulate a concurrent request: the lookup misses the row another request
+    # already inserted, so the INSERT trips the unique index.
+    crud_module = server_main.crud
+    real_find = crud_module._find_subscription
+    calls = {"n": 0}
+    def flaky_find(db, user_id, fundraising_id):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return None
+        return real_find(db, user_id, fundraising_id)
+    monkeypatch.setattr(crud_module, "_find_subscription", flaky_find)
+    client.cookies.set("access_token", other_token)
+    response = client.post("/subscriptions/", json={"fundraising_id": 1, "user_id": 2})
+    assert response.status_code == 200
+    assert response.json()["id"] == 1
+    assert len(subscription_rows(2, 1)) == 1
+
+def test_put_onto_existing_pair_is_409(other_token, setup_database):
+    client.cookies.set("access_token", other_token)
+    created = client.post("/subscriptions/", json={"fundraising_id": 2, "user_id": 2})
+    assert created.status_code == 200
+    response = client.put(f"/subscriptions/{created.json()['id']}", json={"fundraising_id": 1, "user_id": 2})
+    assert response.status_code == 409
+    assert response.json() == {"detail": "Subscription already exists"}
+    assert len(subscription_rows(2, 1)) == 1
+    assert len(subscription_rows(2, 2)) == 1
+
+def test_find_subscription_matches_dedupe_keeper(setup_database):
+    from sqlalchemy import text
+    db = TestingSessionLocal()
+    try:
+        # Bypass the unique index to emulate a pre-dedupe table.
+        db.execute(text("DROP INDEX ux_subscriptions_user_fundraising"))
+        db.execute(text(
+            "INSERT INTO subscriptions (id, user_id, fundraising_id, deleted_at) VALUES "
+            "(10, 1, 2, '2026-01-01 00:00:00'), (11, 1, 2, '2026-03-01 00:00:00'), "
+            "(12, 1, 2, '2026-02-01 00:00:00')"
+        ))
+        db.commit()
+        assert crud._find_subscription(db, 1, 2).id == 11
+    finally:
+        db.close()
+
+def test_unsubscribe_twice_second_is_404(other_token, setup_database):
+    client.cookies.set("access_token", other_token)
+    assert client.delete("/subscriptions/2/1").status_code == 200
+    assert client.delete("/subscriptions/2/1").status_code == 404
+
+def test_unsubscribe_never_subscribed_is_404(auth_token, setup_database):
+    client.cookies.set("access_token", auth_token)
+    assert client.delete("/subscriptions/1/2").status_code == 404
+
+def test_unsubscribe_removes_from_list(other_token, setup_database):
+    client.cookies.set("access_token", other_token)
+    assert client.delete("/subscriptions/2/1").status_code == 200
+    assert client.get("/subscriptions/by-user/2").json() == []
+
+def test_subscriptions_unique_index_in_model(setup_database):
+    from sqlalchemy import inspect
+    indexes = {ix["name"]: ix for ix in inspect(engine).get_indexes("subscriptions")}
+    assert "ux_subscriptions_user_fundraising" in indexes
+    assert indexes["ux_subscriptions_user_fundraising"]["unique"]
+
+# --- B5: dedupe script ---
+
+@pytest.fixture
+def dedupe():
+    from server.scripts import dedupe_subscriptions
+    return dedupe_subscriptions
+
+def test_choose_ids_to_delete_prefers_smallest_active(dedupe):
+    rows = [
+        (5, 1, 1, None),
+        (3, 1, 1, "2026-01-02 00:00:00"),
+        (7, 1, 1, None),
+        (9, 2, 1, None),
+    ]
+    assert sorted(dedupe.choose_ids_to_delete(rows)) == [3, 7]
+
+def test_choose_ids_to_delete_keeps_newest_when_none_active(dedupe):
+    rows = [
+        (1, 1, 1, "2026-01-01 00:00:00"),
+        (2, 1, 1, "2026-03-01 00:00:00"),
+        (3, 1, 1, "2026-02-01 00:00:00"),
+    ]
+    assert sorted(dedupe.choose_ids_to_delete(rows)) == [1, 3]
+
+def test_choose_ids_to_delete_ignores_null_pairs(dedupe):
+    rows = [(1, None, 1, None), (2, None, 1, None), (3, 1, 1, None)]
+    assert dedupe.choose_ids_to_delete(rows) == []
+
+def make_legacy_db(tmp_path):
+    from sqlalchemy import text
+    url = f"sqlite:///{tmp_path / 'legacy.db'}"
+    legacy = create_engine(url)
+    with legacy.begin() as conn:
+        conn.execute(text(
+            "CREATE TABLE subscriptions (id INTEGER PRIMARY KEY, user_id INTEGER, "
+            "fundraising_id INTEGER, deleted_at DATETIME)"
+        ))
+        conn.execute(text(
+            "INSERT INTO subscriptions (id, user_id, fundraising_id, deleted_at) VALUES "
+            "(1, 1, 1, '2026-01-01 00:00:00'), (2, 1, 1, NULL), (3, 1, 1, NULL), "
+            "(4, 2, 1, '2026-01-01 00:00:00'), (5, 2, 1, '2026-02-01 00:00:00'), "
+            "(6, 3, 2, NULL)"
+        ))
+    return url, legacy
+
+def test_dedupe_script_report_only_changes_nothing(dedupe, tmp_path, capsys):
+    from sqlalchemy import text, inspect
+    url, legacy = make_legacy_db(tmp_path)
+    assert dedupe.main([], database_url=url) == 0
+    with legacy.connect() as conn:
+        assert conn.execute(text("SELECT COUNT(*) FROM subscriptions")).scalar() == 6
+    assert inspect(legacy).get_indexes("subscriptions") == []
+    assert "duplicate" in capsys.readouterr().out.lower()
+
+def test_dedupe_script_apply_twice(dedupe, tmp_path, capsys):
+    from sqlalchemy import text, inspect
+    url, legacy = make_legacy_db(tmp_path)
+    assert dedupe.main(["--apply"], database_url=url) == 0
+    with legacy.connect() as conn:
+        ids = [r[0] for r in conn.execute(text("SELECT id FROM subscriptions ORDER BY id"))]
+    assert ids == [2, 5, 6]
+    names = {ix["name"]: ix["unique"] for ix in inspect(legacy).get_indexes("subscriptions")}
+    assert names.get("ux_subscriptions_user_fundraising")
+    capsys.readouterr()
+    assert dedupe.main(["--apply"], database_url=url) == 0
+    assert "no duplicates" in capsys.readouterr().out.lower()
+    with legacy.connect() as conn:
+        assert conn.execute(text("SELECT COUNT(*) FROM subscriptions")).scalar() == 3

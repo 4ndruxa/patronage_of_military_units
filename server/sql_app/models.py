@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, func, DateTime
+from sqlalchemy import Boolean, Column, ForeignKey, Index, Integer, String, func, DateTime
 from sqlalchemy.orm import relationship
 
 from .database import Base
@@ -100,6 +100,11 @@ class Media(Base, BaseMixin):
 
 class Subscriptions(Base, BaseMixin):
     __tablename__ = "subscriptions"
+    # One row per (user, fundraising) forever; existing databases get the same
+    # index from server/scripts/dedupe_subscriptions.py.
+    __table_args__ = (
+        Index("ux_subscriptions_user_fundraising", "user_id", "fundraising_id", unique=True),
+    )
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
