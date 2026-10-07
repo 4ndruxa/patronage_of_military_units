@@ -1,13 +1,7 @@
 @import './variables';
 @import 'node_modules/bootstrap/scss/bootstrap';
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
-
-body {
-  margin: 0;
-  font-family: "Cormorant Garamond", sans-serif !important;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@import './styles/tokens';
+@import './styles/theme';
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

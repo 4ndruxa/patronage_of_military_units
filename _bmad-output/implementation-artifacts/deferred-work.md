@@ -40,3 +40,12 @@
 - source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-1-8-ui-smoke-tests.md`
   summary: Помилки в UI-тестах не видно: handleError диспатчить у глобальний store, а не в тестовий; тест «невдалий запит показує повідомлення» неможливий.
   evidence: services/errorHandler.tsx імпортує store/index; брати разом із тостами Е2.5 (інжекція store або мок errorHandler). Severity low–medium.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-2-1-theme.md`
+  summary: ProtectedRoutes перекидає залогіненого на /login при прямому заході або F5 на захищеній сторінці (navigate перевіряє застарілий isAuth із замикання).
+  evidence: Знайшов агент скріншотів «до»: /my-subscriptions тощо з чинною кукою відкриваються лише навігацією всередині застосунку (components/routes/protectedRoutes.ts). Старий баг. Severity high — виправити першим після теми.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-2-1-theme.md`
+  summary: Сторінка /edit-fundraising/:id відкриває форму для чужого збору (сервер уже відмовить 403, але UI не перевіряє власника).
+  evidence: Скріншот edit-fundraising: збір id 1 належить creator 2, форма відкрилась користувачу 1. Брати з Е7.2. Severity low.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-2-1-theme.md`
+  summary: notificationAlert.scss глобально перебиває .modal-content/.modal-body/.modal-header новою темою, а шапка модалки й кнопка тепер сірі ( змінився на ink-muted); header.css .highlight — чорний.
+  evidence: Старі стилі компонентів вантажаться після index.scss. Переробляються в наступній специфікації оболонки (Е2.3–2.5). Severity low.
