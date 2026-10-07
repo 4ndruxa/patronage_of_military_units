@@ -2,7 +2,8 @@
 title: 'Е6: головна — hero з логотипом, «Як це працює», картки зборів, смуга з фото'
 type: 'feature'
 created: '2026-10-08'
-status: 'draft'
+status: 'ready-for-dev'
+baseline_commit: 'd3e5f135200ab718eb9e4c25ce7ff26a2ce23702'
 route: 'dispatch'
 review_loop_iteration: 0
 context:
