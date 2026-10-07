@@ -73,6 +73,6 @@ src
     - npm install
     - npm start
   2. server:
-    -docker-compose up
+    - docker compose up
   3. client-tests: npm test
-  4. server-tests: PYTHONPATH=$(pwd) pytest test_main.py
+  4. server-tests: server/run_tests.sh (pytest у Docker-образі бекенду)
