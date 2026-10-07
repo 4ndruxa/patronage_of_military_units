@@ -1,14 +1,15 @@
 import React from "react";
-import Header from '../../components/header/header';
+import PageLayout from '../../components/layout/pageLayout';
 import Hero from '../../components/hero/hero';
 import Cards from '../../components/fundraisings/fundraisings';
 
 const HomePage: React.FC = () => {
   return (
     <React.StrictMode>
-      <Header />
-      <Hero />
-      <Cards />
+      <PageLayout>
+        <Hero />
+        <Cards />
+      </PageLayout>
     </React.StrictMode>
   );
 };

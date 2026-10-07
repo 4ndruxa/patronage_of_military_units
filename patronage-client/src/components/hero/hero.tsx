@@ -40,7 +40,6 @@ const Hero: React.FC = () => {
                 фінансову підтримку.
               </li>
             </ul>
-            <p className="fw-semibold">Виконав: ФІОТ 123 КІ студент групи ІО-23 Боднар Андрій</p>
           </div>
         </div>
       </div>

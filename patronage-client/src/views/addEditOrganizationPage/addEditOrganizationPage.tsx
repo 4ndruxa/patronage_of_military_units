@@ -1,13 +1,14 @@
 import React from "react";
-import Header from '../../components/header/header';
+import PageLayout from '../../components/layout/pageLayout';
 import AddOrganization from "../../components/addEditOrganization/addEditOrganization";
 
 
 const AddOrganizationPage: React.FC = () => {
   return (
     <React.StrictMode>
-      < Header />
-      < AddOrganization />
+      <PageLayout>
+        <AddOrganization />
+      </PageLayout>
     </React.StrictMode>
   );
 };

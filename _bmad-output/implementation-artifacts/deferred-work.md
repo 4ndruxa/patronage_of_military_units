@@ -49,3 +49,12 @@
 - source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-2-1-theme.md`
   summary: notificationAlert.scss глобально перебиває .modal-content/.modal-body/.modal-header новою темою, а шапка модалки й кнопка тепер сірі ( змінився на ink-muted); header.css .highlight — чорний.
   evidence: Старі стилі компонентів вантажаться після index.scss. Переробляються в наступній специфікації оболонки (Е2.3–2.5). Severity low.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-2-2-shell.md`
+  summary: PageLayout обгорнуто вручну в 10 views — хедер перемонтовується при кожній навігації; перейти на layout-маршрут (<Route element={<PageLayout><Outlet/></PageLayout>}>) і прибрати per-view React.StrictMode.
+  evidence: Змінює appRoutes.tsx (заборонено в spec-2-2); зручно разом із виправленням ProtectedRoutes (D18). Severity low.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-2-2-shell.md`
+  summary: Доступність оболонки: живий регіон тосту має бути змонтований завжди; повторна та сама помилка не перезапускає таймер; модалка без блокування прокрутки й пастки фокусу; тести стану завантаження хедера, ініціалів з e-mail і наявності PageLayout на кожній сторінці.
+  evidence: Рев'ю spec-2-2 (blind, verification-gap); брати в Е8.1 (a11y-прохід). Severity low.
+- source_spec: `/home/andrii/patronage_of_military_units/_bmad-output/implementation-artifacts/spec-2-2-shell.md`
+  summary: FontAwesome (@fortawesome/*) більше ніде не використовується — прибрати з package.json.
+  evidence: Єдині імпорти (faBars) прибрано разом зі старим хедером. Severity low.

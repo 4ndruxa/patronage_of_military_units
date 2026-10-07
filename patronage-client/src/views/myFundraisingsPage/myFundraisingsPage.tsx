@@ -1,12 +1,13 @@
 import React from "react";
-import Header from '../../components/header/header';
+import PageLayout from '../../components/layout/pageLayout';
 import MyFundraisings from "../../components/myFundraisings/myFundraisings";
 
 const MyFundraisingsPage: React.FC = () => {
   return (
     <React.StrictMode>
-      < Header />
-      < MyFundraisings />
+      <PageLayout>
+        <MyFundraisings />
+      </PageLayout>
     </React.StrictMode>
   );
 };

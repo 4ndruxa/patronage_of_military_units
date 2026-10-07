@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './notificationAlert.scss';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/index';
+import logo from '../../assets/logo.png';
 
 const AlertComponent: React.FC = () => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const showAlert = () => {
@@ -23,36 +27,60 @@ const AlertComponent: React.FC = () => {
     return () => clearTimeout(timeoutId);
   }, []);
 
+  // aria-modal: move focus into the dialog and let Escape close it.
+  useEffect(() => {
+    if (!show || !user) return;
+    closeButtonRef.current?.focus();
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setShow(false);
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [show, user]);
+
   const handleDonateClick = () => {
     navigate('/my-subscriptions');
     setShow(false);
   };
 
+  // The reminder speaks to a subscriber; guests have nothing to go to.
+  if (!user) {
+    return null;
+  }
+
   return (
     <>
-      <div className={`modal ${show ? 'show' : ''}`} style={{ display: show ? 'block' : 'none' }} tabIndex={-1} role="dialog">
-        <div className="modal-dialog modal-lg" role="document">
+      <div
+        className={`modal ${show ? 'show' : ''}`}
+        style={{ display: show ? 'block' : 'none' }}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="pm-reminder-title"
+      >
+        <div className="modal-dialog modal-dialog-centered" role="document" style={{ maxWidth: 480 }}>
           <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Заплановане сповіщення</h5>
+            <div className="modal-header pm-modal-head pm-on-dark">
+              <span className="d-flex align-items-center gap-3">
+                <span className="pm-logo-chip" style={{ width: 48, height: 48 }}><img src={logo} alt="" /></span>
+                <span className="fw-bold">Щомісячне нагадування</span>
+              </span>
+              <button ref={closeButtonRef} type="button" className="btn-close btn-close-white" aria-label="Закрити" onClick={() => setShow(false)}></button>
             </div>
-            <div className="modal-body">
-            <div className="text-center mb-5">
-              <h2>Підтримай українську армію!</h2>
-              <p className="fs-18">
-                Дякуємо, що ви підтримуєте наші благодійні збори. Натисніть 'Перейти до моїх зборів' і ви знайдете збір коштів, за які ви відповідальні. 
-                Вони з нетерпінням чекають на ваші пожертви, які є надзвичайно важливими для наших військових. 
-                Будь ласка, пам'ятайте, що кожного місяця, на перший день, фонди очікують на ваші внески.
+            <div className="modal-body text-center">
+              <h2 id="pm-reminder-title" className="h3 mb-2" style={{ fontSize: '1.375rem' }}>
+                Настав новий місяць. Час підтримати збори, на які ви підписані.
+              </h2>
+              <p className="pm-muted mb-3">
+                У підписках ви знайдете свої збори й посилання на сторінки організацій.
               </p>
-              <p className="fs-18">
-                Натисніть на кнопку 'Задонатити зараз' в розділі 'Мої збори', щоб зробити свій внесок та допомогти нашим героям на передовій. 
-                Ваші пожертви роблять реальну різницю!
+              <p className="pm-caption mb-0">
+                Гроші ми не збираємо: донат ви робите на сторінці організації і самі обираєте суму.
               </p>
             </div>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={() => setShow(false)}>Закрити</button>
-              <button type="button" className="btn btn-primary" onClick={handleDonateClick}>Перейти до моїх зборів</button>
+            <div className="modal-footer justify-content-center">
+              <button type="button" className="btn btn-outline-ink" onClick={() => setShow(false)}>Закрити</button>
+              <button type="button" className="btn btn-donate" onClick={handleDonateClick}>Перейти до підписок</button>
             </div>
           </div>
         </div>

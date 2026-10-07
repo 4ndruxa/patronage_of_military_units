@@ -1,0 +1,40 @@
+// App shell from the approved mockups (mockups/v2/pm.css): navbar, avatar,
+// footer, error toast and the branded modal header.
+
+// Navbar
+.pm-nav { background: rgba(255, 255, 255, .92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--pm-border); min-height: 72px; }
+.pm-nav .navbar-brand { display: flex; align-items: center; gap: .65rem; font-weight: 800; font-size: 1.0625rem; color: var(--pm-ink); line-height: 1.15; white-space: normal; }
+.pm-nav .navbar-brand img { width: 44px; height: 44px; }
+.pm-nav .nav-link { font-weight: 600; color: var(--pm-ink); padding: .5rem .25rem; margin-inline: .6rem; border-bottom: 3px solid transparent; border-radius: 0; }
+.pm-nav .nav-link:hover { color: var(--pm-primary); }
+.pm-nav .nav-link.active { border-bottom-color: var(--pm-teal-strong); }
+.pm-nav .navbar-toggler { border: 2px solid var(--pm-ink); border-radius: 12px; padding: .35rem .6rem; }
+// The avatar toggle is a <button>: drop the native button look.
+.pm-nav .pm-avatar-toggle { background: transparent; }
+.pm-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--pm-ink); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: .9rem; letter-spacing: .02em; }
+
+// Footer
+.pm-on-dark :focus-visible, .pm-footer :focus-visible { outline-color: #fff; }
+.pm-footer { background: var(--pm-ink); color: #C9D6E3; padding-block: 2.5rem 2rem; margin-top: 3rem; }
+.pm-footer a { color: #fff; text-decoration: none; font-weight: 600; }
+.pm-footer a:hover { text-decoration: underline; }
+.pm-footer .pm-logo-chip { width: 56px; height: 56px; }
+.pm-footer hr { border-color: rgba(255, 255, 255, .15); opacity: 1; }
+.pm-footer small { color: #AFC0D2; }
+.pm-logo-chip { width: 64px; height: 64px; border-radius: 50%; background: #fff; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.pm-logo-chip img { width: 80%; }
+
+// Sticky footer: the page column fills the viewport, <main> takes the slack.
+.pm-page { display: flex; flex-direction: column; min-height: 100vh; }
+.pm-page > main { flex: 1 0 auto; }
+
+// Toasts
+.toast.pm-toast { --bs-toast-border-radius: var(--pm-r-md); --bs-toast-border-width: 0; --bs-toast-box-shadow: var(--pm-shadow-2); background: #fff; border-left: 6px solid var(--pm-danger); width: 100%; max-width: 380px; opacity: 1; }
+.toast.pm-toast--ok { border-left-color: var(--pm-success); }
+.pm-toast-area { position: fixed; right: 1rem; bottom: 1rem; left: 1rem; z-index: 1090; display: flex; justify-content: flex-end; pointer-events: none; }
+.pm-toast-area > * { pointer-events: auto; }
+.pm-i { width: 1.1em; height: 1.1em; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -.18em; flex: none; }
+
+// Branded modal header
+.modal-header.pm-modal-head { justify-content: space-between; background: var(--pm-ink); color: #fff; border: 0; padding: 1.1rem 1.5rem; }
+.modal-header .btn-close-white { filter: invert(1) grayscale(100%) brightness(200%); }

@@ -15,12 +15,13 @@ describe('Header', () => {
     expect(currentLocation()).toBe('/login');
   });
 
-  test('user logs out via «Logout»: logoutUser is called and the app goes to /login', async () => {
+  test('user logs out via «Вийти» in the avatar menu: logoutUser is called and the app goes to /login', async () => {
     jest.mocked(logoutUser).mockResolvedValue(undefined);
     sessionStorage.setItem('user', JSON.stringify(testUser));
     const { store } = renderWithProviders(<Header />, { user: testUser });
 
-    fireEvent.click(screen.getByRole('button', { name: 'Logout' }));
+    fireEvent.click(screen.getByRole('button', { name: /Меню користувача/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Вийти' }));
 
     await waitFor(() => expect(currentLocation()).toBe('/login'));
     expect(logoutUser).toHaveBeenCalledTimes(1);
