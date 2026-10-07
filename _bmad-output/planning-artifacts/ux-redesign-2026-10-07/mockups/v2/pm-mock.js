@@ -1,6 +1,6 @@
 /* Службовий перемикач станів для макетів. У продукті його немає. */
 (function () {
-  var css = 'body[data-auth="guest"] [data-auth-only="user"],body[data-auth="guest"] [data-auth-only="user-ns"],body[data-auth="guest"] [data-auth-only="subscribed"],' +
+  var css = 'body[data-auth="guest"] [data-auth-only="loggedin"],body[data-auth="guest"] [data-auth-only="user"],body[data-auth="guest"] [data-auth-only="user-ns"],body[data-auth="guest"] [data-auth-only="subscribed"],' +
     'body[data-auth="user"] [data-auth-only="guest"],body[data-auth="user"] [data-auth-only="subscribed"],' +
     'body[data-auth="subscribed"] [data-auth-only="guest"],body[data-auth="subscribed"] [data-auth-only="user-ns"]{display:none!important}' +
     '[data-thermo-only]{display:none}' + ['none','zero','progress','done','stale'].map(function (s) { return 'body[data-thermo="' + s + '"] [data-thermo-only="' + s + '"]{display:block}'; }).join('');

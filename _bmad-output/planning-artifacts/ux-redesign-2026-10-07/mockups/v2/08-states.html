@@ -9,6 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700&display=swap&subset=cyrillic" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="pm.css" rel="stylesheet">
+<link href="dark.css" rel="stylesheet">
+<script src="pm-theme.js"></script>
 <link rel="icon" href="assets/logo.png">
 </head>
 <body data-auth="user" class="">
@@ -27,19 +29,25 @@
 <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8Z"/></symbol>
 <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0ZM12 9v4M12 17h.01"/></symbol>
 <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
 <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></symbol>
 </defs></svg>
 <div class="mock-bar"><b>МАКЕТ v2</b><span>Порожні стани й тост помилки (фіксований тост унизу праворуч)</span><a href="index.html" style="color:#9ED8F0">усі екрани</a></div>
 <nav class="navbar navbar-expand-lg sticky-top pm-nav" aria-label="Головна навігація">
   <div class="container">
     <a class="navbar-brand" href="01-home.html"><img src="assets/logo.png" alt="" width="44" height="44"><span>Громадське<br class="d-sm-none"> патронування</span></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Відкрити меню"><span class="navbar-toggler-icon"></span></button>
+    <div class="d-flex align-items-center gap-2 order-lg-last ms-auto ms-lg-3">
+      <a class="pm-bellbtn d-lg-none" href="04-my-subscriptions.html" data-auth-only="loggedin" aria-label="Мої підписки: ще не позначено 2"><svg class="pm-i " aria-hidden="true"><use href="#i-bell"/></svg><span class="pm-bellbtn__dot" aria-hidden="true">2</span></a>
+      <button class="pm-theme-toggle" type="button" data-pm-theme-toggle aria-pressed="false" aria-label="Увімкнути темну тему"><svg class="pm-i i-moon" aria-hidden="true"><use href="#i-moon"/></svg><svg class="pm-i i-sun" aria-hidden="true"><use href="#i-sun"/></svg></button>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Відкрити меню"><span class="navbar-toggler-icon"></span></button>
+    </div>
     <div class="collapse navbar-collapse" id="nav">
       <ul class="navbar-nav ms-lg-auto align-items-lg-center">
         <li class="nav-item"><a class="nav-link" href="01-home.html">Збори</a></li>
         <li class="nav-item"><a class="nav-link" href="05a-organizations.html">Організації</a></li>
         <li class="nav-item ms-lg-3 mt-2 mt-lg-0" data-auth-only="guest"><a class="btn btn-primary" href="07-login.html">Увійти</a></li>
-        <li class="nav-item dropdown ms-lg-3" data-auth-only="user">
+        <li class="nav-item dropdown ms-lg-3" data-auth-only="loggedin">
           <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 border-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><span class="pm-avatar" aria-hidden="true">ОК</span><span class="d-lg-none">Олена Коваль</span></a>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="04-my-subscriptions.html">Мої підписки</a></li>
