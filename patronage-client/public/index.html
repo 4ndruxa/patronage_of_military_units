@@ -2,9 +2,30 @@
 <html lang="uk">
   <head>
     <meta charset="utf-8" />
+    <!-- Navy browser bar; the dark theme's footer navy in a dark system. -->
+    <meta name="theme-color" content="#07111F" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#0B1E3A" />
+    <!--
+      Theme before the first paint (no flash): saved choice light|dark from
+      localStorage['pm-theme'], otherwise (auto or nothing) the system setting.
+      Mirrors src/hooks/useTheme.ts.
+    -->
+    <script id="pm-theme-init">
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem('pm-theme'); } catch (e) {}
+        if (t === 'dark' || t === 'light') {
+          // An explicit choice also wins over the media-specific theme-color.
+          var color = t === 'dark' ? '#07111F' : '#0B1E3A';
+          document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute('content', color); });
+        } else {
+          t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-bs-theme', t);
+      })();
+    </script>
     <link rel="icon" type="image/png" href="%PUBLIC_URL%/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0B1E3A" />
     <meta
       name="description"
       content="Громадське патронування: регулярна підтримка військових підрозділів"

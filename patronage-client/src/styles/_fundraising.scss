@@ -14,6 +14,7 @@
 .pm-detail__desc { white-space: pre-line; overflow-wrap: anywhere; }
 
 // Cover: a palette gradient picked by id (the full cover system comes in E6.3).
+// Fixed colors on purpose: the navy/azure covers read the same in both themes.
 .pm-cover { height: 120px; border-radius: var(--pm-r-lg) var(--pm-r-lg) 0 0; position: relative; overflow: hidden; }
 .pm-cover::after { content: ""; position: absolute; width: 180px; height: 180px; border-radius: 50%; right: -40px; top: -60px; background: rgba(255, 255, 255, .1); }
 .pm-cover::before { content: ""; position: absolute; width: 90px; height: 90px; border-radius: 50%; left: 18px; bottom: -48px; background: rgba(255, 255, 255, .08); }
@@ -26,27 +27,27 @@
 .pm-g6 { background: linear-gradient(135deg, #0B1E3A, #0A6E9C); }
 
 // Organization badge
-.badge.pm-badge-org { background: var(--pm-sky-soft); color: var(--pm-primary); font-weight: 700; font-size: .78rem; border-radius: 9999px; padding: .35rem .75rem; text-decoration: none; margin-bottom: .6rem; white-space: normal; text-align: left; }
-a.pm-badge-org:hover { background: #D1E9F4; color: var(--pm-primary-hover); }
+.badge.pm-badge-org { background: var(--pm-sky-soft); color: var(--pm-sky-text); font-weight: 700; font-size: .78rem; border-radius: 9999px; padding: .35rem .75rem; text-decoration: none; margin-bottom: .6rem; white-space: normal; text-align: left; }
+a.pm-badge-org:hover { background: var(--pm-sky-soft-hover); color: var(--pm-sky-text-hover); }
 
 // Action panel
-.pm-panel { background: #fff; border: 1px solid var(--pm-border); border-radius: var(--pm-r-xl); box-shadow: var(--pm-shadow-2); padding: 1.5rem; }
+.pm-panel { background: var(--pm-surface); border: 1px solid var(--pm-border); border-radius: var(--pm-r-xl); box-shadow: var(--pm-shadow-2); padding: 1.5rem; }
 .pm-panel hr { border-color: var(--pm-border); opacity: 1; margin-block: 1.1rem; }
 .pm-checkline { display: flex; gap: .55rem; align-items: center; color: var(--pm-success); font-weight: 700; }
 .btn .pm-i-end { margin-inline: .4rem 0; }
 .btn .pm-i-start { margin-inline: 0 .4rem; }
 
 // Payment sources
-.pm-source { display: flex; align-items: center; gap: .9rem; padding: .85rem 1rem; border: 1px solid var(--pm-border); border-radius: var(--pm-r-md); background: #fff; text-decoration: none; color: var(--pm-ink); }
+.pm-source { display: flex; align-items: center; gap: .9rem; padding: .85rem 1rem; border: 1px solid var(--pm-border); border-radius: var(--pm-r-md); background: var(--pm-surface); text-decoration: none; color: var(--pm-ink); }
 a.pm-source:hover { border-color: var(--pm-primary); box-shadow: var(--pm-shadow-1); color: var(--pm-ink); }
-.pm-source__ico { width: 40px; height: 40px; border-radius: 12px; background: var(--pm-sky-soft); color: var(--pm-primary); display: flex; align-items: center; justify-content: center; flex: none; }
+.pm-source__ico { width: 40px; height: 40px; border-radius: 12px; background: var(--pm-sky-soft); color: var(--pm-sky-text); display: flex; align-items: center; justify-content: center; flex: none; }
 .pm-source__body { flex-grow: 1; min-width: 0; overflow-wrap: anywhere; }
 .pm-source small { display: block; color: var(--pm-ink-muted); font-weight: 500; }
 
-// Mobile action bar: fixed to the bottom, glass where supported, solid white otherwise.
-.pm-actionbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1030; background: #fff; border-top: 1px solid var(--pm-border); padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom)); display: flex; gap: .6rem; box-shadow: 0 -6px 20px rgba(11, 30, 58, .1); }
+// Mobile action bar: fixed to the bottom, glass where supported, solid surface otherwise.
+.pm-actionbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1030; background: var(--pm-surface); border-top: 1px solid var(--pm-border); padding: .7rem 1rem calc(.7rem + env(safe-area-inset-bottom)); display: flex; gap: .6rem; box-shadow: var(--pm-actionbar-shadow); }
 @supports ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
-  .pm-actionbar { background: rgba(255, 255, 255, .92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .pm-actionbar { background: var(--pm-actionbar-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 }
 .pm-actionbar .btn { flex: 1; padding-inline: .75rem; }
 @media (min-width: 992px) { .pm-actionbar { display: none; } }

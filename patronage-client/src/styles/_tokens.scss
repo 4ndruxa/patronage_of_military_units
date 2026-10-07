@@ -1,11 +1,17 @@
-// Brand tokens from the approved mockups (mockups/v2/pm.css).
+// Brand tokens from the approved mockups (mockups/v2/pm.css, dark.css).
+// Every color of the app lives here; components only use var(--pm-*).
 :root {
+  color-scheme: light;
   --pm-ink: #0B1E3A;
   --pm-ink-muted: #4A5B70;
   --pm-primary: #0A6E9C;
   --pm-primary-hover: #085A80;
+  --pm-link: var(--pm-primary);
   --pm-sky: #1FA6D4;
   --pm-sky-soft: #E3F2F9;
+  --pm-sky-soft-hover: #D1E9F4;
+  --pm-sky-text: var(--pm-primary);
+  --pm-sky-text-hover: var(--pm-primary-hover);
   --pm-teal: #2EC4B6;
   --pm-teal-strong: #0F8F84;
   --pm-gold: #F5D04C;
@@ -13,17 +19,125 @@
   --pm-gold-soft: #FFF6D6;
   --pm-gold-ink: #7A5A00;
   --pm-surface: #FFFFFF;
+  --pm-surface-2: #F3F7FA;
   --pm-bg: #F3F7FA;
   --pm-track: #E3EDF3;
   --pm-border: #D9E4EC;
+  --pm-border-strong: #BDCBD8;
   --pm-danger: #B42335;
+  --pm-danger-soft: #FBEAEC;
+  --pm-danger-soft-2: #F6D5D9;
+  --pm-danger-ring: rgba(180, 35, 53, .2);
   --pm-success: #177A5C;
+  --pm-focus: var(--pm-primary);
+  --pm-focus-ring: rgba(10, 110, 156, .22);
+  --pm-text-disabled: #8A97A6;
+  // Text on filled buttons and chips
+  --pm-on-primary: #FFFFFF;
+  --pm-on-ink: #FFFFFF;
+  --pm-on-gold: #0B1E3A;        // gold is always gold, so its text is always navy
+  // Forms
+  --pm-input-bg: #FFFFFF;
+  --pm-input-border: var(--pm-border-strong);
+  --pm-placeholder: #6B7A8C;
+  // Glass bars
+  --pm-nav-bg: rgba(255, 255, 255, .92);
+  --pm-actionbar-bg: rgba(255, 255, 255, .92);
+  --pm-actionbar-shadow: 0 -6px 20px rgba(11, 30, 58, .1);
+  // Always dark in both themes: footer, branded modal header.
+  --pm-navy: #0B1E3A;
+  --pm-footer-bg: #0B1E3A;
+  --pm-on-navy: #FFFFFF;
+  --pm-footer-fg: #C9D6E3;
+  --pm-footer-muted: #AFC0D2;
+  --pm-footer-rule: rgba(255, 255, 255, .15);
+  // The logo is never inverted: on dark it sits in a light circle.
+  --pm-logo-chip-bg: #FFFFFF;
   --pm-r-sm: 8px;
   --pm-r-md: 12px;
   --pm-r-lg: 20px;
   --pm-r-xl: 28px;
+  --pm-shadow-0: rgba(0, 0, 0, .24) 0 1px 3px;
   --pm-shadow-1: 0 1px 2px rgba(11, 30, 58, .06), 0 4px 16px rgba(11, 30, 58, .06);
   --pm-shadow-2: 0 8px 28px rgba(11, 30, 58, .14);
   --pm-font-display: 'Unbounded', 'Manrope', system-ui, sans-serif;
   --pm-font-body: 'Manrope', system-ui, sans-serif;
+}
+
+// Dark theme (mockups/v2/dark.css; contrasts in MOBILE.md §5). Optional: set on
+// <html> by public/index.html and the header toggle (hooks/useTheme.ts).
+[data-bs-theme="dark"] {
+  color-scheme: dark;
+  // surfaces
+  --pm-bg: #0A1626;
+  --pm-surface: #102440;
+  --pm-surface-2: #173050;
+  --pm-navy: #07111F;
+  --pm-footer-bg: #07111F;
+  // text
+  --pm-ink: #E8EEF5;
+  --pm-ink-muted: #A9B9CC;
+  --pm-text-disabled: #7D91AA;
+  // lines
+  --pm-border: #2A4466;
+  --pm-border-strong: #5A7799;
+  --pm-track: #2B4568;
+  // accents
+  --pm-primary: #3AA6DC;
+  --pm-primary-hover: #5BB9E8;
+  --pm-link: #6BC1EE;
+  --pm-sky-soft: #17405F;
+  --pm-sky-soft-hover: #1F5278;
+  --pm-sky-text: #8FD3F4;
+  --pm-sky-text-hover: #BDE5F8;
+  --pm-teal-strong: #2EC4B6;
+  --pm-gold-hover: #FFE07A;
+  --pm-gold-soft: #3A3212;
+  --pm-gold-ink: #F3D870;
+  --pm-danger: #FF8F99;
+  --pm-danger-soft: rgba(255, 143, 153, .12);
+  --pm-danger-soft-2: rgba(255, 143, 153, .2);
+  --pm-danger-ring: rgba(255, 143, 153, .25);
+  --pm-success: #5FD6AE;
+  --pm-focus: #8FD3F4;
+  --pm-focus-ring: rgba(143, 211, 244, .28);
+  --pm-on-primary: #04152A;
+  --pm-on-ink: #04152A;
+  // forms
+  --pm-input-bg: #0C1D35;
+  --pm-placeholder: #8DA2BB;
+  // bars and shadows
+  --pm-nav-bg: rgba(10, 22, 38, .92);
+  --pm-actionbar-bg: rgba(16, 36, 64, .96);
+  --pm-actionbar-shadow: 0 -6px 24px rgba(0, 0, 0, .5);
+  --pm-shadow-0: rgba(0, 0, 0, .5) 0 1px 3px;
+  --pm-shadow-1: 0 1px 2px rgba(0, 0, 0, .4), 0 4px 16px rgba(0, 0, 0, .28);
+  --pm-shadow-2: 0 10px 32px rgba(0, 0, 0, .55);
+
+  // Bootstrap variables
+  --bs-body-bg: var(--pm-bg);
+  --bs-body-bg-rgb: 10, 22, 38;
+  --bs-body-color: var(--pm-ink);
+  --bs-body-color-rgb: 232, 238, 245;
+  --bs-emphasis-color: #FFFFFF;
+  --bs-secondary-color: var(--pm-ink-muted);
+  --bs-secondary-bg: var(--pm-surface);
+  --bs-tertiary-bg: var(--pm-surface-2);
+  --bs-border-color: var(--pm-border);
+  --bs-border-color-translucent: var(--pm-border);
+  --bs-heading-color: var(--pm-ink);
+  --bs-link-color: var(--pm-link);
+  --bs-link-hover-color: #9AD6F4;
+  --bs-link-color-rgb: 107, 193, 238;
+  --bs-link-hover-color-rgb: 154, 214, 244;
+  // Bootstrap's semantic colors follow the dark accents (.text-*, .bg-*, .alert-*, .progress-bar).
+  --bs-primary: var(--pm-primary);
+  --bs-primary-rgb: 58, 166, 220;
+  --bs-primary-text-emphasis: var(--pm-link);
+  --bs-danger: var(--pm-danger);
+  --bs-danger-rgb: 255, 143, 153;
+  --bs-danger-text-emphasis: var(--pm-danger);
+  --bs-success: var(--pm-success);
+  --bs-success-rgb: 95, 214, 174;
+  --bs-success-text-emphasis: var(--pm-success);
 }

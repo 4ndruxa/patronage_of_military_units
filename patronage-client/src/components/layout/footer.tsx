@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
           <div className="col-lg-5 d-flex align-items-center gap-3">
             <span className="pm-logo-chip"><img src={logo} alt="" /></span>
             <div>
-              <strong className="text-white">Громадське патронування</strong>
+              <strong className="pm-footer__name">Громадське патронування</strong>
               <br />
               <small>Регулярна підтримка військових підрозділів</small>
             </div>

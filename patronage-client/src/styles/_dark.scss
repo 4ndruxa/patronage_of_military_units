@@ -1,0 +1,32 @@
+// Dark theme component overrides (mockups/v2/dark.css). Only what the tokens in
+// _tokens.scss cannot express; colors still come from tokens.
+[data-bs-theme="dark"] {
+  // Header: the logo sits in a light circle, never inverted.
+  .pm-nav .navbar-brand img { background: var(--pm-logo-chip-bg); border-radius: 50%; padding: 3px; }
+  .pm-nav .navbar-toggler { border-color: var(--pm-border-strong); }
+  .pm-theme-toggle { border-color: var(--pm-border-strong); }
+  .pm-avatar { background: var(--pm-surface-2); border: 2px solid var(--pm-border-strong); color: var(--pm-ink); }
+  .dropdown-menu { --bs-dropdown-bg: var(--pm-surface); --bs-dropdown-color: var(--pm-ink); --bs-dropdown-link-color: var(--pm-ink); --bs-dropdown-link-hover-bg: var(--pm-surface-2); --bs-dropdown-link-hover-color: var(--pm-ink); --bs-dropdown-divider-bg: var(--pm-border); }
+
+  // Buttons
+  .btn-outline-ink { --bs-btn-border-color: var(--pm-border-strong); }
+  .btn-ghost { --bs-btn-hover-bg: var(--pm-surface-2); --bs-btn-hover-color: var(--pm-sky-text-hover); }
+  // Legacy Bootstrap buttons on the «Мої …» pages.
+  .btn-dark { --bs-btn-bg: var(--pm-surface-2); --bs-btn-border-color: var(--pm-border-strong); --bs-btn-color: var(--pm-ink); --bs-btn-hover-bg: var(--pm-border); --bs-btn-hover-border-color: var(--pm-border-strong); --bs-btn-hover-color: var(--pm-ink); }
+  .btn-outline-secondary { --bs-btn-color: var(--pm-ink-muted); --bs-btn-border-color: var(--pm-border-strong); --bs-btn-hover-bg: var(--pm-surface-2); --bs-btn-hover-border-color: var(--pm-border-strong); --bs-btn-hover-color: var(--pm-ink); }
+
+  // Cards are surfaces above the page, not holes in it.
+  .card { --bs-card-bg: var(--pm-surface); --bs-card-border-color: var(--pm-border); --bs-card-color: var(--pm-ink); }
+
+  // Fundraising page
+  a.pm-source:hover { background: var(--pm-surface-2); }
+
+  // Forms
+  .form-control:focus, .form-select:focus { background-color: var(--pm-input-bg); }
+  .form-control:disabled { background-color: var(--pm-surface); color: var(--pm-text-disabled); }
+  .input-group-text { background: var(--pm-surface-2); border-color: var(--pm-border-strong); color: var(--pm-ink-muted); }
+
+  // Modal, footer
+  .modal-content { border: 1px solid var(--pm-border); }
+  .pm-footer { border-top: 1px solid var(--pm-border); }
+}

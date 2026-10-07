@@ -2,7 +2,8 @@
 title: 'Е2: опційна темна тема з перемикачем'
 type: 'feature'
 created: '2026-10-08'
-status: 'draft'
+status: 'done'
+baseline_commit: '9101b6b3730548edfdf43482fba9018d30901f07'
 route: 'dispatch'
 review_loop_iteration: 0
 context:
@@ -48,10 +49,10 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `public/index.html` -- скрипт без блимання -- матриця 1, 2, 5
-- [ ] `src/styles/_tokens.scss` + усі `.scss` з хардкодом -- токени темної теми -- вигляд
-- [ ] `src/hooks/useTheme.ts`, `src/components/header/header.tsx` -- перемикач -- матриця 3, 4
-- [ ] `src/setupTests.ts`, `src/tests/ui/theme.test.tsx` -- тести матриці -- захист
+- [x] `public/index.html` -- скрипт без блимання -- матриця 1, 2, 5
+- [x] `src/styles/_tokens.scss` + усі `.scss` з хардкодом -- токени темної теми -- вигляд
+- [x] `src/hooks/useTheme.ts`, `src/components/header/header.tsx` -- перемикач -- матриця 3, 4
+- [x] `src/setupTests.ts`, `src/tests/ui/theme.test.tsx` -- тести матриці -- захист
 
 **Acceptance Criteria:**
 - Given темна тема, then головна, сторінка збору, вхід, організації й форми читаються (немає білого тексту на білому/темного на темному), логотип у світлому крузі, жовта «Задонатити» з темним текстом.
@@ -71,3 +72,17 @@ context:
 ## Spec Change Log
 
 ## Review Triage Log
+
+- `low` patch — після переходу «як у системі» → «світла» не перевірено, що системна зміна ігнорується й слухач знятий (verification-gap).
+- `low` defer — гілка `addListener` для Safari < 14 без тесту: поза browserslist (verification-gap, defer).
+- `low` patch — інші вкладки не підхоплюють зміну теми: подія `storage`.
+- `low` reject — хук живе лише в Header, стан окремий для кожного виклику: Header змонтований на кожній сторінці через PageLayout і є єдиним викликом; контекст — коли з'явиться другий.
+- `low` patch — підпис перемикача не каже, що зробить натискання: додано наступний крок.
+- `low` patch — один `theme-color` для обох тем: варіант для темної + оновлення при явному виборі.
+- `low` reject — RGB-змінні Bootstrap дублюють hex-токени: косметика, значення з `dark.css`.
+- `medium` patch — у темній лишаються світлі `--bs-primary/-danger/-success` (майбутні `.text-danger`, `.alert-*` матимуть поганий контраст): перевизначено.
+- `low` patch — `text-white` у футері повз токени.
+- `low` patch — тест шукає перший `<script>` регулярним виразом: `id="pm-theme-init"`.
+- `low` patch — не перевірено зняття слухача при демонтажі, збережене `auto` і некоректне значення в скрипті.
+- `low` reject — inline-скрипт і CSP: CSP на хостингу немає; при появі — хеш скрипта.
+- `false` — специфікації немає в диффі: дифф навмисно лише по `patronage-client/`; контрасти пораховані в `MOBILE.md` §5.
