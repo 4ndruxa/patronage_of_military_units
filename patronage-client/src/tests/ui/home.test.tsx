@@ -20,6 +20,10 @@ describe('Home', () => {
     expect(hero.textContent).not.toMatch(/\d/);
     expect(hero.querySelector('.pm-stat')).toBeNull();
 
+    const mockup = screen.getByRole('link', { name: /Новий дизайн \(в розробці\)/ });
+    expect(mockup).toHaveAttribute('href', `${process.env.PUBLIC_URL ?? ''}/mockup/index.html`);
+    expect(mockup).toHaveAttribute('target', '_blank');
+
     fireEvent.click(screen.getByRole('link', { name: 'Організації' }));
     expect(currentLocation()).toBe('/organizations');
   });

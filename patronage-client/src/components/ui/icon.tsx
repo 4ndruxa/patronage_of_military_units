@@ -3,6 +3,7 @@ import React from 'react';
 // Line icons from the mockup sprite (mockups/v2), inline so no sprite has to be loaded.
 const ICON_PATHS = {
   arrow: 'M5 12h14M12 5l7 7-7 7',
+  ext: 'M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3',
   refresh: 'M23 4v6h-6M1 20v-6h6M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15',
 };
 

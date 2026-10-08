@@ -34,6 +34,16 @@ const Hero: React.FC = () => (
             </a>
             <Link className="btn btn-outline-ink btn-lg" to="/organizations">Організації</Link>
           </div>
+          {/* Static designer mockups served from public/mockup (kept while the redesign is paused). */}
+          <a
+            className="btn btn-ghost btn-sm mt-3"
+            href={`${process.env.PUBLIC_URL ?? ''}/mockup/index.html`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Новий дизайн (в розробці) <Icon name="ext" className="pm-i-end" />
+            <span className="visually-hidden"> (відкриється в новій вкладці)</span>
+          </a>
         </div>
         <div className="col-lg-5 d-none d-lg-block">
           <HeroLogo />

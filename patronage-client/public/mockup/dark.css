@@ -1,0 +1,162 @@
+/* ==========================================================================
+   Темна тема «Громадського патронування» — опція, не основна.
+   Вмикається атрибутом <html data-bs-theme="dark"> (Bootstrap 5.3) за
+   prefers-color-scheme або перемикачем у хедері (pm-theme.js).
+   Підключати ПІСЛЯ pm.css. Лише перевизначення токенів і кількох компонентів.
+   Основа: navy логотипа; лазур і золото лишаються акцентами; логотип
+   завжди у світлому крузі, бо темно-синій контур зливається з тлом.
+   Контрасти пораховано (WCAG): див. таблицю в MOBILE.md / dark-contrast у кінці файлу.
+   ========================================================================== */
+
+[data-bs-theme="dark"] {
+  color-scheme: dark;
+  /* поверхні */
+  --pm-bg: #0A1626;            /* тло сторінки */
+  --pm-surface: #102440;       /* картки, панелі */
+  --pm-surface-2: #173050;     /* вкладені блоки, hover */
+  --pm-navy: #07111F;          /* футер, шапка модалки (завжди темні) */
+  /* текст */
+  --pm-ink: #E8EEF5;           /* 13.3:1 на surface */
+  --pm-ink-muted: #A9B9CC;     /* 7.8:1 на surface */
+  /* лінії */
+  --pm-border: #2A4466;        /* декоративні рамки карток */
+  --pm-border-strong: #5A7799; /* поля, кружки, контурні кнопки: 3.4:1 до surface */
+  --pm-track: #2B4568;
+  /* акценти */
+  --pm-primary: #3AA6DC;       /* кнопка primary; текст на ній #04152A, 6.7:1 */
+  --pm-primary-hover: #5BB9E8;
+  --pm-link: #6BC1EE;          /* посилання 7.8:1 */
+  --pm-sky-soft: #17405F;      /* бейдж організації; текст #8FD3F4, 6.6:1 */
+  --pm-sky-text: #8FD3F4;
+  --pm-teal-strong: #2EC4B6;   /* заповнення термометра: 4.5:1 до треку */
+  --pm-gold: #F5D04C;          /* без змін, текст ink #0B1E3A, 11.1:1 */
+  --pm-gold-hover: #FFE07A;
+  --pm-gold-soft: #3A3212;
+  --pm-gold-ink: #F3D870;      /* 9.0:1 на gold-soft */
+  --pm-danger: #FF8F99;        /* текст/ікони на surface 7.2:1 */
+  --pm-danger-solid: #C8283C;  /* суцільна кнопка «Видалити», білий текст 5.4:1 */
+  --pm-success: #5FD6AE;       /* 8.7:1 */
+  --pm-focus: #8FD3F4;         /* 9.5:1 */
+  --pm-shadow-1: 0 1px 2px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.28);
+  --pm-shadow-2: 0 10px 32px rgba(0,0,0,.55);
+
+  /* карта на змінні Bootstrap */
+  --bs-body-bg: var(--pm-bg);
+  --bs-body-color: var(--pm-ink);
+  --bs-secondary-color: var(--pm-ink-muted);
+  --bs-border-color: var(--pm-border);
+  --bs-link-color: var(--pm-link);
+  --bs-link-hover-color: #9AD6F4;
+  --bs-link-color-rgb: 107,193,238;
+  --bs-link-hover-color-rgb: 154,214,244;
+  --bs-heading-color: var(--pm-ink);
+  --bs-emphasis-color: #fff;
+}
+
+/* ---- глобальне -------------------------------------------------------- */
+[data-bs-theme="dark"] body { background: var(--pm-bg); color: var(--pm-ink); }
+[data-bs-theme="dark"] :focus-visible { outline-color: var(--pm-focus); }
+[data-bs-theme="dark"] .pm-lead, [data-bs-theme="dark"] .pm-muted { color: var(--pm-ink-muted); }
+[data-bs-theme="dark"] .breadcrumb-item.active { color: var(--pm-ink-muted); }
+[data-bs-theme="dark"] .breadcrumb-item + .breadcrumb-item::before { color: var(--pm-ink-muted); }
+[data-bs-theme="dark"] code { color: #FF9CC8; }
+
+/* ---- шапка, логотип на світлому ----------------------------------------- */
+[data-bs-theme="dark"] .pm-nav { background: rgba(10,22,38,.92); border-bottom-color: var(--pm-border); }
+[data-bs-theme="dark"] .pm-nav .navbar-brand { color: var(--pm-ink); }
+[data-bs-theme="dark"] .pm-nav .navbar-brand img, [data-bs-theme="dark"] .pm-empty img, [data-bs-theme="dark"] img.pm-logo-plate { background: #fff; border-radius: 50%; padding: 3px; }
+[data-bs-theme="dark"] .pm-empty img { padding: 8px; opacity: .85; filter: none; }
+[data-bs-theme="dark"] .pm-nav .nav-link { color: var(--pm-ink); }
+[data-bs-theme="dark"] .pm-nav .nav-link:hover { color: var(--pm-link); }
+[data-bs-theme="dark"] .pm-nav .navbar-toggler { border-color: var(--pm-border-strong); }
+[data-bs-theme="dark"] .pm-nav .navbar-toggler-icon { filter: invert(1); }
+[data-bs-theme="dark"] .pm-avatar { background: var(--pm-surface-2); border: 2px solid var(--pm-border-strong); color: var(--pm-ink); }
+[data-bs-theme="dark"] .dropdown-menu { --bs-dropdown-bg: var(--pm-surface); --bs-dropdown-color: var(--pm-ink); --bs-dropdown-link-color: var(--pm-ink); --bs-dropdown-link-hover-bg: var(--pm-surface-2); --bs-dropdown-link-hover-color: var(--pm-ink); --bs-dropdown-link-active-bg: var(--pm-primary); --bs-dropdown-link-active-color: #04152A; --bs-dropdown-divider-bg: var(--pm-border); border-color: var(--pm-border); }
+
+/* ---- кнопки ----------------------------------------------------------------- */
+[data-bs-theme="dark"] .btn-primary { --bs-btn-color: #04152A; --bs-btn-bg: var(--pm-primary); --bs-btn-border-color: var(--pm-primary); --bs-btn-hover-color: #04152A; --bs-btn-hover-bg: var(--pm-primary-hover); --bs-btn-hover-border-color: var(--pm-primary-hover); --bs-btn-active-color: #04152A; --bs-btn-active-bg: var(--pm-primary-hover); --bs-btn-active-border-color: var(--pm-primary-hover); --bs-btn-disabled-color: #04152A; --bs-btn-disabled-bg: var(--pm-primary); --bs-btn-disabled-border-color: var(--pm-primary); }
+[data-bs-theme="dark"] .btn-donate { --bs-btn-color: #0B1E3A; --bs-btn-hover-color: #0B1E3A; --bs-btn-active-color: #0B1E3A; }
+[data-bs-theme="dark"] .btn-outline-ink { --bs-btn-color: var(--pm-ink); --bs-btn-border-color: var(--pm-border-strong); --bs-btn-hover-color: #04152A; --bs-btn-hover-bg: var(--pm-ink); --bs-btn-hover-border-color: var(--pm-ink); --bs-btn-active-color: #04152A; --bs-btn-active-bg: var(--pm-ink); --bs-btn-active-border-color: var(--pm-ink); --bs-btn-disabled-color: var(--pm-ink-muted); --bs-btn-disabled-border-color: var(--pm-border); }
+[data-bs-theme="dark"] .btn-ghost { --bs-btn-color: var(--pm-link); --bs-btn-hover-bg: var(--pm-surface-2); --bs-btn-hover-color: #9AD6F4; }
+[data-bs-theme="dark"] .btn-ghost-danger { --bs-btn-color: var(--pm-danger); --bs-btn-hover-color: var(--pm-danger); --bs-btn-hover-bg: rgba(255,143,153,.12); --bs-btn-active-bg: rgba(255,143,153,.2); --bs-btn-active-color: var(--pm-danger); }
+[data-bs-theme="dark"] .btn-danger { --bs-btn-color: #fff; --bs-btn-bg: var(--pm-danger-solid); --bs-btn-border-color: var(--pm-danger-solid); --bs-btn-hover-bg: #A8202F; --bs-btn-hover-border-color: #A8202F; }
+[data-bs-theme="dark"] .btn-google { background: #fff; color: #0B1E3A; border-color: #fff; }
+[data-bs-theme="dark"] .btn-google:hover { background: #E8EEF5; color: #0B1E3A; }
+
+/* ---- hero, кроки ------------------------------------------------------------------ */
+[data-bs-theme="dark"] .pm-hero { background: radial-gradient(900px 420px at 85% 0%, rgba(31,166,212,.16), transparent 70%), linear-gradient(180deg, #0D1C33 0%, var(--pm-bg) 100%); }
+[data-bs-theme="dark"] .pm-hero h1 em { color: var(--pm-link); }
+[data-bs-theme="dark"] .pm-hero-logo::before { background: #E3F2F9; box-shadow: 0 0 80px rgba(31,166,212,.28); }
+[data-bs-theme="dark"] .pm-hero-logo::after { border-color: rgba(143,211,244,.55); }
+[data-bs-theme="dark"] .pm-eyebrow { background: var(--pm-gold-soft); color: var(--pm-gold-ink); }
+[data-bs-theme="dark"] .pm-steps li { background: var(--pm-surface); border-color: var(--pm-border); }
+[data-bs-theme="dark"] .pm-steps li::before { color: var(--pm-sky-text); }
+[data-bs-theme="dark"] .pm-photo__credit { background: rgba(0,0,0,.55); }
+
+/* ---- картки, бейджі, термометр -------------------------------------------------------- */
+[data-bs-theme="dark"] .pm-card { --bs-card-bg: var(--pm-surface); --bs-card-border-color: var(--pm-border); --bs-card-color: var(--pm-ink); }
+[data-bs-theme="dark"] .pm-card--flat { box-shadow: none; }
+[data-bs-theme="dark"] .pm-card .card-title a { color: var(--pm-ink); }
+[data-bs-theme="dark"] .pm-more { color: var(--pm-link); }
+[data-bs-theme="dark"] .badge.pm-badge-org { background: var(--pm-sky-soft); color: var(--pm-sky-text); }
+[data-bs-theme="dark"] a.pm-badge-org:hover { background: #1F5278; color: #BDE5F8; }
+[data-bs-theme="dark"] .badge.pm-badge-ok { background: #123B36; color: #7BE0BC; }
+[data-bs-theme="dark"] .badge.pm-badge-warn { background: var(--pm-gold-soft); color: var(--pm-gold-ink); }
+[data-bs-theme="dark"] .badge.pm-badge-muted { background: var(--pm-surface-2); color: var(--pm-ink-muted); }
+[data-bs-theme="dark"] .pm-thermo .progress { --bs-progress-bg: var(--pm-track); }
+[data-bs-theme="dark"] .pm-thermo--done .progress-bar { background: #4FD1A5; }
+[data-bs-theme="dark"] .pm-thermo--stale .progress-bar { background: #8CA0B8; }
+[data-bs-theme="dark"] .pm-thermo--none { background: var(--pm-surface-2); border-color: var(--pm-border-strong); }
+
+/* ---- панель дій, джерела, серія ------------------------------------------------------------ */
+[data-bs-theme="dark"] .pm-panel { background: var(--pm-surface); border-color: var(--pm-border); }
+[data-bs-theme="dark"] .pm-actionbar { background: rgba(16,36,64,.96); border-top-color: var(--pm-border); box-shadow: 0 -6px 24px rgba(0,0,0,.5); }
+[data-bs-theme="dark"] .pm-source { background: var(--pm-surface); border-color: var(--pm-border); color: var(--pm-ink); }
+[data-bs-theme="dark"] .pm-source:hover { border-color: var(--pm-primary); background: var(--pm-surface-2); }
+[data-bs-theme="dark"] .pm-source__ico { background: var(--pm-sky-soft); color: var(--pm-sky-text); }
+[data-bs-theme="dark"] .pm-self { background: var(--pm-surface-2); }
+[data-bs-theme="dark"] .pm-dot i { background: transparent; border-color: var(--pm-border-strong); color: #04152A; }
+[data-bs-theme="dark"] .pm-dot.is-on i { background: var(--pm-teal-strong); border-color: var(--pm-teal-strong); }
+[data-bs-theme="dark"] .pm-dot.is-now i { border-color: var(--pm-link); }
+[data-bs-theme="dark"] .pm-banner { background: var(--pm-gold-soft); border-color: #5A4C1C; }
+[data-bs-theme="dark"] .pm-banner p { color: var(--pm-ink); }
+
+/* ---- форми ------------------------------------------------------------------------------------- */
+[data-bs-theme="dark"] .form-control, [data-bs-theme="dark"] .form-select { background-color: #0C1D35; border-color: var(--pm-border-strong); color: var(--pm-ink); }
+[data-bs-theme="dark"] .form-select { --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23E8EEF5' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e"); }
+[data-bs-theme="dark"] .form-control::placeholder { color: #8DA2BB; }
+[data-bs-theme="dark"] .form-control:focus, [data-bs-theme="dark"] .form-select:focus { border-color: var(--pm-focus); box-shadow: 0 0 0 4px rgba(143,211,244,.28); background-color: #0C1D35; color: var(--pm-ink); }
+[data-bs-theme="dark"] .form-control:disabled { background-color: var(--pm-surface); color: #7D91AA; }
+[data-bs-theme="dark"] .form-control.is-invalid { border-color: var(--pm-danger); }
+[data-bs-theme="dark"] .form-control.is-invalid:focus { box-shadow: 0 0 0 4px rgba(255,143,153,.25); }
+[data-bs-theme="dark"] .invalid-feedback { color: var(--pm-danger); }
+[data-bs-theme="dark"] .input-group-text { background: var(--pm-surface-2); border-color: var(--pm-border-strong); color: var(--pm-ink-muted); }
+[data-bs-theme="dark"] .pm-fieldset { background: var(--pm-surface); border-color: var(--pm-border); }
+[data-bs-theme="dark"] .pm-fieldset legend { background: var(--pm-sky-soft); color: var(--pm-sky-text); }
+[data-bs-theme="dark"] .pm-formbar { background: rgba(10,22,38,.94); border-top-color: var(--pm-border); }
+
+/* ---- модалка, тост, порожні стани, пагінація, футер -------------------------------------------------------- */
+[data-bs-theme="dark"] .modal-content { background: var(--pm-surface); color: var(--pm-ink); border: 1px solid var(--pm-border); }
+[data-bs-theme="dark"] .modal-header.pm-modal-head { background: var(--pm-navy); }
+[data-bs-theme="dark"] .pm-backdrop { background: rgba(2,8,16,.78); }
+[data-bs-theme="dark"] .toast.pm-toast { background: var(--pm-surface); color: var(--pm-ink); border-left-color: var(--pm-danger); }
+[data-bs-theme="dark"] .toast.pm-toast--ok { border-left-color: var(--pm-success); }
+[data-bs-theme="dark"] .toast .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
+[data-bs-theme="dark"] .pm-empty { background: var(--pm-surface); border-color: var(--pm-border-strong); }
+[data-bs-theme="dark"] .page-link { background: transparent; border-color: var(--pm-border-strong); color: var(--pm-ink); }
+[data-bs-theme="dark"] .page-item.active .page-link { background: var(--pm-primary); border-color: var(--pm-primary); color: #04152A; }
+[data-bs-theme="dark"] .page-item.disabled .page-link { background: transparent; color: #7D91AA; border-color: var(--pm-border); }
+[data-bs-theme="dark"] .pm-footer { background: var(--pm-navy); border-top: 1px solid var(--pm-border); }
+[data-bs-theme="dark"] .pm-login-side { background: linear-gradient(160deg, #07111F 0%, #0B3A5C 100%); }
+[data-bs-theme="dark"] .row.g-0.shadow-sm { background: var(--pm-surface) !important; border-color: var(--pm-border) !important; }
+[data-bs-theme="dark"] .mock-frame { background: rgba(255,255,255,.03); border-color: var(--pm-border-strong); }
+[data-bs-theme="dark"] .sw { border-color: var(--pm-border-strong); }
+
+/* ---- перемикач теми (у всіх темах) ------------------------------------------------------------------------------- */
+.pm-theme-toggle { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--pm-border); background: transparent; color: var(--pm-ink); display: inline-flex; align-items: center; justify-content: center; padding: 0; transition: background-color .15s; }
+.pm-theme-toggle:hover { background: var(--pm-sky-soft); }
+.pm-theme-toggle .pm-i { width: 1.25rem; height: 1.25rem; }
+.pm-theme-toggle .i-sun { display: none; }
+[data-bs-theme="dark"] .pm-theme-toggle { border-color: var(--pm-border-strong); }
+[data-bs-theme="dark"] .pm-theme-toggle .i-sun { display: inline-block; }
+[data-bs-theme="dark"] .pm-theme-toggle .i-moon { display: none; }
