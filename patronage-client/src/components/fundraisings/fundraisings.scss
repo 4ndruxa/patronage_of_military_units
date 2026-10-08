@@ -1,28 +1,46 @@
-@import '../../variables';
-@import 'node_modules/bootstrap/scss/functions';
-@import 'node_modules/bootstrap/scss/variables';
-@import 'node_modules/bootstrap/scss/mixins';
+// Fundraising cards and the grid (mockups/v2/01-home.html, pm.css; VISUAL-POLISH.md).
+// Covers (.pm-cover, .pm-g1..6) and the org badge live in styles/_fundraising.scss.
 
-.card-width {
-    width: 49%
+.pm-card { --bs-card-border-color: var(--pm-border); --bs-card-border-radius: var(--pm-r-lg); --bs-card-inner-border-radius: var(--pm-r-lg); --bs-card-bg: var(--pm-surface); --bs-card-color: var(--pm-ink); box-shadow: var(--pm-shadow-1); transition: box-shadow .2s, transform .2s; }
+.pm-card--link:hover, .pm-card--link:focus-within { box-shadow: var(--pm-shadow-2); transform: translateY(-2px); }
+// Springy press on the whole card.
+.pm-card--link:active { transform: scale(.98); }
+// The ring goes around the card the stretched link covers, not around the title text.
+.pm-card--link:focus-within { outline: 3px solid var(--pm-focus); outline-offset: 2px; }
+.pm-card .stretched-link:focus-visible { outline: none; }
+.pm-card .card-title { font-size: 1.125rem; margin-bottom: .5rem; }
+.pm-card .card-title a { color: var(--pm-ink); text-decoration: none; }
+.pm-card .card-body { padding: 1.25rem 1.5rem 1.5rem; display: flex; flex-direction: column; }
+.pm-card .pm-badge-org { align-self: flex-start; }
+.pm-card .pm-desc { color: var(--pm-ink-muted); font-size: .9375rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; margin-bottom: .9rem; }
+.pm-card .pm-foot { margin-top: auto; display: flex; justify-content: flex-end; align-items: center; gap: .5rem; border-top: 1px solid var(--pm-border); padding-top: .8rem; font-size: .875rem; font-weight: 600; }
+.pm-more { color: var(--pm-link); font-weight: 700; display: inline-flex; align-items: center; gap: .3rem; }
+
+// Soft reveal of the first six cards: fade + 8px, 40ms stagger. Only opacity and
+// transform move; without the animation (old browser, reduced motion) cards are simply there.
+@keyframes pm-reveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.pm-reveal > .col:nth-child(-n + 6) { animation: pm-reveal .35s ease-out backwards; }
+@for $i from 2 through 6 {
+  .pm-reveal > .col:nth-child(#{$i}) { animation-delay: #{($i - 1) * 40}ms; }
 }
 
-@include media-breakpoint-up(lg) {
-    .card-width {
-        width: 33%
-    }    
-  }
+// Empty and error states (mockups/v2/08-states.html, dark.css).
+.pm-empty { text-align: center; background: var(--pm-surface); border: 1px dashed var(--pm-border-strong); border-radius: var(--pm-r-lg); padding: 2.5rem 1.5rem; }
+.pm-empty img { width: 88px; height: 88px; opacity: .4; filter: grayscale(.4); margin-bottom: 1rem; }
+.pm-empty h3 { margin-bottom: .35rem; }
+.pm-empty p { color: var(--pm-ink-muted); max-width: 420px; margin: 0 auto 1.25rem; }
+.pm-empty p:last-child { margin-bottom: 0; }
 
-.page-item.active-card-page .page-link {
-    background-color: var(--pm-primary) !important;
-    color: var(--pm-on-primary) !important;
+@media (prefers-reduced-motion: reduce) {
+  .pm-reveal > .col { animation: none !important; }
+  .pm-card--link:hover, .pm-card--link:focus-within, .pm-card--link:active { transform: none; }
 }
 
-.card-scale {
-    transition: all 0.5s ease;
-} 
-
-.card-scale:hover {
-    transform: scale(1.010);
-    box-shadow: var(--pm-shadow-0);
+[data-bs-theme="dark"] {
+  .pm-empty { background: var(--pm-surface); border-color: var(--pm-border-strong); }
+  // The logo is never inverted: on dark it sits in a light disc.
+  .pm-empty img { background: var(--pm-logo-chip-bg); border-radius: 50%; padding: 8px; opacity: .85; filter: none; }
 }

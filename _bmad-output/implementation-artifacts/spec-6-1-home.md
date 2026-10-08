@@ -2,7 +2,7 @@
 title: 'Е6: головна — hero з логотипом, «Як це працює», картки зборів, смуга з фото'
 type: 'feature'
 created: '2026-10-08'
-status: 'ready-for-dev'
+status: 'done'
 baseline_commit: 'd3e5f135200ab718eb9e4c25ce7ff26a2ce23702'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -50,11 +50,11 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `src/utils/cover.ts` + тест; `fundraising.tsx` на неї -- обкладинки
-- [ ] `src/components/ui/*` -- картка, пагінація, порожній стан
-- [ ] `hero.tsx`, кроки, смуга фото, `homePage.tsx`, `_home.scss` -- головна
-- [ ] `fundraisings.tsx`/`.scss` -- сітка на нових компонентах
-- [ ] тести -- матриця
+- [x] `src/utils/cover.ts` + тест; `fundraising.tsx` на неї -- обкладинки
+- [x] `src/components/ui/*` -- картка, пагінація, порожній стан
+- [x] `hero.tsx`, кроки, смуга фото, `homePage.tsx`, `_home.scss` -- головна
+- [x] `fundraisings.tsx`/`.scss` -- сітка на нових компонентах
+- [x] тести -- матриця
 
 **Acceptance Criteria:**
 - Given 1366×768 і 390 px, then обидві CTA видно без прокрутки; у hero немає цифр і фото зі зброєю.
@@ -73,3 +73,5 @@ context:
 ## Spec Change Log
 
 ## Review Triage Log
+
+- Рев'ю не завершено: сесію перервано, а розробку призупинено за рішенням Андрія (2026-10-08). Перед поверненням до Е6 прогнати рев'ю цієї зміни.

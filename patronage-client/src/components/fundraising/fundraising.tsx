@@ -5,6 +5,7 @@ import { createSubscription } from '../../services/api/subscriptions/subscriptio
 import { getFundraisingById } from '../../services/api/fundraisings/fundraisings';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
+import { coverClass } from '../../utils/cover';
 
 const SUBSCRIBE_EXPLAINER =
   'Раз на місяць ми нагадаємо вам про цей збір у застосунку. Гроші ми не збираємо: донат ви робите на сторінці оплати.';
@@ -237,7 +238,6 @@ const Fundraising: React.FC = () => {
 
   const { title, description, organizations, sources, id } = fundraisingData;
   const canDonate = Boolean(donateUrl);
-  const coverClass = `pm-g${(Math.abs(id) % 6) + 1}`;
 
   const subscribeSpinner = subscribing && (
     <span className="spinner-border spinner-border-sm pm-i-start" aria-hidden="true"></span>
@@ -253,7 +253,7 @@ const Fundraising: React.FC = () => {
       </nav>
       <div className="pm-detail">
         <div className="pm-detail__main">
-          <div className={`pm-cover pm-cover--tall ${coverClass} mb-4`} aria-hidden="true"></div>
+          <div className={`pm-cover pm-cover--tall ${coverClass(id)} mb-4`} aria-hidden="true"></div>
           <Link className="badge pm-badge-org" to={`/organizations/${organizations.id}`}>
             {organizations.name}
           </Link>

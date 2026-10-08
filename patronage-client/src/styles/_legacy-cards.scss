@@ -1,0 +1,14 @@
+// Old card grid still used by the «Мої …» and organizations pages until they move to
+// the shared FundraisingCard/Pagination (E6.3–6.4). Moved out of fundraisings.scss.
+.card-width { width: 49%; }
+@include media-breakpoint-up(lg) {
+  .card-width { width: 33%; }
+}
+
+.page-item.active-card-page .page-link {
+  background-color: var(--pm-primary) !important;
+  color: var(--pm-on-primary) !important;
+}
+
+.card-scale { transition: all 0.5s ease; }
+.card-scale:hover { transform: scale(1.010); box-shadow: var(--pm-shadow-0); }

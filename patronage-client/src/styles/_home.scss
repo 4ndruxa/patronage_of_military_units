@@ -1,0 +1,77 @@
+// Home page from the approved mockup (mockups/v2/01-home.html, pm.css, dark.css)
+// with the round-5 polish (VISUAL-POLISH.md): logo glow, clamp headline, ambient gradient.
+
+.pm-section { padding-block: 2.5rem; }
+@media (min-width: 992px) { .pm-section { padding-block: 4rem; } }
+// Anchor target of «Переглянути збори»: clear the sticky header.
+#zbory { scroll-margin-top: 80px; }
+
+.pm-eyebrow { display: inline-block; background: var(--pm-gold-soft); color: var(--pm-gold-ink); font-weight: 700; font-size: .8125rem; border-radius: 9999px; padding: .35rem .85rem; margin-bottom: 1rem; }
+
+// Hero: ambient gradient with a soft sky spot, never a dark hero.
+.pm-hero {
+  background:
+    radial-gradient(900px 420px at 85% 0%, rgba(31, 166, 212, .12), transparent 70%),
+    linear-gradient(180deg, var(--pm-surface) 0%, var(--pm-bg) 100%);
+  padding-block: 1.5rem 2rem;
+  overflow: hidden;
+}
+@media (min-width: 992px) { .pm-hero { padding-block: 3.5rem 4rem; } }
+.pm-hero h1 { font-size: clamp(2rem, 1.2rem + 3vw, 3.5rem); line-height: 1.1; letter-spacing: -.02em; }
+.pm-hero h1 em { font-style: normal; color: var(--pm-primary); }
+.pm-hero .pm-lead { max-width: 34rem; }
+
+// Logo in a circle. The circle is always the light sky tint (also in the dark theme):
+// the logo is never inverted.
+.pm-hero-logo { position: relative; width: min(100%, 340px); aspect-ratio: 1; margin-inline: auto; }
+.pm-hero-logo::before { content: ""; position: absolute; inset: 6%; border-radius: 50%; background: #E3F2F9; box-shadow: 0 0 80px rgba(31, 166, 212, .25); }
+.pm-hero-logo::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px dashed rgba(31, 166, 212, .5); }
+.pm-hero-logo img { position: relative; z-index: 1; display: block; width: 76%; height: auto; margin: 12%; filter: drop-shadow(0 10px 20px rgba(11, 30, 58, .18)); }
+.pm-hero-logo i { position: absolute; z-index: 2; width: 14px; height: 14px; border-radius: 50%; }
+.pm-hero-logo i:nth-of-type(1) { background: var(--pm-gold); top: 12%; right: 12%; }
+.pm-hero-logo i:nth-of-type(2) { background: var(--pm-teal); bottom: 18%; left: 8%; }
+// Phones and tablets: a 120px logo above the headline, no ring or dots.
+@media (max-width: 991.98px) {
+  .pm-hero-logo { width: 120px; margin: 0 0 1rem; }
+  .pm-hero-logo::after, .pm-hero-logo i { display: none; }
+  .pm-hero-logo::before { inset: 0; box-shadow: 0 0 40px rgba(31, 166, 212, .25); }
+  .pm-hero-logo img { width: 80%; margin: 10%; }
+}
+
+// How it works
+.pm-steps { display: grid; gap: .75rem; grid-template-columns: 1fr; list-style: none; padding: 0; margin: 0; counter-reset: step; }
+@media (min-width: 768px) { .pm-steps { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } }
+.pm-steps li { counter-increment: step; display: flex; gap: .85rem; align-items: flex-start; background: var(--pm-surface); border: 1px solid var(--pm-border); border-radius: var(--pm-r-lg); padding: 1rem 1.15rem; font-size: .9375rem; color: var(--pm-ink-muted); }
+.pm-steps li::before { content: counter(step); flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--pm-sky-soft); color: var(--pm-sky-text); font-family: var(--pm-font-display); font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.pm-steps strong { display: block; color: var(--pm-ink); font-size: 1rem; }
+
+// Photo strip «Кому ми допомагаємо». Always navy (both themes). The photo is shown at
+// its natural size and offset onto the flag and the standing figure: the launchers on
+// the left and the rifles low on the right stay out of the frame.
+.pm-photo { position: relative; border-radius: var(--pm-r-xl); overflow: hidden; background: var(--pm-navy); isolation: isolate; min-height: 340px; display: flex; align-items: flex-end; }
+.pm-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: none; object-position: -700px 0; z-index: -2; }
+.pm-photo::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(11, 30, 58, .94) 0%, rgba(11, 30, 58, .6) 55%, rgba(11, 30, 58, .1) 100%); }
+.pm-photo__body { color: #fff; padding: 1.5rem; padding-top: 7rem; max-width: 560px; }
+.pm-photo h2 { color: #fff; }
+.pm-photo p { color: #E3ECF4; }
+.pm-photo__credit { position: absolute; right: .9rem; bottom: .6rem; font-size: .75rem; color: #E3ECF4; background: rgba(11, 30, 58, .55); border-radius: 9999px; padding: .15rem .6rem; }
+@media (min-width: 992px) {
+  // Text on solid navy on the left, the photo on the right 60% fading into it.
+  .pm-photo { aspect-ratio: 21 / 8; max-height: 440px; min-height: 0; align-items: center; }
+  .pm-photo img { left: auto; width: 60%; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 45%); mask-image: linear-gradient(90deg, transparent 0%, #000 45%); }
+  .pm-photo::before { background: linear-gradient(90deg, rgba(11, 30, 58, .96) 0%, rgba(11, 30, 58, .85) 40%, rgba(11, 30, 58, .05) 75%); }
+  .pm-photo__body { padding: 2.5rem 3rem; }
+}
+
+[data-bs-theme="dark"] {
+  .pm-hero {
+    background:
+      radial-gradient(900px 420px at 85% 0%, rgba(31, 166, 212, .16), transparent 70%),
+      linear-gradient(180deg, #0D1C33 0%, var(--pm-bg) 100%);
+  }
+  .pm-hero h1 em { color: var(--pm-link); }
+  .pm-hero-logo::before { box-shadow: 0 0 80px rgba(31, 166, 212, .28); }
+  .pm-hero-logo::after { border-color: rgba(143, 211, 244, .55); }
+  .pm-photo { border: 1px solid var(--pm-border); }
+  .pm-photo__credit { background: rgba(0, 0, 0, .55); }
+}
