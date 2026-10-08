@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B1E3A">
+<title>Редагувати збір · Громадське патронування</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700&display=swap&subset=cyrillic" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="pm.css" rel="stylesheet">
+<link href="dark.css" rel="stylesheet">
+<script src="pm-theme.js"></script>
+<link rel="icon" href="assets/logo.webp">
+</head>
+<body data-auth="user" class="">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></symbol>
+<symbol id="i-card" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8Z"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0ZM12 9v4M12 17h.01"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></symbol>
+</defs></svg>
+<div class="mock-bar"><b>МАКЕТ v2</b><span>Форма збору (ціль/зібрано, джерела-фієлдсети) і діалог видалення</span><a href="index.html" style="color:#9ED8F0">усі екрани</a></div>
+<nav class="navbar navbar-expand-lg sticky-top pm-nav" aria-label="Головна навігація">
+  <div class="container">
+    <a class="navbar-brand" href="01-home.html"><img src="assets/logo.webp" alt="" width="44" height="44"><span>Громадське<br class="d-sm-none"> патронування</span></a>
+    <div class="d-flex align-items-center gap-2 order-lg-last ms-auto ms-lg-3">
+      <a class="pm-bellbtn d-lg-none" href="04-my-subscriptions.html" data-auth-only="loggedin" aria-label="Мої підписки: ще не позначено 2"><svg class="pm-i " aria-hidden="true"><use href="#i-bell"/></svg><span class="pm-bellbtn__dot" aria-hidden="true">2</span></a>
+      <button class="pm-theme-toggle" type="button" data-pm-theme-toggle aria-pressed="false" aria-label="Увімкнути темну тему"><svg class="pm-i i-moon" aria-hidden="true"><use href="#i-moon"/></svg><svg class="pm-i i-sun" aria-hidden="true"><use href="#i-sun"/></svg></button>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Відкрити меню"><span class="navbar-toggler-icon"></span></button>
+    </div>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-lg-auto align-items-lg-center">
+        <li class="nav-item"><a class="nav-link" href="01-home.html">Збори</a></li>
+        <li class="nav-item"><a class="nav-link" href="05a-organizations.html">Організації</a></li>
+        <li class="nav-item ms-lg-3 mt-2 mt-lg-0" data-auth-only="guest"><a class="btn btn-primary" href="07-login.html">Увійти</a></li>
+        <li class="nav-item dropdown ms-lg-3" data-auth-only="loggedin">
+          <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 border-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><span class="pm-avatar" aria-hidden="true">ОК</span><span class="d-lg-none">Олена Коваль</span></a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="04-my-subscriptions.html">Мої підписки</a></li>
+            <li><a class="dropdown-item" href="06-fundraising-form.html">Мої збори</a></li>
+            <li><a class="dropdown-item" href="05a-organizations.html">Мої організації</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="01-home.html">Вийти</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<main class="container pt-4 pt-lg-5" style="max-width:860px">
+  <nav aria-label="Хлібні крихти" class="mb-3"><ol class="breadcrumb mb-0 small"><li class="breadcrumb-item"><a href="#">Мої збори</a></li><li class="breadcrumb-item active" aria-current="page">Редагувати</li></ol></nav>
+  <h1 class="mb-4">Редагувати збір</h1>
+  <form novalidate>
+    <section class="card pm-card pm-card--flat mb-4"><div class="card-body p-4">
+      <h2 class="h3 mb-3">Основне</h2>
+      <div class="mb-3"><label class="form-label" for="t">Назва збору</label><input class="form-control" id="t" value="Пікап для евакуації поранених"></div>
+      <div class="mb-3"><label class="form-label" for="org">Організація</label><select class="form-select" id="org"><option selected>Добровольчий батальйон «Сокіл»</option><option>Розвідувальний взвод «Тінь»</option></select></div>
+      <div><label class="form-label" for="d">Опис</label><textarea class="form-control" id="d" rows="4">Збираємо на надійний пікап 4x4 для евакуації з передових позицій.</textarea></div>
+    </div></section>
+    <section class="card pm-card pm-card--flat mb-4"><div class="card-body p-4">
+      <h2 class="h3 mb-1">Прогрес збору</h2>
+      <p class="pm-muted small mb-3">Необов'язково. Суму ви вказуєте й оновлюєте вручну. Відвідувачі побачать підпис «Суму вказує власник збору».</p>
+      <div class="row g-3 mb-3">
+        <div class="col-sm-6"><label class="form-label" for="goal">Ціль</label><div class="input-group"><input class="form-control" id="goal" inputmode="numeric" value="850000"><span class="input-group-text">₴</span></div></div>
+        <div class="col-sm-6"><label class="form-label" for="got">Зібрано</label><div class="input-group"><input class="form-control" id="got" inputmode="numeric" value="357000"><span class="input-group-text">₴</span></div><div class="form-text">Оновлено 03.10.2026. Оновлюйте суму хоча б раз на місяць.</div></div>
+      </div>
+      <div class="mock-label">Так це побачать відвідувачі</div>
+      <div class="pm-thermo pm-thermo--lg"><div class="pm-thermo__head"><span class="pm-thermo__sum">Зібрано <b>357 000</b> з 850 000 ₴</span><span class="pm-thermo__pct">42%</span></div><div class="progress" role="progressbar" aria-label="Зібрано 42% цілі" aria-valuenow="42" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width:42%"></div></div><p class="pm-thermo__note">Суму вказує власник збору і оновлює вручну. Станом на 03.10.2026.</p></div>
+      <div class="row g-3 mt-1">
+        <div class="col-sm-6"><label class="form-label" for="g2">Приклад помилки: ціль</label><div class="input-group has-validation"><input class="form-control is-invalid" id="g2" value="0" aria-describedby="g2e"><span class="input-group-text">₴</span><div class="invalid-feedback" id="g2e">Ціль має бути більшою за нуль.</div></div></div>
+        <div class="col-sm-6"><label class="form-label" for="g3">Приклад помилки: зібрано</label><div class="input-group has-validation"><input class="form-control is-invalid" id="g3" value="-5" aria-describedby="g3e"><span class="input-group-text">₴</span><div class="invalid-feedback" id="g3e">Сума не може бути від'ємною.</div></div></div>
+      </div>
+    </div></section>
+    <h2 class="h3 mb-3">Способи оплати</h2>
+    <fieldset class="pm-fieldset mb-4"><legend>Джерело 1</legend><div class="row g-3 pt-2">
+  <div class="col-md-4"><label class="form-label" for="st1">Назва</label><input class="form-control" id="st1" value="Банка Monobank"></div>
+  <div class="col-md-3"><label class="form-label" for="sy1">Тип</label><select class="form-select" id="sy1"><option value="monobank" selected>Банка Monobank</option><option value="card">Картка</option><option value="paypal">PayPal</option><option value="other">Інше</option></select></div>
+  <div class="col-md-5"><label class="form-label" for="su1">Посилання</label><input class="form-control" id="su1" value="https://send.monobank.ua/jar/DEMO_SOKIL_1"></div></div></fieldset>
+    <fieldset class="pm-fieldset mb-4"><legend>Джерело 2</legend><div class="row g-3 pt-2">
+  <div class="col-md-4"><label class="form-label" for="st2">Назва</label><input class="form-control" id="st2" value="PayPal"></div>
+  <div class="col-md-3"><label class="form-label" for="sy2">Тип</label><select class="form-select" id="sy2"><option value="monobank">Банка Monobank</option><option value="card">Картка</option><option value="paypal" selected>PayPal</option><option value="other">Інше</option></select></div>
+  <div class="col-md-5"><label class="form-label" for="su2">Посилання</label><input class="form-control" id="su2" value="https://paypal.me/demo-sokil"></div><div class="col-12 text-end"><button type="button" class="btn btn-ghost-danger btn-sm"><svg class="pm-i " aria-hidden="true"><use href="#i-trash"/></svg>Видалити джерело</button></div></div></fieldset>
+    <button type="button" class="btn btn-outline-ink" disabled aria-describedby="addhint"><svg class="pm-i " aria-hidden="true"><use href="#i-plus"/></svg>Додати джерело</button>
+    <span class="form-text ms-2" id="addhint">Додати можна, коли заповнено попереднє.</span>
+    <div class="pm-formbar"><div class="pm-formbar__row">
+      <a class="btn btn-outline-ink" href="#">Скасувати</a><button class="btn btn-primary">Зберегти зміни</button>
+    </div></div>
+    <section class="pm-danger mt-5" aria-labelledby="dz"><div><h2 id="dz" class="h3 mb-1">Видалення збору</h2><p class="pm-muted small mb-0">Збір буде видалено без можливості відновити.</p></div>
+      <button type="button" class="btn btn-ghost-danger" data-bs-toggle="modal"><svg class="pm-i " aria-hidden="true"><use href="#i-trash"/></svg>Видалити збір</button></section>
+  </form>
+  <div class="mock-label mt-5">Стан: діалог підтвердження видалення</div>
+  <div class="mock-frame p-3 p-md-5" style="background:rgba(11,30,58,.62)">
+    <div class="modal-content mx-auto" style="max-width:460px" role="alertdialog" aria-modal="true" aria-labelledby="dtl" aria-describedby="dds">
+      <div class="modal-body p-4"><div class="d-flex gap-3"><span class="flex-none rounded-circle d-inline-flex align-items-center justify-content-center" style="width:44px;height:44px;background:#FBEAEC;color:var(--pm-danger);flex:none"><svg class="pm-i " aria-hidden="true"><use href="#i-alert"/></svg></span>
+        <div><h2 id="dtl" class="h3 mb-1">Видалити збір «Пікап для евакуації поранених»?</h2><p id="dds" class="pm-muted mb-0">Збір буде видалено без можливості відновити.</p></div></div></div>
+      <div class="modal-footer justify-content-end"><button class="btn btn-outline-ink" autofocus>Скасувати</button><button class="btn btn-danger">Видалити</button></div>
+    </div>
+  </div>
+</main>
+<footer class="pm-footer pm-on-dark">
+  <div class="container">
+    <div class="row gy-4 align-items-center">
+      <div class="col-lg-5 d-flex align-items-center gap-3"><span class="pm-logo-chip"><img src="assets/logo.webp" alt=""></span><div><strong class="text-white">Громадське патронування</strong><br><small>Регулярна підтримка військових підрозділів</small></div></div>
+      <nav class="col-lg-4" aria-label="Нижня навігація"><ul class="list-unstyled d-flex gap-4 mb-0"><li><a href="01-home.html">Збори</a></li><li><a href="05a-organizations.html">Організації</a></li><li><a href="04-my-subscriptions.html">Мої підписки</a></li></ul></nav>
+      <div class="col-lg-3 text-lg-end"><small>Слава Україні!</small></div>
+    </div>
+    <hr class="my-4">
+    <small>Ми не збираємо гроші: донат ви робите на сторінці організації. Проєкт розробив Андрій Боднар.</small>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="pm-mock.js"></script>
+</body>
+</html>

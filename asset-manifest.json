@@ -1,20 +1,21 @@
 {
   "files": {
-    "main.css": "/patronage_of_military_units/static/css/main.ee01c7b8.css",
-    "main.js": "/patronage_of_military_units/static/js/main.7bb2d71c.js",
+    "main.css": "/patronage_of_military_units/static/css/main.087df195.css",
+    "main.js": "/patronage_of_military_units/static/js/main.abf94cb8.js",
     "static/js/453.7cd6df65.chunk.js": "/patronage_of_military_units/static/js/453.7cd6df65.chunk.js",
-    "static/media/hero-background.webp": "/patronage_of_military_units/static/media/hero-background.1d07d6f6f390fae69d33.webp",
-    "static/media/organization-default.png": "/patronage_of_military_units/static/media/organization-default.bf032c3123404899f1ac.png",
-    "static/media/logo.png": "/patronage_of_military_units/static/media/logo.12820dc98d5a385d9333.png",
-    "static/media/fundraising-default.png": "/patronage_of_military_units/static/media/fundraising-default.ac07ade1cbc6016fa9b3.png",
+    "static/media/hero-background.webp": "/patronage_of_military_units/static/media/hero-background.d9251bb4f2f51fad6ed7.webp",
+    "static/media/organization-default.webp": "/patronage_of_military_units/static/media/organization-default.19ec9018a3235987e6cb.webp",
+    "static/media/logo-640.webp": "/patronage_of_military_units/static/media/logo-640.2625f0aefbb8606ae606.webp",
+    "static/media/logo-144.png": "/patronage_of_military_units/static/media/logo-144.f7d51e0f6ad83b61301f.png",
+    "static/media/fundraising-default.webp": "/patronage_of_military_units/static/media/fundraising-default.73357f7091a806799fa5.webp",
     "index.html": "/patronage_of_military_units/index.html",
     "static/media/google-logo.svg": "/patronage_of_military_units/static/media/google-logo.d7f092af888a54de79ed9c9303d689d7.svg",
-    "main.ee01c7b8.css.map": "/patronage_of_military_units/static/css/main.ee01c7b8.css.map",
-    "main.7bb2d71c.js.map": "/patronage_of_military_units/static/js/main.7bb2d71c.js.map",
+    "main.087df195.css.map": "/patronage_of_military_units/static/css/main.087df195.css.map",
+    "main.abf94cb8.js.map": "/patronage_of_military_units/static/js/main.abf94cb8.js.map",
     "453.7cd6df65.chunk.js.map": "/patronage_of_military_units/static/js/453.7cd6df65.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ee01c7b8.css",
-    "static/js/main.7bb2d71c.js"
+    "static/css/main.087df195.css",
+    "static/js/main.abf94cb8.js"
   ]
 }
